@@ -1,0 +1,324 @@
+components:
+  schemas:
+
+    # ──────────────────────────────────────────
+    # Genéricos
+    # ──────────────────────────────────────────
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          example: Mensaje de error descriptivo
+        detalles:
+          type: object
+          additionalProperties: true
+
+    ValidationError:
+      type: object
+      required: [errors]
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              message: { type: string }
+
+    # ──────────────────────────────────────────
+    # Usuario
+    # ──────────────────────────────────────────
+    Usuario:
+      type: object
+      properties:
+        user_id:          { type: string, format: uuid, example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }
+        username:         { type: string, example: "thor_dev" }
+        email:            { type: string, format: email, example: "thor@valhalla.dev" }
+        avatar_url:       { type: string, nullable: true, example: "https://cdn.valhalla.dev/avatars/thor.png" }
+        bio:              { type: string, nullable: true, example: "Desarrollador apasionado por Rust y sistemas distribuidos." }
+        experience_points: { type: integer, example: 1250 }
+        current_level:    { type: integer, example: 5 }
+        streak_days:      { type: integer, example: 14 }
+        role:             { $ref: '#/components/schemas/RolUsuario' }
+        is_banned:        { type: boolean, example: false }
+        github_url:       { type: string, nullable: true }
+        linkedin_url:     { type: string, nullable: true }
+        total_comments:   { type: integer, example: 42 }
+        total_solutions:  { type: integer, example: 7 }
+        created_at:       { type: string, format: date-time }
+
+    RolUsuario:
+      type: string
+      enum: [INVITADO, USUARIO, MODERADOR, ADMIN]
+      example: USUARIO
+
+    # ──────────────────────────────────────────
+    # Reto
+    # ──────────────────────────────────────────
+    Reto:
+      type: object
+      properties:
+        challenge_id:      { type: string, format: uuid }
+        title:             { type: string, example: "Palíndromo" }
+        description:       { type: string }
+        difficulty:        { $ref: '#/components/schemas/Dificultad' }
+        category:          { $ref: '#/components/schemas/Categoria' }
+        experience_reward: { type: integer, example: 100 }
+        instructions:      { type: string, nullable: true }
+        example_output:    { type: string, nullable: true }
+        examples:          { type: array, items: { type: object } }
+        hints:             { type: array, items: { type: object } }
+        created_at:        { type: string, format: date-time }
+        lenguajes:
+          type: array
+          items: { $ref: '#/components/schemas/LenguajeProgramacion' }
+        etiquetas:
+          type: array
+          items: { $ref: '#/components/schemas/Etiqueta' }
+
+    Dificultad:
+      type: string
+      enum: [FACIL, MEDIO, DIFICIL, EXPERTO]
+      example: MEDIO
+
+    Categoria:
+      type: string
+      enum: [ALGORITMOS, FRONTEND, BACKEND, DATABASE, DEVOPS]
+      example: ALGORITMOS
+
+    LenguajeProgramacion:
+      type: object
+      properties:
+        language_id:         { type: string, format: uuid }
+        name:                { type: string, example: "JavaScript" }
+        monaco_language_id:  { type: string, example: "javascript" }
+        initial_code:        { type: string, nullable: true }
+        solution_code:       { type: string, nullable: true }
+        validation_code:     { type: string, nullable: true }
+
+    ProgresoReto:
+      type: object
+      properties:
+        user_id:       { type: string, format: uuid }
+        challenge_id:  { type: string, format: uuid }
+        status:        { $ref: '#/components/schemas/EstadoProgreso' }
+        user_solution: { type: string, nullable: true }
+        completed_at:  { type: string, format: date-time, nullable: true }
+
+    EstadoProgreso:
+      type: string
+      enum: [SIN_EMPEZAR, EN_PROGRESO, COMPLETADO, ABANDONADO]
+      example: EN_PROGRESO
+
+    ResultadoEjecucion:
+      type: object
+      properties:
+        stdout:       { type: string }
+        stderr:       { type: string }
+        exitCode:     { type: integer, example: 0 }
+        signal:       { type: string, nullable: true }
+        timedOut:     { type: boolean, example: false }
+        compileError: { type: boolean, example: false }
+
+    # ──────────────────────────────────────────
+    # Academia
+    # ──────────────────────────────────────────
+    ContenidoAcademia:
+      type: object
+      properties:
+        content_id:   { type: string, format: uuid }
+        title:        { type: string, example: "Introducción a TypeScript" }
+        slug:         { type: string, example: "intro-typescript" }
+        description:  { type: string, nullable: true }
+        body:         { type: array, items: { type: object } }
+        type:         { $ref: '#/components/schemas/TipoContenido' }
+        is_published: { type: boolean }
+        order_index:  { type: integer }
+        created_at:   { type: string, format: date-time }
+
+    TipoContenido:
+      type: string
+      enum: [CURSO, MODULO, LECCION, CHEAT_SHEET]
+      example: LECCION
+
+    # ──────────────────────────────────────────
+    # Notas
+    # ──────────────────────────────────────────
+    Nota:
+      type: object
+      properties:
+        note_id:          { type: string, format: uuid }
+        user_id:          { type: string, format: uuid }
+        title:            { type: string, example: "Conceptos de closures en JS" }
+        summary:          { type: string }
+        language:         { type: string, example: "javascript" }
+        tags:             { type: array, items: { type: string } }
+        difficulty:       { type: string }
+        content:
+          type: array
+          items: { $ref: '#/components/schemas/BloqueContenido' }
+        community_status:
+          type: string
+          enum: [personal, pending, approved, rejected]
+        created_at: { type: string, format: date-time }
+
+    BloqueContenido:
+      type: object
+      required: [type, value]
+      properties:
+        type:     { type: string, enum: [text, code] }
+        value:    { type: string }
+        language: { type: string }
+        filename: { type: string }
+
+    # ──────────────────────────────────────────
+    # Publicaciones / Foro
+    # ──────────────────────────────────────────
+    Publicacion:
+      type: object
+      properties:
+        post_id:      { type: string, format: uuid }
+        author_id:    { type: string, format: uuid }
+        title:        { type: string, example: "¿Cómo optimizar queries en PostgreSQL?" }
+        slug:         { type: string, nullable: true }
+        content:      { type: array, items: { type: object } }
+        post_type:    { $ref: '#/components/schemas/TipoPublicacion' }
+        view_count:   { type: integer }
+        upvote_count: { type: integer }
+        created_at:   { type: string, format: date-time }
+        autor:        { $ref: '#/components/schemas/Usuario' }
+        etiquetas:
+          type: array
+          items: { $ref: '#/components/schemas/Etiqueta' }
+
+    TipoPublicacion:
+      type: string
+      enum: [PREGUNTA, ARTICULO, PROYECTO, DISCUSION, RECURSO, EMPLEO, TEAMUP]
+      example: PREGUNTA
+
+    Comentario:
+      type: object
+      properties:
+        user_comment_id:         { type: string, format: uuid }
+        post_id:                 { type: string, format: uuid }
+        author_id:               { type: string, format: uuid }
+        parent_user_comment_id:  { type: string, format: uuid, nullable: true }
+        content:                 { type: string }
+        is_solution:             { type: boolean }
+        autor:                   { $ref: '#/components/schemas/Usuario' }
+
+    Etiqueta:
+      type: object
+      properties:
+        tag_id: { type: string, format: uuid }
+        name:   { type: string, example: "typescript" }
+
+    # ──────────────────────────────────────────
+    # Mensajería
+    # ──────────────────────────────────────────
+    Conversacion:
+      type: object
+      properties:
+        conversation_id:       { type: string, format: uuid }
+        last_message:          { type: string, nullable: true }
+        last_message_time:     { type: string, format: date-time, nullable: true }
+        last_message_sender_id: { type: string, format: uuid, nullable: true }
+        participantes:
+          type: array
+          items: { $ref: '#/components/schemas/ParticipanteConversacion' }
+
+    ParticipanteConversacion:
+      type: object
+      properties:
+        conversation_id: { type: string, format: uuid }
+        user_id:         { type: string, format: uuid }
+        unread_count:    { type: integer }
+        is_archived:     { type: boolean }
+        usuario:         { $ref: '#/components/schemas/Usuario' }
+
+    Mensaje:
+      type: object
+      properties:
+        message_id:      { type: string, format: uuid }
+        conversation_id: { type: string, format: uuid }
+        sender_id:       { type: string, format: uuid }
+        content:         { type: string }
+        read:            { type: boolean }
+        reply_to_id:     { type: string, format: uuid, nullable: true }
+        created_at:      { type: string, format: date-time }
+        emisor:          { $ref: '#/components/schemas/Usuario' }
+
+    # ──────────────────────────────────────────
+    # Logros
+    # ──────────────────────────────────────────
+    Logro:
+      type: object
+      properties:
+        achievement_id: { type: string, format: uuid }
+        title:          { type: string, example: "Primer reto completado" }
+        description:    { type: string }
+        trigger_type:
+          type: string
+          enum: [challenge_count, note_count, comment_count, solutions_given,
+                 level_reached, streak_days, xp_total, custom,
+                 post_count, post_featured, avatar_changed]
+        threshold:     { type: integer, example: 1 }
+        xp_reward:     { type: integer, example: 50 }
+        rarity:
+          type: string
+          enum: [common, rare, epic, legendary]
+        emblem_url:    { type: string, nullable: true }
+        is_active:     { type: boolean }
+        status:
+          type: string
+          enum: [pending, published]
+        display_order: { type: integer }
+
+    InfoNivel:
+      type: object
+      properties:
+        currentLevel:    { type: integer, example: 5 }
+        currentXP:       { type: integer, example: 1250 }
+        xpForNextLevel:  { type: integer, example: 2000 }
+        xpForThisLevel:  { type: integer, example: 1000 }
+        progressPercent: { type: number, format: float, example: 62.5 }
+
+  responses:
+    Unauthorized:
+      description: Token ausente, inválido o expirado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: "Token inválido o expirado" }
+
+    Forbidden:
+      description: Sin permisos suficientes para esta operación
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+    Conflict:
+      description: Conflicto — el recurso ya existe
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+    ValidationError:
+      description: Error de validación de los campos enviados
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ValidationError' }
+
+    ServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }

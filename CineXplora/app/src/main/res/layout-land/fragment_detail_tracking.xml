@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="?android:attr/windowBackground">
+
+    <!-- Panel izquierdo: poster del titulo -->
+    <ImageView
+        android:id="@+id/imgPosterDetail"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:scaleType="centerCrop" />
+
+    <!-- Divisor vertical -->
+    <View
+        android:layout_width="@dimen/divider_height"
+        android:layout_height="match_parent"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Panel derecho: datos del seguimiento -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_xl">
+
+            <!-- Cabecera: tipo + fecha -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_md">
+
+                <TextView
+                    android:id="@+id/txtTypeDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_type_serie"
+                    android:paddingHorizontal="@dimen/space_sm"
+                    android:paddingVertical="2dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="SERIE" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/txtDateDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/space_sm"
+                    android:gravity="center_vertical"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"
+                    tools:text="01/02/2026"
+                    app:drawableStartCompat="@drawable/ic_calendar_today"
+                    app:drawableTint="?android:attr/textColorSecondary" />
+            </LinearLayout>
+
+            <!-- Titulo -->
+            <TextView
+                android:id="@+id/txtTitleDetail"
+                style="@style/CineXplora.Text.HeadlineMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_sm"
+                tools:text="Stranger Things" />
+
+            <!-- Rating -->
+            <RatingBar
+                android:id="@+id/ratingBarDetail"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:progressTint="?attr/colorPrimary"
+                android:secondaryProgressTint="?attr/colorPrimary" />
+
+            <!-- Divisor -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_marginVertical="@dimen/space_lg"
+                android:background="?android:attr/listDivider" />
+
+            <!-- Comentario -->
+            <TextView
+                android:id="@+id/lblComment"
+                style="@style/CineXplora.Text.TitleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_md"
+                android:text="@string/label_your_comment" />
+
+            <TextView
+                android:id="@+id/txtCommentDetail"
+                style="@style/CineXplora.Text.BodyLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_comment_box"
+                android:lineSpacingMultiplier="1.2"
+                android:padding="@dimen/space_lg" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

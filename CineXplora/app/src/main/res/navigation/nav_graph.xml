@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav"
+    app:startDestination="@id/exploreFragment">
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="es.iesagora.cinexplora.view.explore.ExploreFragment"
+        android:label="@string/nav_explore"
+        tools:layout="@layout/fragment_explore" >
+        <argument
+            android:name="screen_type"
+            android:defaultValue="explore"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_exploreFragment_to_seriesDetailFragment"
+            app:destination="@id/seriesDetailFragment" />
+        <action
+            android:id="@+id/action_exploreFragment_to_moviesDetailFragment"
+            app:destination="@id/moviesDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followUpFragment"
+        android:name="es.iesagora.cinexplora.view.tracking.TrackingFragment"
+        android:label="@string/nav_follow_up"
+        tools:layout="@layout/fragment_tracking" >
+        <action
+            android:id="@+id/action_followUpFragment_to_detailTrackingFragment"
+            app:destination="@id/detailTrackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTrackingFragment"
+        android:name="es.iesagora.cinexplora.view.tracking.AddTrackingFragment"
+        android:label="@string/title_add_new_tracking"
+        tools:layout="@layout/fragment_add_tracking" />
+    <fragment
+        android:id="@+id/moviesDetailFragment"
+        android:name="es.iesagora.cinexplora.view.details.MoviesDetailFragment"
+        android:label="@string/detailTitle" />
+        <action
+            android:id="@+id/action_moviesDetail_to_personDetail"
+            app:destination="@id/personDetailFragment" />
+    <fragment
+        android:id="@+id/seriesDetailFragment"
+        android:name="es.iesagora.cinexplora.view.details.SeriesDetailFragment"
+        android:label="@string/detailTitle" />
+        <action
+            android:id="@+id/action_seriesDetail_to_personDetail"
+            app:destination="@id/personDetailFragment" />
+    <fragment
+        android:id="@+id/watchlistFragment"
+        android:name="es.iesagora.cinexplora.view.watchlist.WatchlistFragment"
+        android:label="@string/nav_watchlist"
+        tools:layout="@layout/fragment_watchlist" />
+    <fragment
+        android:id="@+id/detailTrackingFragment"
+        android:name="es.iesagora.cinexplora.view.details.DetailTrackingFragment"
+        android:label="@string/nav_detail"
+        tools:layout="@layout/fragment_detail_tracking" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="es.iesagora.cinexplora.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/personDetailFragment"
+        android:name="es.iesagora.cinexplora.view.details.PersonDetailFragment"
+        android:label="@string/title_person_detail"
+        tools:layout="@layout/fragment_person_detail" />
+    <fragment
+        android:id="@+id/favoriteActorsFragment"
+        android:name="es.iesagora.cinexplora.view.favorites.FavoriteActorsFragment"
+        android:label="@string/nav_favorite_actors"
+        tools:layout="@layout/fragment_favorite_actors" >
+        <action
+            android:id="@+id/action_favoriteActors_to_personDetail"
+            app:destination="@id/personDetailFragment" />
+    </fragment>
+
+</navigation>

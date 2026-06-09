@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="?android:attr/windowBackground">
+
+    <!-- Panel izquierdo: titulo y filtros de tipo -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:background="?attr/colorSurface"
+        android:padding="@dimen/space_lg">
+
+        <TextView
+            style="@style/CineXplora.Text.HeadlineLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_watchlist"
+            android:layout_marginBottom="@dimen/space_xl" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/selector_text_filter"
+                android:button="@null"
+                android:background="@drawable/selector_underline"
+                android:paddingVertical="@dimen/space_sm"
+                android:paddingHorizontal="@dimen/space_md"
+                android:checked="true"
+                android:layout_marginBottom="@dimen/space_xs" />
+
+            <RadioButton
+                android:id="@+id/radioMovies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_movie"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/selector_text_filter"
+                android:button="@null"
+                android:background="@drawable/selector_underline"
+                android:paddingVertical="@dimen/space_sm"
+                android:paddingHorizontal="@dimen/space_md"
+                android:layout_marginBottom="@dimen/space_xs" />
+
+            <RadioButton
+                android:id="@+id/radioSeries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_tv_show"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/selector_text_filter"
+                android:button="@null"
+                android:background="@drawable/selector_underline"
+                android:paddingVertical="@dimen/space_sm"
+                android:paddingHorizontal="@dimen/space_md" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <!-- Divisor vertical -->
+    <View
+        android:layout_width="@dimen/divider_height"
+        android:layout_height="match_parent"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Panel derecho: grid de contenidos -->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvWatchlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layoutEmptyState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_popcorn_empty"
+                app:tint="?android:attr/textColorSecondary"
+                android:alpha="0.5" />
+
+            <TextView
+                android:id="@+id/tvEmptyMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:text="@string/empty_watchlist_title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="?android:attr/textColorPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoToExplore"
+                style="@style/CineXplora.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/btn_explore_catalog" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="?attr/colorPrimary"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

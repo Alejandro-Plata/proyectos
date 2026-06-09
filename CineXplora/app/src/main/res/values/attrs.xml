@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="accentGlow" format="color" />
+    <attr name="badgeMovie" format="color" />
+    <attr name="badgeSerie" format="color" />
+    <attr name="errorSurface" format="color" />
+    <attr name="successColor" format="color" />
+    <attr name="successSurface" format="color" />
+    <attr name="surfaceElevated" format="color" />
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "514811399414",
+    "project_id": "cinexplora-ed6bc",
+    "storage_bucket": "cinexplora-ed6bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514811399414:android:c1df592891b06e1210b0d7",
+        "android_client_info": {
+          "package_name": "es.iesagora.cinexplora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514811399414-2g7eon5l4o32629hvgjneovufkedep3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.iesagora.cinexplora",
+            "certificate_hash": "9c0c6c6752fb4057c567384ad7323d3827c73b7e"
+          }
+        },
+        {
+          "client_id": "514811399414-3gslm5m117c2lhgi91ka6gf5eg8mqk9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.iesagora.cinexplora",
+            "certificate_hash": "9aa83d5ded8b3558892e85663dcbdf2f6ace11fd"
+          }
+        },
+        {
+          "client_id": "514811399414-elf3qo3nrvama013n9sdr5tfohre31rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJ1Roy98R3xYaIYaSmsGfIGbLZUKTrl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514811399414-elf3qo3nrvama013n9sdr5tfohre31rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,68 @@
+
+.notched-tr {
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.notched-tl {
+    clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
+}
+.notched-br {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+}
+.notched-bl {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+/* Top-right + Bottom-left double notch (for modal) */
+.notched-tr-bl {
+    clip-path: polygon(
+        0 0,
+        calc(100% - 14px) 0,
+        100% 14px,
+        100% 100%,
+        14px 100%,
+        0 calc(100% - 14px)
+    );
+}
+
+/* ---------- Avatar shape: square with top-right notch ---------- */
+.hex-shield {
+    clip-path: polygon(0 0, 80% 0, 100% 20%, 100% 100%, 0 100%);
+}
+
+/* ---------- Message entry animations ---------- */
+@keyframes notch-reveal-own {
+    from {
+        clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%, 100% 100%, 100% 100%);
+        opacity: 0;
+    }
+    to {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 100%);
+        opacity: 1;
+    }
+}
+
+@keyframes notch-reveal-other {
+    from {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 100%, 0 100%, 0 calc(100% - 14px));
+        opacity: 0;
+    }
+    to {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px), 0 calc(100% - 14px));
+        opacity: 1;
+    }
+}
+
+.msg-own-enter {
+    animation: notch-reveal-own 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.msg-other-enter {
+    animation: notch-reveal-other 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .msg-own-enter,
+    .msg-other-enter {
+        animation: none;
+        opacity: 1;
+    }
+}

@@ -1,0 +1,46 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.CineXplora" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/light_accent_primary</item>
+        <item name="colorPrimaryVariant">@color/light_accent_primary_variant</item>
+        <item name="colorOnPrimary">@color/light_on_accent</item>
+        <item name="colorSecondary">@color/light_accent_secondary</item>
+        <item name="colorOnSecondary">@color/light_on_accent</item>
+
+
+        <item name="android:windowBackground">@color/light_background</item>
+        <item name="colorSurface">@color/light_surface</item>
+        <item name="colorSurfaceVariant">@color/light_surface_elevated</item>
+        <item name="colorOnSurface">@color/light_text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/light_text_secondary</item>
+
+        <item name="android:textColorPrimary">@color/light_text_primary</item>
+        <item name="android:textColorSecondary">@color/light_text_secondary</item>
+        <item name="android:textColorHint">@color/light_text_disabled</item>
+
+        <item name="colorControlNormal">@color/light_text_secondary</item>
+        <item name="colorControlActivated">@color/light_accent_primary</item>
+        <item name="colorError">@color/light_error</item>
+
+        <item name="android:statusBarColor">@color/light_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:listDivider">@color/light_divider</item>
+
+        <item name="accentGlow">@color/light_accent_glow</item>
+        <item name="badgeMovie">@color/light_badge_movie</item>
+        <item name="badgeSerie">@color/light_badge_serie</item>
+        <item name="errorSurface">@color/light_error_surface</item>
+        <item name="successColor">@color/light_success</item>
+        <item name="successSurface">@color/light_success_surface</item>
+        <item name="surfaceElevated">@color/light_surface_elevated</item>
+
+        <item name="textInputStyle">@style/CineXplora.TextInputLayout</item>
+        <item name="materialButtonStyle">@style/CineXplora.Button</item>
+        <item name="materialCardViewStyle">@style/CineXplora.Card</item>
+        <item name="alertDialogTheme">@style/CineXplora.AlertDialog</item>
+    </style>
+
+    <style name="Theme.CineXplora" parent="Base.Theme.CineXplora" />
+</resources>

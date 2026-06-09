@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CineXplora</string>
+    <string name="listFragmentTitle">Explora</string>
+    <string name="detailTitle">Detalle</string>
+    <string name="explora">Explora</string>
+    <string name="explore_title">Explorar</string>
+    <string name="error_1">¡Vaya!</string>
+    <string name="error_2">No hemos podido conectar con el servidor. Por favor, revisa tu conexión.</string>
+    <string name="try_again">Reintentar</string>
+    <string name="btn_watch_trailer">Ver tráiler</string>
+    <string name="title_synopsis">Sinopsis</string>
+    <string name="title_info">Información</string>
+    <string name="label_type">Tipo</string>
+    <string name="label_release_date">Fecha de emisión</string>
+    <string name="label_budget">Presupuesto</string>
+    <string name="type_movie">Película</string>
+    <string name="type_tv_show">Serie de TV</string>
+    <string name="label_status">Estado</string>
+    <string name="label_seasons">Temporadas</string>
+    <string name="label_episodes">Episodios</string>
+    <string name="empty_watchlist_series_title">Tu lista de series está vacía</string>
+    <string name="empty_watchlist_series_subtitle">Descubre nuevas temporadas y añádelas a tu lista.</string>
+    <string name="btn_explore_series">Explorar series</string>
+    <string name="empty_watchlist_subtitle">¡Explora nuestro catálogo de películas!</string>
+    <string name="btn_explore_catalog">Explorar catálogo</string>
+    <string name="empty_watchlist_title">Tu lista de películas está vacía</string>
+    <string name="title_add_new_tracking">Nuevo Seguimiento</string>
+    <string name="type_series">Tipo</string>
+    <string name="hint_title">Título</string>
+    <string name="hint_date_watched">03/03/2025</string>
+    <string name="label_my_rating">Puntuación</string>
+    <string name="label_add_memory">Imagen de recuerdo</string>
+    <string name="text_tap_to_add_image">Añadir imagen</string>
+    <string name="btn_save_tracking">Guardar seguimiento</string>
+    <string name="label_date_finished">Fecha de finalización</string>
+    <string name="hint_select_date">03/03/2000</string>
+    <string name="hint_title_placeholder">Stranger Things…</string>
+    <string name="label_title">Título</string>
+    <string name="nav_follow_up">Seguimiento</string>
+    <string name="nav_explore">Explorar</string>
+    <string name="nav_watchlist">Pendientes</string>
+    <string name="nav_detail">Detalles</string>
+    <string-array name="languages_array">
+        <item>Español</item>
+        <item>Catalán</item>
+        <item>Inglés</item>
+        <item>Alemán</item>
+        <item>Francés</item>
+    </string-array>
+
+    <!-- Filtros de seguimiento -->
+    <string name="hint_search_title">Buscar por título…</string>
+    <string name="label_sort_by">Ordenar por</string>
+    <string name="sort_date_desc">Recientes</string>
+    <string name="sort_date_asc">Antiguas</string>
+    <string name="sort_rating_desc">Mejor</string>
+    <string name="sort_rating_asc">Peor</string>
+    <string name="btn_advanced_filters">Filtros avanzados</string>
+    <string name="label_date_range">Rango de fechas</string>
+    <string name="hint_date_from">Desde</string>
+    <string name="hint_date_to">Hasta</string>
+    <string name="label_rating_range">Rango de puntuación</string>
+    <string name="hint_rating_min">Mín (0–5)</string>
+    <string name="hint_rating_max">Máx (0–5)</string>
+    <string name="btn_apply_filters">Aplicar</string>
+    <string name="btn_clear_filters">Limpiar</string>
+    <string name="msg_no_results">No hay resultados con los filtros aplicados</string>
+    <string name="msg_no_tracking_yet">No has añadido ningún seguimiento todavía</string>
+    <string name="msg_press_plus">Pulsa el botón + para empezar</string>
+    <string name="error_min_greater_than_max">El mínimo no puede superar al máximo</string>
+    <string name="error_rating_range">Debe estar entre 0 y 5</string>
+    <string name="error_date_from_after_to">La fecha desde no puede ser posterior a hasta</string>
+    <string name="title_validation_error">Error de validación</string>
+    <string name="msg_fix_filter_errors">Corrige los errores en los filtros</string>
+
+    <!-- Foto de perfil -->
+    <string name="btn_change_photo">Cambiar foto</string>
+    <string name="label_profile_photo">Foto de perfil (opcional)</string>
+
+    <!-- Ajustes -->
+    <string name="title_settings">Ajustes</string>
+    <string name="label_username">Nombre de usuario</string>
+    <string name="label_preferred_language">Idioma preferido</string>
+    <string name="label_data_storage">Datos y Almacenamiento</string>
+    <string name="label_wifi_only">Solo cargar imágenes con Wi-Fi</string>
+    <string name="label_wifi_subtitle">Ahorra datos móviles cargando imágenes solo con Wi-Fi</string>
+    <string name="label_appearance">Apariencia</string>
+    <string name="btn_light">Claro</string>
+    <string name="btn_dark">Oscuro</string>
+    <string name="btn_save_preferences">Guardar Preferencias</string>
+    <string name="btn_reset_defaults">Restaurar valores predeterminados</string>
+    <string name="btn_logout">Cerrar Sesión</string>
+    <string name="msg_settings_saved">Ajustes guardados correctamente</string>
+    <string name="msg_settings_reset">Ajustes restaurados</string>
+
+    <!-- Diálogos -->
+    <string name="dialog_logout_title">Cerrar Sesión</string>
+    <string name="dialog_logout_message">¿Estás seguro de que quieres salir?</string>
+    <string name="dialog_logout_confirm">Salir</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="dialog_delete_title">Eliminar seguimiento</string>
+    <string name="dialog_delete_message">¿Seguro que quieres eliminar \'%s\'?</string>
+    <string name="dialog_delete_confirm">Eliminar</string>
+    <string name="msg_deleted">%s eliminado</string>
+    <string name="dialog_undo">Deshacer</string>
+    <string name="dialog_welcome_title">¡Bienvenido!</string>
+    <string name="dialog_welcome_message">¡Hola! Para personalizar tu experiencia, puedes configurar tu nombre en Ajustes.</string>
+    <string name="dialog_go_to_settings">Ir a Ajustes</string>
+    <string name="dialog_later">Más tarde</string>
+    <string name="dialog_tracking_pending_title">Seguimiento pendiente</string>
+    <string name="dialog_tracking_pending_message">Hola, %1$s. ¿Has visto ya tu %2$s pendiente %3$s?</string>
+    <string name="dialog_add_tracking">Añadir Seguimiento</string>
+    <string name="dialog_not_yet">Aún no</string>
+    <string name="type_movie_lower">película</string>
+    <string name="type_serie_lower">serie</string>
+
+    <!-- Tracking guardado -->
+    <string name="dialog_tracking_saved_title">Seguimiento guardado</string>
+    <string name="dialog_tracking_saved_message">El seguimiento se ha guardado correctamente.</string>
+    <string name="dialog_accept">Aceptar</string>
+    <string name="msg_already_tracked">Ya tienes este título</string>
+
+    <!-- Auth -->
+    <string name="label_director_name">Nombre de director</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_confirm_password">Repetir contraseña</string>
+    <string name="btn_register">Registrarme</string>
+    <string name="btn_login">Iniciar sesión</string>
+    <string name="link_already_account">¿Ya tienes cuenta?</string>
+    <string name="link_enter_here">Entra aquí</string>
+    <string name="link_no_account">¿No tienes cuenta?</string>
+    <string name="link_register_here">Regístrate aquí</string>
+    <string name="link_forgot_password">¿Has olvidado tu contraseña?</string>
+
+    <!-- Login -->
+    <string name="login_welcome">Bienvenido</string>
+    <string name="login_subtitle">Inicia sesión para continuar</string>
+    <string name="login_or_continue_with">O continúa con</string>
+    <string name="error_login_invalid">Usuario o contraseña incorrectos</string>
+
+    <!-- Add tracking -->
+    <string name="label_comments_optional">Comentarios (opcional)</string>
+    <string name="hint_write_comment">Escribe aquí tu comentario…</string>
+    <string name="hint_select_date_text">Selecciona la fecha</string>
+    <string name="error_title_required">El título es obligatorio</string>
+    <string name="error_date_required">La fecha es obligatoria</string>
+    <string name="error_write_title">Escribe un título…</string>
+    <string name="error_upload_image">Error al subir imagen: %s</string>
+    <string name="error_register">Error al registrar</string>
+
+    <!-- Watchlist -->
+    <string name="msg_no_pending_movies">No tienes películas pendientes</string>
+    <string name="msg_no_pending_series">No tienes series pendientes</string>
+    <string name="msg_empty_list">¡Tu lista está vacía!</string>
+
+    <!-- Detail tracking -->
+    <string name="label_your_comment">Tu comentario</string>
+
+    <!-- Settings -->
+    <string name="hint_username_placeholder">Ej: Cinefilo123</string>
+
+    <!-- Register -->
+    <string name="label_add_photo">Añadir foto de perfil</string>
+
+    <!-- Reparto y equipo técnico -->
+    <string name="title_cast">Reparto</string>
+    <string name="title_crew">Equipo técnico</string>
+    <string name="label_direction">Dirección: </string>
+    <string name="label_screenplay">Guión: </string>
+    <string name="btn_see_more_cast">Ver más</string>
+
+    <!-- Detalle de persona -->
+    <string name="title_person_detail">Detalle de persona</string>
+    <string name="title_personal_info">Información personal</string>
+    <string name="label_birthday">Nacimiento:</string>
+    <string name="label_birth_place">Lugar de nacimiento:</string>
+    <string name="label_deathday">Fallecimiento:</string>
+    <string name="title_biography">Biografía</string>
+    <string name="title_known_for">Conocido/a por</string>
+
+    <!-- Actores favoritos -->
+    <string name="nav_favorite_actors">Actores favoritos</string>
+    <string name="btn_add_favorite_actor">Añadir a actores favoritos</string>
+    <string name="btn_remove_favorite_actor">Eliminar de favoritos</string>
+    <string name="dialog_remove_favorite_title">Eliminar favorito</string>
+    <string name="dialog_remove_favorite_message">¿Seguro que quieres eliminar a %s de tus actores favoritos?</string>
+    <string name="msg_no_favorite_actors">No has añadido ningún actor favorito todavía</string>
+    <string name="msg_add_favorite_actors_hint">Explora películas y series para descubrir actores que te gusten</string>
+
+    <!-- Watchlist actions -->
+    <string name="msg_already_in_list">Ya está en tu lista</string>
+    <string name="msg_added_to_watchlist">Añadida a la lista de pendientes: %s</string>
+    <string name="msg_no_trailer">No hay ningún trailer disponible.</string>
+    <string name="msg_load_more_error">Error al cargar más contenido</string>
+
+    <!-- Google Sign-In -->
+    <string name="msg_google_cancelled">Registro con Google cancelado.</string>
+    <string name="msg_google_account_error">No se pudo obtener la cuenta de Google.</string>
+    <string name="msg_google_error">Error Google Sign-In: %s</string>
+    <string name="msg_google_error_code">Error código: %s - %s</string>
+
+    <!-- WiFi placeholder -->
+    <string name="msg_wifi_only_mode">Modo \'Solo WiFi\' activado.\nConéctate a una red WiFi para ver el contenido.</string>
+
+    <!-- Validation -->
+    <string name="error_name_required">El nombre es obligatorio</string>
+    <string name="error_email_required">El correo es obligatorio</string>
+    <string name="error_email_invalid">Introduce un correo válido (ej: usuario@dominio.com)</string>
+    <string name="error_password_required">La contraseña es obligatoria</string>
+    <string name="error_password_weak">Mínimo 8 caracteres, al menos una letra y un número</string>
+    <string name="error_confirm_password">Repite la contraseña</string>
+    <string name="error_passwords_mismatch">Las contraseñas no coinciden</string>
+</resources>

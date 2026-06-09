@@ -1,0 +1,33 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="valhalla-gradient" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#34d399" />
+            <stop offset="100%" stop-color="#22d3ee" />
+        </linearGradient>
+    </defs>
+    
+    <g transform="translate(6, 6) scale(1.1)">
+        <rect x="10" y="10" width="28" height="24" rx="4" fill="url(#valhalla-gradient)" />
+        
+        <g fill="#050505">
+            <circle cx="17" cy="19" r="2.5" />
+            <circle cx="31" cy="19" r="2.5" />
+            <rect x="15" y="26" width="3" height="3" opacity="0.6"/>
+            <rect x="22.5" y="26" width="3" height="3" opacity="0.6"/>
+            <rect x="30" y="26" width="3" height="3" opacity="0.6"/>
+        </g>
+        
+        <path d="M14 10 L8 2 M34 10 L40 2" stroke="url(#valhalla-gradient)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M24 10 L24 4" stroke="url(#valhalla-gradient)" stroke-width="3" stroke-linecap="round"/>
+        
+        <path d="M10 14 L2 20 L2 30 L10 26 Z" fill="url(#valhalla-gradient)" opacity="0.9"/>
+        <path d="M38 14 L46 20 L46 30 L38 26 Z" fill="url(#valhalla-gradient)" opacity="0.9"/>
+        
+        <g fill="url(#valhalla-gradient)">
+            <rect x="12" y="38" width="4" height="4" />
+            <rect x="18" y="42" width="4" height="4" />
+            <rect x="26" y="42" width="4" height="4" />
+            <rect x="32" y="38" width="4" height="4" />
+        </g>
+    </g>
+</svg>

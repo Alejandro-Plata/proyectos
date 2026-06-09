@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Espaciado -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">12dp</dimen>
+    <dimen name="space_lg">16dp</dimen>
+    <dimen name="space_xl">24dp</dimen>
+    <dimen name="space_2xl">32dp</dimen>
+    <dimen name="space_3xl">48dp</dimen>
+
+    <!-- Border Radius -->
+    <dimen name="radius_xs">2dp</dimen>
+    <dimen name="radius_sm">4dp</dimen>
+    <dimen name="radius_md">4dp</dimen>
+    <dimen name="radius_lg">4dp</dimen>
+
+    <!-- Componentes -->
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="card_border_width">1dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="icon_size_sm">16dp</dimen>
+    <dimen name="icon_size_md">24dp</dimen>
+    <dimen name="icon_size_lg">40dp</dimen>
+
+    <!-- Imágenes -->
+    <dimen name="avatar_size_sm">72dp</dimen>
+    <dimen name="avatar_size_md">100dp</dimen>
+    <dimen name="avatar_size_lg">180dp</dimen>
+    <dimen name="cast_item_width">100dp</dimen>
+    <dimen name="favorite_actor_photo">80dp</dimen>
+</resources>

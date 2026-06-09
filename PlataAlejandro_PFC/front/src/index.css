@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset CSS */
+
+* {
+    box-sizing: border-box;
+    position: relative;
+    min-width: none;
+}
+
+body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    text-wrap: balance;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+/* Ancho (Vertical) y Alto (Horizontal) */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* El carril (Track) - Transparente para efecto flotante */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* El pulgar (Thumb) - MODO CLARO (Por defecto) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.3); /* Slate-400 suave */
+  border-radius: 10px;
+  /* Un pequeño borde transparente crea espacio alrededor si quieres que flote más */
+  border: 1px solid transparent; 
+  background-clip: content-box;
+}
+
+/* Hover en Modo Claro */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.6);
+}
+
+/* --- MODO OSCURO --- */
+/* Se activa cuando la clase 'dark' está presente en el HTML/Body */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1); /* Blanco muy sutil */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Un poco más visible al hover */
+}
+
+/* Opcional: Ocultar botones de flecha (arriba/abajo) si existen */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* ───── Animations ───── */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up  { animation: fadeInUp   0.25s ease both; }
+.animate-fade-in-down { animation: fadeInDown 0.25s ease both; }
+
+/* Hamburger menu overlay – slightly slower for a smooth feel */
+.menu-fade-in-down { animation: fadeInDown 0.2s cubic-bezier(0.4,0,0.2,1) both; }
+
+/* ───── Mobile design tokens ───── */
+:root {
+    --safe-pb: env(safe-area-inset-bottom, 0px);
+    --nav-h: 88px;
+    --fab-bottom: calc(var(--nav-h) + var(--safe-pb) + 16px);
+    --touch-min: 44px;
+}
+
+/* ───── Slow down default Tailwind animations ───── */
+/* These override the built-in Tailwind utility classes directly
+   so the fix works regardless of Tailwind config cache state.   */
+.animate-spin   { animation-duration: 2s   !important; }
+.animate-bounce { animation-duration: 1.8s !important; }
+.animate-pulse  { animation-duration: 2.8s !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ───── Select global ───── */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 0.85em;
+    cursor: pointer;
+}
+
+.dark select {
+    background-color: #0f1115;
+    color: #e2e8f0;
+    border-color: rgba(16, 185, 129, 0.15);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+.dark select option {
+    background-color: #0f1115;
+    color: #e2e8f0;
+}
+
+select:focus {
+    outline: none;
+}
+
+select option {
+    background-color: #ffffff;
+    color: #1e293b;
+}

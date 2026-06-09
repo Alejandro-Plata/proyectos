@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/watchlistFragment"
+        android:icon="@drawable/ic_nav_pending"
+        android:title="@string/nav_watchlist"
+        />
+
+    <item
+        android:id="@+id/exploreFragment"
+        android:icon="@drawable/ic_nav_explore"
+        android:title="@string/nav_explore" />
+
+    <item
+        android:id="@+id/followUpFragment"
+        android:icon="@drawable/ic_nav_follow_up"
+        android:title="@string/nav_follow_up" />
+
+    <item
+        android:id="@+id/favoriteActorsFragment"
+        android:icon="@drawable/ic_favorite"
+        android:title="@string/nav_favorite_actors" />
+
+</menu>
