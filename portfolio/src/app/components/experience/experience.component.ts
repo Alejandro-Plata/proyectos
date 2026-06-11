@@ -17,7 +17,7 @@ interface TimelineItem {
   standalone: true,
   template: `
     <section id="experiencia" class="mb-32">
-      <h3 class="text-2xl font-bold text-white mb-10">Experiencia & Educación</h3>
+      <h3 class="text-2xl font-bold text-white mb-10 font-orbitron text-neon tracking-wide">Experiencia & Educación</h3>
 
       <div class="relative border-l border-zinc-800 pl-6 ml-3 space-y-12">
         @for (item of timeline; track item.title) {

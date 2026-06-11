@@ -6,7 +6,7 @@ import { PROJECTS, Project } from '../../models/project.model';
   standalone: true,
   template: `
     <section id="proyectos" class="mb-32">
-      <h3 class="text-2xl font-bold text-white mb-10">Proyectos</h3>
+      <h3 class="text-2xl font-bold text-white mb-10 font-orbitron text-neon tracking-wide">Proyectos</h3>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         @for (project of projects; track project.title) {

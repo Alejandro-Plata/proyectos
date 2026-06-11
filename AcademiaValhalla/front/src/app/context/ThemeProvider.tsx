@@ -16,11 +16,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (savedTheme === 'light' || savedTheme === 'dark') {
             return savedTheme;
         }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'dark';
+
+        // Sin preferencia guardada: solo abrimos en claro si el navegador lo pide
+        // explícitamente. Si pide oscuro o no tiene ninguna preferencia, oscuro por defecto.
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            return 'light';
         }
 
-        return 'light';
+        return 'dark';
     });
 
     useEffect(() => {
@@ -35,10 +38,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-        const handleChange = (e: MediaQueryListEvent) => {
-            // Solo cambiamos automáticamente si NO hay preferencia guardada
+        const handleChange = () => {
+            // Solo cambiamos automáticamente si NO hay preferencia guardada.
+            // Misma regla que al arrancar: claro solo si el navegador lo pide
+            // explícitamente; en cualquier otro caso, oscuro.
             if (!localStorage.getItem('theme')) {
-                setTheme(e.matches ? 'dark' : 'light');
+                const prefiereClaro = window.matchMedia('(prefers-color-scheme: light)').matches;
+                setTheme(prefiereClaro ? 'light' : 'dark');
             }
         };
 

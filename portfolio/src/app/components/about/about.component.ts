@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
                  border border-zinc-800" />
 
         <div>
-          <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-tight text-white">
+          <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-tight text-white font-orbitron text-neon">
             Desarrollador Full Stack
           </h1>
           <h2 class="text-xl md:text-2xl text-zinc-400 font-light">
