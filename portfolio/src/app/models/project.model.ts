@@ -29,6 +29,7 @@ export const PROJECTS: Project[] = [
       'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+2',
       'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+3',
     ],
+    demoUrl: 'https://academia-valhalla-psi.vercel.app/',
     githubUrl: REPO,
   },
   {
@@ -42,7 +43,7 @@ export const PROJECTS: Project[] = [
       'assets/projects/playfutbet.png',
       'https://placehold.co/800x500/18181b/e4e4e7?text=PlayFutBet+2',
     ],
-    demoUrl: 'https://playfutbet-r.vercel.app/login',
+    demoUrl: 'https://playfutbet.vercel.app/',
     githubUrl: REPO,
   },
   {

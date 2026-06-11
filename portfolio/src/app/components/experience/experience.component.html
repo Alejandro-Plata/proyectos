@@ -1,0 +1,41 @@
+<section id="experiencia" class="mb-20 sm:mb-32">
+  <h3 class="text-xl sm:text-2xl font-bold text-white mb-8 sm:mb-10 font-orbitron text-neon tracking-wide">Experiencia & Educación</h3>
+
+  <div class="relative border-l border-zinc-800 pl-6 ml-3 space-y-12">
+    @for (item of timeline; track item.title) {
+      <div class="relative">
+        <div
+          class="absolute -left-[31px] top-1 w-3 h-3 rounded-sm"
+          [class.bg-zinc-100]="item.current"
+          [class.bg-zinc-800]="!item.current"
+          [class.border]="!item.current"
+          [class.border-zinc-500]="!item.current"></div>
+        <span class="text-sm font-mono text-zinc-400">{{ item.period }}</span>
+        <div class="flex flex-wrap items-center gap-2 mt-1">
+          <h4 class="text-lg font-bold text-white">{{ item.title }}</h4>
+          @if (item.badge) {
+            <span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full
+                         text-amber-300 border border-amber-400/50 bg-amber-400/10
+                         shadow-[0_0_12px_-2px_rgba(251,191,36,0.7)]">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.69 21.348a.53.53 0 0 1-.771-.56l.882-5.139a2.122 2.122 0 0 0-.611-1.879L2.453 10.13a.53.53 0 0 1 .294-.904l5.166-.756a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+              {{ item.badge }}
+            </span>
+          }
+        </div>
+        <p class="text-sm font-medium text-zinc-300" [class.mb-3]="item.bullets" [class.mb-2]="!item.bullets">
+          {{ item.place }}
+        </p>
+        @if (item.summary) {
+          <p class="text-sm text-zinc-400">{{ item.summary }}</p>
+        }
+        @if (item.bullets) {
+          <ul class="text-sm text-zinc-400 space-y-2 list-disc list-inside">
+            @for (bullet of item.bullets; track bullet) {
+              <li>{{ bullet }}</li>
+            }
+          </ul>
+        }
+      </div>
+    }
+  </div>
+</section>
