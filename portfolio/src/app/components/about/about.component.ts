@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 
         <div>
           <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-tight text-white">
-            Desarrollador Multiplataforma
+            Desarrollador Full Stack
           </h1>
           <h2 class="text-xl md:text-2xl text-zinc-400 font-light">
             Alejandro Plata Cortés
@@ -25,13 +25,13 @@ import { Component } from '@angular/core';
 
       <div class="max-w-2xl text-zinc-300 space-y-4 text-lg leading-relaxed">
         <p>
-          Soy una persona disciplinada, trabajadora, resolutiva y con gran capacidad de adaptación.
-          Actualmente cursando Desarrollo de Aplicaciones Multiplataforma.
+          Desarrollador Full Stack (Java/Spring &amp; React/Angular) con formación en Biología, lo que
+          me aporta una sólida capacidad de análisis y atención al detalle. Recientemente he
+          finalizado mis prácticas en NTT Data trabajando con arquitecturas MVC y testing.
         </p>
         <p>
-          Como biólogo, he desarrollado una mentalidad analítica y una sólida atención al detalle.
-          Me desenvuelvo bien en entornos dinámicos y bajo presión, con actitud positiva y
-          profesional.
+          Apasionado por la creación de soluciones eficientes y con un portfolio de proyectos propios
+          listos para producción.
         </p>
       </div>
 

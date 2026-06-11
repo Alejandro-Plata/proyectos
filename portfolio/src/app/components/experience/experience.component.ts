@@ -53,15 +53,13 @@ export class ExperienceComponent {
   timeline: TimelineItem[] = [
     {
       period: 'Abr 2025 - Jun 2025',
-      title: 'Cursos avanzados en formación dual',
-      place: 'NTT Data | Cáceres',
+      title: 'Desarrollador Junior (Prácticas) - NTT Data',
+      place: 'Cáceres',
       bullets: [
-        'Control de versiones con Git.',
-        'Desarrollo front-end con Angular.',
-        'Gestión de bases de datos a nivel intermedio-avanzado.',
-        'Java: testing con JUnit y Mockito, programación funcional con Streams y Lambdas, y gestión de dependencias con Maven.',
-        'Uso de agentes de IA y conocimiento avanzado de modelos de lenguaje (LLMs).',
-        'Automatización con IA y prompt engineering.',
+        'Desarrollo de aplicaciones siguiendo arquitectura MVC utilizando Java 8 y Spring Framework.',
+        'Implementación de vistas con JSP y controladores/servicios mediante interfaces.',
+        'Aseguramiento de la calidad del código mediante testing (JUnit, Mockito) y análisis de cobertura con SonarQube.',
+        'Control de versiones en equipo utilizando Git y SourceTree.',
       ],
     },
     {
