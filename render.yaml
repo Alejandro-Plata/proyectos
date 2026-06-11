@@ -1,0 +1,78 @@
+# Blueprint de Render — despliega los DOS backends gratis desde este monorepo.
+# Los frontends Angular NO van aquí: esos se publican en Vercel/Netlify (estáticos).
+# La base de datos es Neon (gratis) — su cadena se mete en DATABASE_URL (sync:false => se rellena en el panel).
+#
+# Plan free: el servicio se duerme tras ~15 min de inactividad y tarda ~50s en despertar.
+# - PlayFutBet lo tolera: su catchUp() recalcula la liga según el tiempo transcurrido al arrancar.
+# - El PFC reconecta el websocket al volver.
+
+services:
+  # ---------------- PFC / Academia Valhalla (Express + socket.io + Sequelize) ----------------
+  - type: web
+    name: valhalla-back
+    runtime: node
+    rootDir: AcademiaValhalla/back
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # --- secretos: se rellenan en el panel de Render, no se versionan ---
+      - key: DATABASE_URL          # cadena de Neon (postgresql://...sslmode=require)
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL          # URL del front desplegado, p.ej. https://valhalla.vercel.app
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL   # https://valhalla-back.onrender.com/api/v1/auth/google/callback
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_CALLBACK_URL   # https://valhalla-back.onrender.com/api/v1/auth/github/callback
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: JUDGE0_URL
+        sync: false
+      - key: JUDGE0_AUTH_TOKEN
+        sync: false
+      - key: JUDGE0_AUTH_HEADER
+        sync: false
+      - key: JUDGE0_WAIT_SUPPORTED
+        sync: false
+
+  # ---------------- PlayFutBet (Express + simulación con setInterval) ----------------
+  - type: web
+    name: playfutbet-back
+    runtime: node
+    rootDir: PlayFutBet/back
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm start
+    # Sin healthCheckPath: Render solo comprueba que el puerto queda a la escucha
+    # (PlayFutBet no expone una ruta raíz que devuelva 200).
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false

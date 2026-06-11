@@ -1,0 +1,149 @@
+import { Component, computed, signal } from '@angular/core';
+import { PROJECTS, Project } from '../../models/project.model';
+
+@Component({
+  selector: 'app-projects',
+  standalone: true,
+  template: `
+    <section id="proyectos" class="mb-32">
+      <h3 class="text-2xl font-bold text-white mb-10">Proyectos</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        @for (project of projects; track project.title) {
+          <article class="bg-zinc-900 border border-zinc-800 rounded-sm p-5 flex flex-col transition-colors duration-200 hover:border-zinc-600">
+
+            <div class="relative group cursor-pointer mb-5 overflow-hidden rounded-sm border border-zinc-800" (click)="openModal(project)">
+              <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
+                @for (img of project.images; track img) {
+                  <img [src]="img" [alt]="project.title" class="w-full h-56 object-cover flex-shrink-0 snap-center">
+                }
+              </div>
+              @if (project.videoUrl) {
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span class="bg-black/60 text-white rounded-full p-4 border border-white/20 backdrop-blur-sm">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                </div>
+              }
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <span class="bg-zinc-900 text-white text-xs px-3 py-1 rounded border border-zinc-700">
+                  {{ project.videoUrl ? 'Ver demo en vídeo' : 'Click para ampliar' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex-grow">
+              <h4 class="text-lg font-bold text-white mb-2">{{ project.title }}</h4>
+              <p class="text-sm text-zinc-400 mb-4 line-clamp-3">{{ project.description }}</p>
+
+              <div class="flex flex-wrap gap-2 mb-6">
+                @for (tech of project.tech; track tech) {
+                  <span class="text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded-sm border border-zinc-700">
+                    {{ tech }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="flex gap-3 mt-auto pt-4 border-t border-zinc-800">
+              @if (project.demoUrl) {
+                <a [href]="project.demoUrl" target="_blank" rel="noopener" class="text-sm text-white hover:text-zinc-300 flex items-center gap-1">
+                  Demo
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+              }
+              <a [href]="project.githubUrl" target="_blank" rel="noopener" class="text-sm text-zinc-400 hover:text-white flex items-center gap-1">
+                GitHub
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (isModalOpen()) {
+        <div class="fixed inset-0 bg-zinc-950/95 z-50 flex flex-col items-center justify-center p-4 backdrop-blur-sm" (click)="closeModal()">
+
+          <button class="absolute top-6 right-6 text-zinc-400 hover:text-white" (click)="closeModal()">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+
+          @if (currentVideo()) {
+            <div class="relative w-full max-w-3xl flex items-center justify-center" (click)="$event.stopPropagation()">
+              <video [src]="currentVideo()!" controls autoplay loop muted playsinline
+                     poster="assets/projects/android.png"
+                     class="max-h-[80vh] w-auto rounded border border-zinc-800 shadow-2xl"></video>
+            </div>
+          } @else {
+            <div class="relative w-full max-w-5xl flex items-center justify-center" (click)="$event.stopPropagation()">
+              <button class="absolute left-0 bg-zinc-900 border border-zinc-700 text-white p-3 rounded hover:bg-zinc-800" (click)="prevImage()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+              </button>
+
+              <img [src]="currentImage()" alt="Imagen del proyecto" class="max-h-[70vh] rounded border border-zinc-800 shadow-2xl">
+
+              <button class="absolute right-0 bg-zinc-900 border border-zinc-700 text-white p-3 rounded hover:bg-zinc-800" (click)="nextImage()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            </div>
+
+            <div class="flex gap-3 mt-8 overflow-x-auto max-w-full px-4" (click)="$event.stopPropagation()">
+              @for (img of currentImages(); track img; let i = $index) {
+                <img [src]="img"
+                     class="h-16 w-24 object-cover rounded cursor-pointer border-2 transition-colors"
+                     [class.border-zinc-300]="currentIndex() === i"
+                     [class.border-transparent]="currentIndex() !== i"
+                     [class.opacity-50]="currentIndex() !== i"
+                     (click)="setIndex(i)">
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+  `,
+  styles: [`
+    /* Oculta la barra de scroll del carrusel de la tarjeta manteniendo el desplazamiento. */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  `],
+})
+export class ProjectsComponent {
+  projects: Project[] = PROJECTS;
+
+  // Estado del modal con signals (Angular 19)
+  isModalOpen = signal<boolean>(false);
+  currentImages = signal<string[]>([]);
+  currentIndex = signal<number>(0);
+  currentImage = computed(() => this.currentImages()[this.currentIndex()]);
+  /** Si el proyecto abierto tiene vídeo, el modal lo reproduce en vez del carrusel. */
+  currentVideo = signal<string | null>(null);
+
+  openModal(project: Project): void {
+    this.currentImages.set(project.images);
+    this.currentIndex.set(0);
+    this.currentVideo.set(project.videoUrl ?? null);
+    this.isModalOpen.set(true);
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.currentVideo.set(null);
+    document.body.style.overflow = 'auto';
+  }
+
+  nextImage(): void {
+    const next = (this.currentIndex() + 1) % this.currentImages().length;
+    this.currentIndex.set(next);
+  }
+
+  prevImage(): void {
+    const prev = (this.currentIndex() - 1 + this.currentImages().length) % this.currentImages().length;
+    this.currentIndex.set(prev);
+  }
+
+  setIndex(index: number): void {
+    this.currentIndex.set(index);
+  }
+}
