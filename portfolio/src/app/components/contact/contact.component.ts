@@ -59,7 +59,7 @@ export class ContactComponent {
   // Web3Forms: crea una access key gratis en https://web3forms.com (te llega a tu correo,
   // pero tu email queda en su panel y NUNCA aparece en el HTML, así no lo capturan los grabbers).
   // TODO: pega aquí tu access key.
-  private readonly accessKey = 'TU_ACCESS_KEY_DE_WEB3FORMS';
+  private readonly accessKey = '7c152fa9-b9bb-4998-86a5-80dee46b0830';
 
   nombre = '';
   email = '';
