@@ -185,7 +185,8 @@ router.get('/validate', autenticar, async (req, res) => {
  *       '302':
  *         description: Redirección a Google OAuth
  */
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+// Quitamos la barra final para no generar dobles barras en el redirect (//oauth/callback).
+const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
 
 router.get('/google',
     passport.authenticate('google', { scope: ['email', 'profile'], session: false })

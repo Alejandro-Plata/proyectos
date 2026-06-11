@@ -1,14 +1,14 @@
 <section id="proyectos" class="mb-20 sm:mb-32">
   <h3 class="text-xl sm:text-2xl font-bold text-white mb-8 sm:mb-10 font-orbitron text-neon tracking-wide">Proyectos</h3>
 
-  <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar">
+  <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory projects-scroll">
     @for (project of projects; track project.title) {
-      <article class="bg-zinc-900 border border-zinc-800 rounded-sm p-5 flex flex-col transition-colors duration-200 hover:border-zinc-600 grow shrink-0 basis-72 sm:basis-80 snap-start">
+      <article class="bg-zinc-900 border border-zinc-800 rounded-sm p-5 flex flex-col transition-colors duration-200 hover:border-zinc-600 shrink-0 basis-80 sm:basis-[32rem] snap-start">
 
         <div class="relative group cursor-pointer mb-5 overflow-hidden rounded-sm border border-zinc-800" (click)="openModal(project)">
           <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
             @for (img of project.images; track img) {
-              <img [src]="img" [alt]="project.title" class="w-full h-56 object-cover flex-shrink-0 snap-center">
+              <img [src]="img" [alt]="project.title" class="w-full h-56 sm:h-72 object-cover flex-shrink-0 snap-center">
             }
           </div>
           @if (project.videoUrl) {

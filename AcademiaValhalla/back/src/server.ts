@@ -42,15 +42,19 @@ export async function conectarBD(retries = 5, delayMs = 3000) {
 
 const app = express();
 
+// Normaliza quitando la barra final para que el CORS sea robusto aunque
+// FRONTEND_URL esté configurado con o sin '/' al final.
+const normalizarOrigen = (u: string) => u.replace(/\/+$/, '');
+
 const ORIGENES_PERMITIDOS = [
     process.env.FRONTEND_URL,
     'http://localhost:5173',
-].filter(Boolean) as string[];
+].filter(Boolean).map((u) => normalizarOrigen(u as string));
 
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
-        if (ORIGENES_PERMITIDOS.includes(origin)) return callback(null, true);
+        if (ORIGENES_PERMITIDOS.includes(normalizarOrigen(origin))) return callback(null, true);
         callback(null, false);
     },
     credentials: false,

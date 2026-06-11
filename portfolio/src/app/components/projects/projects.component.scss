@@ -1,3 +1,16 @@
-/* Oculta la barra de scroll del carrusel de la tarjeta manteniendo el desplazamiento. */
+/* Oculta la barra de scroll del carrusel de imágenes interno de cada tarjeta. */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Barra de scroll visible y estilizada para la fila de proyectos. */
+.projects-scroll {
+  scrollbar-width: thin;                  /* Firefox */
+  scrollbar-color: #52525b transparent;   /* thumb (zinc-600) / track */
+}
+.projects-scroll::-webkit-scrollbar { height: 8px; }
+.projects-scroll::-webkit-scrollbar-track { background: transparent; }
+.projects-scroll::-webkit-scrollbar-thumb {
+  background: #52525b;        /* zinc-600 */
+  border-radius: 9999px;
+}
+.projects-scroll::-webkit-scrollbar-thumb:hover { background: #71717a; } /* zinc-500 */
