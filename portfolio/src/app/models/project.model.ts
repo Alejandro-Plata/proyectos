@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     images: [
       'assets/projects/android.png'
     ],
-    videoUrl: 'assets/projects/cinexplora_review.webm',
+    videoUrl: 'assets/projects/cinexplora_review.mp4',
     githubUrl: REPO,
   },
   {
