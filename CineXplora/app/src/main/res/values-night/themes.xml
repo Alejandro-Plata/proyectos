@@ -19,10 +19,14 @@
 
         <item name="colorControlNormal">@color/dark_text_secondary</item>
         <item name="colorControlActivated">@color/dark_accent_primary</item>
+        <!-- Ripple dorado sutil al tocar elementos -->
+        <item name="colorControlHighlight">#1FD4AF37</item>
         <item name="colorError">@color/dark_error</item>
 
         <item name="android:statusBarColor">@color/dark_background</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
 
         <item name="android:listDivider">@color/dark_divider</item>
 
@@ -38,5 +42,6 @@
         <item name="materialButtonStyle">@style/CineXplora.Button</item>
         <item name="materialCardViewStyle">@style/CineXplora.Card</item>
         <item name="alertDialogTheme">@style/CineXplora.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/CineXplora.AlertDialog</item>
     </style>
 </resources>

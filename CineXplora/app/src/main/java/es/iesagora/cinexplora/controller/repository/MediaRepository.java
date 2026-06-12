@@ -1,13 +1,14 @@
 package es.iesagora.cinexplora.controller.repository;
 
 import java.util.List;
-
 import es.iesagora.cinexplora.model.Language;
+import es.iesagora.cinexplora.model.request.Genre;
 import es.iesagora.cinexplora.model.request.Movie;
 import es.iesagora.cinexplora.model.request.MovieDetail;
 import es.iesagora.cinexplora.model.request.PersonDetail;
 import es.iesagora.cinexplora.model.response.CombinedCreditsResponse;
 import es.iesagora.cinexplora.model.response.CreditsResponse;
+import es.iesagora.cinexplora.model.response.GenresResponse;
 import es.iesagora.cinexplora.model.response.MoviesResponse;
 import es.iesagora.cinexplora.model.states.Resource;
 import es.iesagora.cinexplora.model.request.Serie;
@@ -342,6 +343,84 @@ public class MediaRepository {
 
                     @Override
                     public void onFailure(Call<CombinedCreditsResponse> call, Throwable t) {
+                        callback.onResult(Resource.error("Error de red: " + t.getMessage()));
+                    }
+                });
+    }
+
+    public interface GenresCallback {
+        void onResult(Resource<List<Genre>> result);
+    }
+
+    public void getMovieGenres(GenresCallback callback) {
+        api.getMovieGenres(getLanguageCode()).enqueue(new Callback<GenresResponse>() {
+            @Override
+            public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onResult(Resource.success(response.body().getGenres()));
+                } else {
+                    callback.onResult(Resource.error("No se pudieron cargar los géneros"));
+                }
+            }
+            @Override
+            public void onFailure(Call<GenresResponse> call, Throwable t) {
+                callback.onResult(Resource.error("Error de red: " + t.getMessage()));
+            }
+        });
+    }
+
+    public void getTvGenres(GenresCallback callback) {
+        api.getTvGenres(getLanguageCode()).enqueue(new Callback<GenresResponse>() {
+            @Override
+            public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onResult(Resource.success(response.body().getGenres()));
+                } else {
+                    callback.onResult(Resource.error("No se pudieron cargar los géneros"));
+                }
+            }
+            @Override
+            public void onFailure(Call<GenresResponse> call, Throwable t) {
+                callback.onResult(Resource.error("Error de red: " + t.getMessage()));
+            }
+        });
+    }
+
+    public void discoverMovies(int page, String withGenres, String sortBy, MoviesCallback callback) {
+        callback.onResult(Resource.loading());
+        int minVotes = "vote_average.desc".equals(sortBy) ? 200 : 0;
+        api.discoverMovies(page, getLanguageCode(), withGenres, sortBy, minVotes)
+                .enqueue(new Callback<MoviesResponse>() {
+                    @Override
+                    public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            callback.onResult(Resource.success(response.body().getResults()));
+                        } else {
+                            callback.onResult(Resource.error("No se pudo cargar el catálogo"));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                        callback.onResult(Resource.error("Error de red: " + t.getMessage()));
+                    }
+                });
+    }
+
+    public void discoverSeries(int page, String withGenres, String sortBy, SeriesCallback callback) {
+        callback.onResult(Resource.loading());
+        int minVotes = "vote_average.desc".equals(sortBy) ? 200 : 0;
+        api.discoverSeries(page, getLanguageCode(), withGenres, sortBy, minVotes)
+                .enqueue(new Callback<SeriesResponse>() {
+                    @Override
+                    public void onResponse(Call<SeriesResponse> call, Response<SeriesResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            callback.onResult(Resource.success(response.body().getResults()));
+                        } else {
+                            callback.onResult(Resource.error("No se pudo cargar el catálogo"));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<SeriesResponse> call, Throwable t) {
                         callback.onResult(Resource.error("Error de red: " + t.getMessage()));
                     }
                 });

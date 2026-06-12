@@ -185,6 +185,11 @@ public class TrackingRepository {
                                 continue;
                             }
                         }
+                        if (filter.getMediaType() != null && !filter.getMediaType().equals("all")) {
+                            if (!item.getType().equalsIgnoreCase(filter.getMediaType())) {
+                                continue;
+                            }
+                        }
                         lista.add(item);
                     }
                 }

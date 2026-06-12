@@ -6,72 +6,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
-    android:padding="16dp">
+    android:paddingHorizontal="16dp">
 
     <LinearLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="@dimen/space_lg"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <RadioGroup
-            android:id="@+id/radioGroupFilters"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@id/btnAll">
 
-            <RadioButton
-                android:id="@+id/radioAll"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAll"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="All"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingBottom="8dp"
-                android:paddingHorizontal="12dp"
-                android:checked="true"
-                android:layout_marginEnd="16dp"/>
+                android:layout_weight="1"
+                android:text="@string/filter_all" />
 
-            <RadioButton
-                android:id="@+id/radioMovies"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMovies"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/type_movie"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingBottom="8dp"
-                android:paddingHorizontal="12dp"
-                android:layout_marginEnd="16dp"/>
+                android:layout_weight="1"
+                android:text="@string/type_movie" />
 
-            <RadioButton
-                android:id="@+id/radioSeries"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSeries"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/type_tv_show"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingBottom="8dp"
-                android:paddingHorizontal="12dp"/>
+                android:layout_weight="1"
+                android:text="@string/type_tv_show" />
 
-        </RadioGroup>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
     </LinearLayout>
 
@@ -79,8 +58,9 @@
         android:id="@+id/rvWatchlist"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:clipToPadding="false"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,33 +75,42 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
+        android:paddingHorizontal="@dimen/space_2xl"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:src="@drawable/ic_popcorn_empty"
-            app:tint="?android:attr/textColorSecondary"/>
+            android:alpha="0.85"
+            app:tint="?attr/colorPrimary" />
 
         <TextView
             android:id="@+id/tvEmptyMessage"
+            style="@style/CineXplora.Text.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/empty_watchlist_title"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginTop="@dimen/space_lg"
             android:gravity="center"
-            android:textColor="?android:attr/textColorPrimary"/>
+            android:text="@string/empty_watchlist_title" />
+
+        <TextView
+            style="@style/CineXplora.Text.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:gravity="center"
+            android:text="@string/empty_watchlist_subtitle"
+            android:textColor="?android:attr/textColorSecondary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoToExplore"
             style="@style/CineXplora.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"
+            android:layout_marginTop="@dimen/space_xl"
             android:text="@string/btn_explore_catalog" />
     </LinearLayout>
 

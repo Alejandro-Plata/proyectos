@@ -167,11 +167,44 @@
                     android:text="@string/btn_register"
                     android:layout_marginBottom="@dimen/space_md" />
 
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/googleSignInButton"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/space_lg" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/space_md">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="?android:attr/listDivider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login_or_continue_with"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="@dimen/space_md" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="?android:attr/listDivider" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/googleSignInButton"
+                    style="@style/CineXplora.Button.Outlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:text="@string/btn_google_signin"
+                    app:icon="@drawable/ic_google"
+                    app:iconSize="20dp"
+                    app:iconTint="@null"
+                    android:layout_marginBottom="@dimen/space_xl" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -187,7 +220,7 @@
                         android:id="@+id/tvLoginLink"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_xs"
+                        android:layout_marginStart="@dimen/space_sm"
                         android:text="@string/link_enter_here"
                         android:textStyle="bold"
                         android:textColor="?attr/colorPrimary" />
@@ -201,7 +234,7 @@
         android:id="@+id/layoutLoadingReg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CC0D0F13"
+        android:background="@color/scrim_cinema"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"

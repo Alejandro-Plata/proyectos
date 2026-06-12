@@ -38,12 +38,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="top|end"
-                android:layout_margin="12dp"
-                android:background="?attr/colorPrimary"
-                android:src="@drawable/ic_add_bold"
-                app:tint="?attr/colorOnPrimary"
-                android:contentDescription="Añadir a lista"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_btn_watchlist"
+                android:src="@drawable/ic_bookmark_add"
+                android:tint="@color/dark_on_accent"
+                android:scaleType="center"
+                android:padding="9dp"
+                android:elevation="4dp"
+                android:contentDescription="Añadir a pendientes"
                 android:clickable="true"
                 android:focusable="true" />
 
@@ -60,14 +62,14 @@
                     android:layout_height="20dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/ic_tv"
-                    app:tint="@android:color/white" />
+                    app:tint="#F2EDE3" />
 
                 <TextView
                     android:id="@+id/txtTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="#F2EDE3"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>

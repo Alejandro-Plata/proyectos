@@ -1,62 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutError"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:padding="24dp">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/space_2xl">
 
     <ImageView
         android:id="@+id/ivErrorIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@android:drawable/stat_notify_error"
-        app:tint="#D32F2F"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_error_state"
+        android:alpha="0.85"
+        app:tint="?attr/colorPrimary" />
 
     <TextView
         android:id="@+id/tvErrorTitle"
+        style="@style/CineXplora.Text.TitleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/error_1"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivErrorIcon" />
+        android:layout_marginTop="@dimen/space_lg"
+        android:gravity="center"
+        android:text="@string/error_1" />
 
     <TextView
         android:id="@+id/tvErrorMessage"
-        android:layout_width="0dp"
+        style="@style/CineXplora.Text.BodyMedium"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/space_sm"
         android:gravity="center"
         android:text="@string/error_2"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvErrorTitle" />
+        android:textColor="?android:attr/textColorSecondary" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRetry"
-        style="@style/Widget.Material3.Button"
+        style="@style/CineXplora.Button.Outlined"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:text="@string/try_again"
-        android:textColor="?attr/colorOnPrimary"
-        app:cornerRadius="20dp"
-        app:icon="@android:drawable/ic_menu_rotate"
-        app:iconTint="?attr/colorOnPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvErrorMessage" />
+        android:layout_marginTop="@dimen/space_xl"
+        android:text="@string/try_again" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

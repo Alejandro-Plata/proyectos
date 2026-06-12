@@ -48,7 +48,7 @@
                     android:background="@drawable/bg_type_serie"
                     android:paddingHorizontal="@dimen/space_sm"
                     android:paddingVertical="2dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/badgeSerie"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     tools:text="SERIE" />

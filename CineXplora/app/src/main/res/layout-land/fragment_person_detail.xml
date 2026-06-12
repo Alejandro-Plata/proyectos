@@ -225,12 +225,58 @@
                 android:text="@string/title_known_for"
                 android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerFilmography"
+            <!-- Películas -->
+            <TextView
+                android:id="@+id/txtMoviesLabel"
+                style="@style/CineXplora.Text.Overline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_lg"
                 android:layout_marginTop="@dimen/space_md"
+                android:text="@string/label_movies"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:paddingHorizontal="@dimen/space_lg"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- Series -->
+            <View
+                android:id="@+id/dividerSeries"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_marginHorizontal="@dimen/space_lg"
+                android:layout_marginTop="@dimen/space_lg"
+                android:background="?android:attr/listDivider"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtSeriesLabel"
+                style="@style/CineXplora.Text.Overline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_lg"
+                android:layout_marginTop="@dimen/space_md"
+                android:text="@string/label_series"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:paddingHorizontal="@dimen/space_lg"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
                 android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </LinearLayout>

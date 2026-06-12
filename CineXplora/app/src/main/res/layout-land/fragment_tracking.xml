@@ -11,277 +11,85 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <!-- Panel izquierdo: filtros sobre superficie elevada -->
+        <!-- Panel izquierdo: búsqueda compacta + chips activos -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:orientation="vertical"
-            android:background="?attr/colorSurface">
+            android:background="?attr/colorSurface"
+            android:padding="@dimen/space_lg">
 
+            <!-- Fila: búsqueda + botón orden + botón filtros -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/space_lg">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_sm">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilSearch"
                     style="@style/CineXplora.TextInputLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:hint="@string/hint_search_title"
                     app:startIconDrawable="@drawable/ic_search"
-                    app:endIconMode="clear_text"
-                    android:layout_marginBottom="@dimen/space_sm">
+                    app:startIconTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSearch"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textColor="?android:attr/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="@dimen/space_xs">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_sort_by"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="12sp"
-                        android:layout_marginEnd="@dimen/space_xs" />
-
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:id="@+id/toggleSort"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:singleSelection="true"
-                        app:selectionRequired="true"
-                        app:checkedButton="@id/btnSortDateDesc">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSortDateDesc"
-                            style="@style/CineXplora.Button.Outlined"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/button_height"
-                            android:layout_weight="1"
-                            android:text="↓"
-                            android:contentDescription="@string/sort_date_desc"
-                            android:tooltipText="@string/tooltip_sort_date_desc"
-                            app:icon="@drawable/ic_sort_date_desc"
-                            app:iconGravity="textStart"
-                            app:iconSize="14dp"
-                            app:iconPadding="2dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSortDateAsc"
-                            style="@style/CineXplora.Button.Outlined"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/button_height"
-                            android:layout_weight="1"
-                            android:text="↑"
-                            android:contentDescription="@string/sort_date_asc"
-                            android:tooltipText="@string/tooltip_sort_date_asc"
-                            app:icon="@drawable/ic_sort_date_asc"
-                            app:iconGravity="textStart"
-                            app:iconSize="14dp"
-                            app:iconPadding="2dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSortRatingDesc"
-                            style="@style/CineXplora.Button.Outlined"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/button_height"
-                            android:layout_weight="1"
-                            android:text="↓"
-                            android:contentDescription="@string/sort_rating_desc"
-                            android:tooltipText="@string/tooltip_sort_rating_desc"
-                            app:icon="@drawable/ic_sort_rating_desc"
-                            app:iconGravity="textStart"
-                            app:iconSize="14dp"
-                            app:iconPadding="2dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSortRatingAsc"
-                            style="@style/CineXplora.Button.Outlined"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/button_height"
-                            android:layout_weight="1"
-                            android:text="↑"
-                            android:contentDescription="@string/sort_rating_asc"
-                            android:tooltipText="@string/tooltip_sort_rating_asc"
-                            app:icon="@drawable/ic_sort_rating_asc"
-                            app:iconGravity="textStart"
-                            app:iconSize="14dp"
-                            app:iconPadding="2dp" />
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
-                </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSort"
+                    style="@style/CineXplora.Button.Icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text=""
+                    app:icon="@drawable/ic_sort"
+                    app:iconGravity="textStart"
+                    app:iconSize="20dp"
+                    android:contentDescription="@string/btn_sort" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAdvancedFilters"
-                    style="@style/CineXplora.Button.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btn_advanced_filters"
-                    android:visibility="gone" />
+                    android:id="@+id/btnFilters"
+                    style="@style/CineXplora.Button.Icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text=""
+                    app:icon="@drawable/ic_filter"
+                    app:iconGravity="textStart"
+                    app:iconSize="20dp"
+                    android:contentDescription="@string/btn_advanced_filters" />
 
             </LinearLayout>
 
-            <View
+            <!-- Chips de filtros activos (GONE por defecto) -->
+            <HorizontalScrollView
+                android:id="@+id/scrollActiveFilters"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_height"
-                android:background="?android:attr/listDivider" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_sm"
+                android:scrollbars="none"
+                android:visibility="gone">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="false">
-
-                <LinearLayout
-                    android:id="@+id/layoutAdvancedFilters"
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupActiveFilters"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/space_lg"
-                    android:paddingVertical="@dimen/space_md"
-                    android:visibility="visible">
+                    app:singleLine="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_date_range"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="@dimen/space_xs" />
+            </HorizontalScrollView>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="@dimen/space_sm">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilDateFrom"
-                            style="@style/CineXplora.TextInputLayout"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="@dimen/space_sm"
-                            android:hint="@string/hint_date_from">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etDateFrom"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:focusable="false"
-                                android:inputType="none" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilDateTo"
-                            style="@style/CineXplora.TextInputLayout"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="@string/hint_date_to">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etDateTo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:focusable="false"
-                                android:inputType="none" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_rating_range"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="@dimen/space_xs" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="@dimen/space_md">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hint_rating_min"
-                            android:textColor="?android:attr/textColorSecondary"
-                            android:textSize="12sp"
-                            android:layout_marginBottom="2dp"/>
-
-                        <RatingBar
-                            android:id="@+id/ratingBarMin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:numStars="5"
-                            android:stepSize="0.5"
-                            android:rating="0"
-                            android:progressTint="?attr/colorPrimary"
-                            android:secondaryProgressTint="?android:attr/textColorSecondary"
-                            android:layout_marginBottom="@dimen/space_sm"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hint_rating_max"
-                            android:textColor="?android:attr/textColorSecondary"
-                            android:textSize="12sp"
-                            android:layout_marginBottom="2dp"/>
-
-                        <RatingBar
-                            android:id="@+id/ratingBarMax"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:numStars="5"
-                            android:stepSize="0.5"
-                            android:rating="0"
-                            android:progressTint="?attr/colorPrimary"
-                            android:secondaryProgressTint="?android:attr/textColorSecondary"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnApplyFilters"
-                            style="@style/CineXplora.Button"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="@dimen/space_sm"
-                            android:text="@string/btn_apply_filters" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnClearFilters"
-                            style="@style/CineXplora.Button.Outlined"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/btn_clear_filters" />
-                    </LinearLayout>
-                </LinearLayout>
-            </ScrollView>
         </LinearLayout>
 
         <!-- Divisor vertical -->
@@ -319,32 +127,32 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:paddingHorizontal="@dimen/space_xl"
                 android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:src="@drawable/ic_check_circle"
-                    app:tint="?android:attr/textColorSecondary"
-                    android:alpha="0.4" />
+                    android:alpha="0.85"
+                    app:tint="?attr/colorPrimary" />
 
                 <TextView
+                    style="@style/CineXplora.Text.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_lg"
+                    android:layout_marginTop="@dimen/space_md"
                     android:gravity="center"
-                    android:text="@string/msg_no_tracking_yet"
-                    android:textSize="15sp"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:text="@string/msg_no_tracking_yet" />
 
                 <TextView
+                    style="@style/CineXplora.Text.BodyMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_sm"
+                    android:layout_marginTop="@dimen/space_xs"
                     android:gravity="center"
                     android:text="@string/msg_press_plus"
-                    android:textSize="12sp"
-                    android:textColor="?android:attr/textColorHint" />
+                    android:textColor="?android:attr/textColorSecondary" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

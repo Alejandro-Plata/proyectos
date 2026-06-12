@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
@@ -106,7 +106,7 @@ public class MoviesDetailFragment extends Fragment {
                     break;
                 case ERROR:
                     binding.progressBar.setVisibility(View.GONE);
-                    new AlertDialog.Builder(requireContext())
+                    new MaterialAlertDialogBuilder(requireContext())
                             .setMessage(resource.message)
                             .setPositiveButton(getString(R.string.dialog_accept), null)
                             .show();
@@ -133,7 +133,7 @@ public class MoviesDetailFragment extends Fragment {
                     break;
                 case ERROR:
                     binding.progressBar.setVisibility(View.GONE);
-                    new AlertDialog.Builder(requireContext())
+                    new MaterialAlertDialogBuilder(requireContext())
                             .setMessage(resource.message)
                             .setPositiveButton(getString(R.string.dialog_accept), null)
                             .show();
@@ -245,7 +245,7 @@ public class MoviesDetailFragment extends Fragment {
         binding.btnTrailer.setOnClickListener(v -> {
 
             if(key == null) {
-                new AlertDialog.Builder(requireContext())
+                new MaterialAlertDialogBuilder(requireContext())
                         .setMessage(getString(R.string.msg_no_trailer))
                         .setPositiveButton(getString(R.string.dialog_accept), null)
                         .show();

@@ -45,7 +45,7 @@
             android:text="PELÍCULA"
             android:textSize="10sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="?attr/badgeMovie"
             app:layout_constraintStart_toEndOf="@id/cardPoster"
             app:layout_constraintTop_toTopOf="@id/cardPoster" />
 

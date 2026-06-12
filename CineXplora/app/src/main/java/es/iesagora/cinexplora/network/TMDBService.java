@@ -7,6 +7,7 @@ import es.iesagora.cinexplora.model.response.CombinedCreditsResponse;
 import es.iesagora.cinexplora.model.response.CreditsResponse;
 import es.iesagora.cinexplora.model.response.MoviesResponse;
 import es.iesagora.cinexplora.model.request.SerieDetail;
+import es.iesagora.cinexplora.model.response.GenresResponse;
 import es.iesagora.cinexplora.model.response.SeriesResponse;
 import es.iesagora.cinexplora.model.request.Video;
 import retrofit2.Call;
@@ -99,4 +100,30 @@ public interface TMDBService {
             @Path("person_id") int personId,
             @Query("language") String language
     );
+
+    // Obtener géneros de películas
+    @GET("genre/movie/list")
+    Call<GenresResponse> getMovieGenres(@Query("language") String language);
+
+    // Obtener géneros de series
+    @GET("genre/tv/list")
+    Call<GenresResponse> getTvGenres(@Query("language") String language);
+
+    // Discover películas con filtros
+    @GET("discover/movie")
+    Call<MoviesResponse> discoverMovies(
+            @Query("page") int page,
+            @Query("language") String language,
+            @Query("with_genres") String withGenres,
+            @Query("sort_by") String sortBy,
+            @Query("vote_count.gte") int minVoteCount);
+
+    // Discover series con filtros
+    @GET("discover/tv")
+    Call<SeriesResponse> discoverSeries(
+            @Query("page") int page,
+            @Query("language") String language,
+            @Query("with_genres") String withGenres,
+            @Query("sort_by") String sortBy,
+            @Query("vote_count.gte") int minVoteCount);
 }

@@ -3,6 +3,7 @@ import { NotaUsuario, Usuario } from '../modelos/Modelos.js';
 import { ServicioXP } from '../servicios/ServicioXP.js';
 import { ServicioLogros } from '../servicios/ServicioLogros.js';
 import { RECOMPENSA_XP_NOTA } from '../utils/constXP.js';
+import { subirArchivo } from '../servicios/ServicioStorage.js';
 
 export class ControladorNotaUsuario {
 
@@ -10,7 +11,8 @@ export class ControladorNotaUsuario {
         if (!req.file) {
             return res.status(400).json({ msg: 'No se subió ninguna imagen' });
         }
-        res.status(201).json({ url: `/uploads/notes/${req.file.filename}` });
+        const url = await subirArchivo(req.file, 'notes', 'note');
+        res.status(201).json({ url });
     };
 
     static crearNota = async (req: Request, res: Response) => {

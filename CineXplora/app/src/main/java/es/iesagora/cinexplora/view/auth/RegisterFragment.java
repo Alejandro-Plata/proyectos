@@ -19,7 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -115,7 +115,7 @@ public class RegisterFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null) {
-                        new AlertDialog.Builder(requireActivity())
+                        new MaterialAlertDialogBuilder(requireActivity())
                                 .setMessage(getString(R.string.msg_google_cancelled))
                                 .setPositiveButton(getString(R.string.dialog_accept), null)
                                 .show();
@@ -135,7 +135,7 @@ public class RegisterFragment extends Fragment {
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
             if (account == null || account.getIdToken() == null) {
-                new AlertDialog.Builder(requireActivity())
+                new MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(getString(R.string.msg_google_account_error))
                         .setPositiveButton(getString(R.string.dialog_accept), null)
                         .show();
@@ -145,7 +145,7 @@ public class RegisterFragment extends Fragment {
             viewModel.loginWithGoogle(account.getIdToken());
 
         } catch (ApiException e) {
-            new AlertDialog.Builder(requireActivity())
+            new MaterialAlertDialogBuilder(requireActivity())
                     .setMessage(getString(R.string.msg_google_error, e.getMessage()))
                     .setPositiveButton(getString(R.string.dialog_accept), null)
                     .show();

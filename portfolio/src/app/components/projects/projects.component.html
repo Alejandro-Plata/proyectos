@@ -27,12 +27,27 @@
 
         <div class="flex-grow">
           <h4 class="text-lg font-bold text-white mb-2">{{ project.title }}</h4>
-          <p class="text-sm text-zinc-400 mb-4 line-clamp-3">{{ project.description }}</p>
+          <p class="text-sm text-zinc-400 mb-1" [class.line-clamp-3]="!isExpanded(project.title)">{{ project.description }}</p>
+          <button type="button" class="text-xs font-semibold text-sky-400 hover:text-sky-300 mb-4" (click)="toggleDescription(project.title)">
+            {{ isExpanded(project.title) ? 'Ver menos' : 'Ver más' }}
+          </button>
 
-          <div class="flex flex-wrap gap-2 mb-6">
+          <div class="flex flex-wrap items-center gap-4 mb-6">
             @for (tech of project.tech; track tech) {
-              <span class="text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded-sm border border-zinc-700">
-                {{ tech }}
+              <span class="group relative inline-flex items-center">
+                @if (techIcon(tech)) {
+                  <i [class]="techIcon(tech) + ' text-2xl text-zinc-200'" aria-hidden="true"></i>
+                } @else if (tech === 'Capacitor') {
+                  <svg class="w-6 h-6" fill="#119EFF" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 3.7l-5.766 5.766 5.725 5.736-3.713 3.712L5.073 3.742 8.786.03l5.736 5.726L20.284 0 24 3.7zM.029 8.785l3.713-3.713 15.173 15.173-3.713 3.714-5.732-5.726L3.7 24 0 20.285l5.754-5.764L.029 8.785z"/></svg>
+                } @else if (tech === 'JWT') {
+                  <svg class="w-6 h-6" fill="#e4e4e7" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.2 0v6.456L12 8.928l1.8-2.472V0zm3.6 6.456v3.072l2.904-.96L20.52 3.36l-2.928-2.136zm2.904 2.112l-1.8 2.496 2.928.936 6.144-1.992-1.128-3.432zM17.832 12l-2.928.936 1.8 2.496 6.144 1.992 1.128-3.432zm-1.128 3.432l-2.904-.96v3.072l3.792 5.232 2.928-2.136zM13.8 17.544L12 15.072l-1.8 2.472V24h3.6zm-3.6 0v-3.072l-2.904.96L3.48 20.64l2.928 2.136zm-2.904-2.112l1.8-2.496L6.168 12 .024 13.992l1.128 3.432zM6.168 12l2.928-.936-1.8-2.496-6.144-1.992-1.128 3.432zm1.128-3.432l2.904.96V6.456L6.408 1.224 3.48 3.36Z"/></svg>
+                } @else {
+                  <span class="text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded-sm border border-zinc-700">{{ tech }}</span>
+                }
+                <!-- Tooltip con el nombre de la tecnología al pasar el ratón -->
+                <span class="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white border border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {{ techLabel(tech) }}
+                </span>
               </span>
             }
           </div>

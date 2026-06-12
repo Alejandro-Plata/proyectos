@@ -2,7 +2,7 @@ package es.iesagora.cinexplora.view.tracking;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -62,7 +62,7 @@ public class AddTrackingFragment extends Fragment {
         trackingViewModel.isTracked.observe(getViewLifecycleOwner(), exists -> {
             if (exists != null) {
                 if (exists) {
-                    new AlertDialog.Builder(requireContext())
+                    new MaterialAlertDialogBuilder(requireContext())
                             .setMessage(getString(R.string.msg_already_tracked))
                             .setPositiveButton(getString(R.string.dialog_accept), null)
                             .show();
@@ -223,7 +223,7 @@ public class AddTrackingFragment extends Fragment {
                                 break;
                             case ERROR:
                                 binding.btnSaveTracking.setEnabled(true);
-                                new AlertDialog.Builder(requireContext())
+                                new MaterialAlertDialogBuilder(requireContext())
                                         .setMessage(getString(R.string.error_upload_image, uploadRes.message))
                                         .setPositiveButton(getString(R.string.dialog_accept), null)
                                         .show();
@@ -237,7 +237,7 @@ public class AddTrackingFragment extends Fragment {
 
     private void saveTrackingSupabase(TrackingMedia media) {
         trackingViewModel.addTracking(media);
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.dialog_tracking_saved_title))
                 .setMessage(getString(R.string.dialog_tracking_saved_message))
                 .setPositiveButton(getString(R.string.dialog_accept), null)

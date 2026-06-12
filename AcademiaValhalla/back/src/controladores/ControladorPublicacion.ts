@@ -4,6 +4,7 @@ import { Op, literal } from 'sequelize';
 import { ServicioXP } from '../servicios/ServicioXP.js';
 import { ServicioLogros } from '../servicios/ServicioLogros.js';
 import { COMENTARIOS_POR_XP, LOGRO_XP_COMENTARIO, XP_SOLUCION_MARCADA } from '../utils/constXP.js';
+import { subirArchivo } from '../servicios/ServicioStorage.js';
 
 export class ControladorPublicacion {
 
@@ -11,7 +12,8 @@ export class ControladorPublicacion {
         if (!req.file) {
             return res.status(400).json({ msg: 'No se subió ninguna imagen' });
         }
-        res.status(201).json({ url: `/uploads/posts/${req.file.filename}` });
+        const url = await subirArchivo(req.file, 'posts', 'post');
+        res.status(201).json({ url });
     };
 
     static obtenerTodos = async (req: Request, res: Response) => {

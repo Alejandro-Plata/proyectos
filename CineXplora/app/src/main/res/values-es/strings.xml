@@ -43,10 +43,7 @@
     <string name="nav_detail">Detalles</string>
     <string-array name="languages_array">
         <item>Español</item>
-        <item>Catalán</item>
         <item>Inglés</item>
-        <item>Alemán</item>
-        <item>Francés</item>
     </string-array>
 
     <!-- Filtros de seguimiento -->
@@ -138,6 +135,7 @@
     <string name="login_welcome">Bienvenido</string>
     <string name="login_subtitle">Inicia sesión para continuar</string>
     <string name="login_or_continue_with">O continúa con</string>
+    <string name="btn_google_signin">Continuar con Google</string>
     <string name="error_login_invalid">Usuario o contraseña incorrectos</string>
 
     <!-- Add tracking -->
@@ -212,4 +210,59 @@
     <string name="error_password_weak">Mínimo 8 caracteres, al menos una letra y un número</string>
     <string name="error_confirm_password">Repite la contraseña</string>
     <string name="error_passwords_mismatch">Las contraseñas no coinciden</string>
+
+    <!-- Filtros fase 2 -->
+    <string name="filter_all">Todos</string>
+    <string name="label_filters">Filtros</string>
+    <string name="label_min_rating">Puntuación mínima</string>
+    <string name="btn_sort">Ordenar</string>
+    <string name="sort_newest">Más recientes primero</string>
+    <string name="sort_oldest">Más antiguos primero</string>
+    <string name="sort_best_rated">Mejor valorados</string>
+    <string name="sort_worst_rated">Peor valorados</string>
+    <string name="chip_date">Fecha: %s – %s</string>
+    <string name="chip_rating">★ %s+</string>
+    <string name="chip_type_movie">Tipo: Película</string>
+    <string name="chip_type_serie">Tipo: Serie</string>
+
+    <!-- Actores favoritos fase 2 -->
+    <string name="label_your_actors">Tus actores · %d</string>
+    <string name="sort_added_recently">Añadidos recientemente</string>
+    <string name="sort_name_az">Nombre A–Z</string>
+    <string name="sort_department">Departamento</string>
+    <string name="hint_search_actors">Buscar actores…</string>
+    <string name="badge_birthday">Cumpleaños</string>
+    <string name="menu_remove_favorite">Eliminar de favoritos</string>
+    <string name="menu_view_filmography">Ver filmografía</string>
+
+    <!-- Filtros explorar -->
+    <string name="filter_popular">Popular</string>
+    <string name="filter_top_rated">Mejor valoradas</string>
+    <string name="filter_newest">Más recientes</string>
+    <string name="filter_revenue">Taquilla</string>
+    <string name="label_all_genres">Todos los géneros</string>
+    <string name="label_genre">Género</string>
+    <string name="label_movies">Películas</string>
+    <string name="label_series">Series</string>
+    <string name="msg_adjust_filters">Prueba ajustando los filtros</string>
+
+    <!-- Ajustes secciones -->
+    <string name="section_profile">Perfil</string>
+    <string name="section_preferences">Preferencias</string>
+    <string name="section_data">Datos y Almacenamiento</string>
+    <string name="section_account">Cuenta</string>
+
+    <!-- Departamentos TMDB -->
+    <string name="dept_acting">Interpretación</string>
+    <string name="dept_directing">Dirección</string>
+    <string name="dept_writing">Guión</string>
+    <string name="dept_production">Producción</string>
+    <string name="dept_camera">Cámara</string>
+    <string name="dept_art">Arte</string>
+    <string name="dept_sound">Sonido</string>
+    <string name="dept_visual_effects">Efectos visuales</string>
+    <string name="dept_editing">Montaje</string>
+    <string name="dept_costume">Vestuario y Maquillaje</string>
+    <string name="dept_lighting">Iluminación</string>
+    <string name="dept_crew">Equipo técnico</string>
 </resources>

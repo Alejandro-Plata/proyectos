@@ -17,7 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -92,7 +92,7 @@ public class LoginFragment extends Fragment {
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
             if (account == null || account.getIdToken() == null) {
-                new AlertDialog.Builder(requireActivity())
+                new MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(getString(R.string.msg_google_account_error))
                         .setPositiveButton(getString(R.string.dialog_accept), null)
                         .show();
@@ -102,7 +102,7 @@ public class LoginFragment extends Fragment {
             viewModel.loginWithGoogle(account.getIdToken());
 
         } catch (ApiException e) {
-            new AlertDialog.Builder(requireActivity())
+            new MaterialAlertDialogBuilder(requireActivity())
                     .setMessage(getString(R.string.msg_google_error_code, String.valueOf(e.getStatusCode()), e.getMessage()))
                     .setPositiveButton(getString(R.string.dialog_accept), null)
                     .show();

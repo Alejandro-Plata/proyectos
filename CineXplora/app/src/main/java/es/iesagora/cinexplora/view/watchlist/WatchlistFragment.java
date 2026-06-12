@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,7 +85,7 @@ public class WatchlistFragment extends Fragment {
 
                 case ERROR:
                     binding.progressBar.setVisibility(View.GONE);
-                    new AlertDialog.Builder(requireContext())
+                    new MaterialAlertDialogBuilder(requireContext())
                             .setMessage(resource.message)
                             .setPositiveButton(getString(R.string.dialog_accept), null)
                             .show();
@@ -95,8 +95,8 @@ public class WatchlistFragment extends Fragment {
     }
 
     private void setupFilters() {
-        binding.radioGroupFilters.setOnCheckedChangeListener((group, checkedId) -> {
-            filtrarLista();
+        binding.toggleType.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) filtrarLista();
         });
     }
 
@@ -135,20 +135,20 @@ public class WatchlistFragment extends Fragment {
     }
 
     private void filtrarLista() {
-        int selectedId = binding.radioGroupFilters.getCheckedRadioButtonId();
+        int selectedId = binding.toggleType.getCheckedButtonId();
         List<PendingMedia> listaFiltrada = new ArrayList<>();
 
-        if (selectedId == R.id.radioAll) {
+        if (selectedId == R.id.btnAll) {
             listaFiltrada.addAll(listaMaestra);
         }
-        else if (selectedId == R.id.radioMovies) {
+        else if (selectedId == R.id.btnMovies) {
             for (PendingMedia item : listaMaestra) {
                 if (MediaType.MOVIE.name().equalsIgnoreCase(item.getType())) {
                     listaFiltrada.add(item);
                 }
             }
         }
-        else if (selectedId == R.id.radioSeries) {
+        else if (selectedId == R.id.btnSeries) {
             for (PendingMedia item : listaMaestra) {
                 if (MediaType.SERIE.name().equalsIgnoreCase(item.getType())) {
                     listaFiltrada.add(item);
@@ -164,8 +164,8 @@ public class WatchlistFragment extends Fragment {
             binding.rvWatchlist.setVisibility(View.GONE);
             binding.layoutEmptyState.setVisibility(View.VISIBLE);
 
-            if (binding.radioMovies.isChecked()) binding.tvEmptyMessage.setText(getString(R.string.msg_no_pending_movies));
-            else if (binding.radioSeries.isChecked()) binding.tvEmptyMessage.setText(getString(R.string.msg_no_pending_series));
+            if (binding.btnMovies.isChecked()) binding.tvEmptyMessage.setText(getString(R.string.msg_no_pending_movies));
+            else if (binding.btnSeries.isChecked()) binding.tvEmptyMessage.setText(getString(R.string.msg_no_pending_series));
             else binding.tvEmptyMessage.setText(getString(R.string.msg_empty_list));
 
         } else {

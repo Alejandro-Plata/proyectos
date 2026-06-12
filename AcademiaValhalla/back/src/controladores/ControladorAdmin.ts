@@ -1,6 +1,4 @@
 ﻿import { Request, Response } from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import {
     Usuario, Reto, LenguajeReto, LenguajeProgramacion,
     Publicacion, ContenidoAcademia, NotaUsuario,
@@ -11,9 +9,7 @@ import { Op } from 'sequelize';
 import { db } from '../config/db.js';
 import { validarPayloadReto, validarPayloadNota } from '../utils/validarPayloadContenido.js';
 import { aprobarRetoDesdeSolicitud, aprobarNotaDesdeSolicitud } from '../servicios/ServicioAprobacionContenido.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { subirArchivo, eliminarArchivo } from '../servicios/ServicioStorage.js';
 
 export class ControladorAdmin {
 
@@ -602,7 +598,7 @@ export class ControladorAdmin {
                 return res.status(400).json({ error: 'Faltan campos requeridos' });
             }
 
-            const emblem_url = req.file ? `/uploads/emblems/${req.file.filename}` : null;
+            const emblem_url = req.file ? await subirArchivo(req.file, 'emblems', 'emblem') : null;
 
             const logro = await Logro.create({
                 title,
@@ -645,12 +641,8 @@ export class ControladorAdmin {
             }
 
             if (req.file) {
-                if (logro.emblem_url) {
-                    const fs = await import('fs/promises');
-                    const oldPath = path.join(__dirname, '../../public', logro.emblem_url);
-                    await fs.unlink(oldPath).catch(() => {});
-                }
-                actualizaciones.emblem_url = `/uploads/emblems/${req.file.filename}`;
+                await eliminarArchivo(logro.emblem_url);
+                actualizaciones.emblem_url = await subirArchivo(req.file, 'emblems', 'emblem');
             }
 
             await logro.update(actualizaciones);
@@ -689,11 +681,7 @@ export class ControladorAdmin {
 
             await LogroUsuario.destroy({ where: { achievement_id: achievementId } });
 
-            if (logro.emblem_url) {
-                const fs = await import('fs/promises');
-                const filePath = path.join(__dirname, '../../public', logro.emblem_url);
-                await fs.unlink(filePath).catch(() => {});
-            }
+            await eliminarArchivo(logro.emblem_url);
 
             await logro.destroy();
             return res.json({ message: 'Logro eliminado correctamente' });

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Usuario } from '../modelos/Modelos.js';
 import { hashContrasena, verificarContrasena } from '../utils/autenticacion.js';
 import { ServicioLogros } from '../servicios/ServicioLogros.js';
+import { subirArchivo, eliminarArchivo } from '../servicios/ServicioStorage.js';
 
 export class ControladorPerfil {
 
@@ -47,7 +48,10 @@ export class ControladorPerfil {
                 return res.status(404).json({ msg: 'Usuario no encontrado' });
             }
 
-            const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+            // Si el avatar anterior estaba en nuestro bucket, lo eliminamos.
+            await eliminarArchivo(usuario.avatar_url);
+
+            const avatarUrl = await subirArchivo(req.file, 'avatars', 'avatar');
             usuario.avatar_url = avatarUrl;
             await usuario.save();
 

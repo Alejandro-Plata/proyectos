@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingBottom="@dimen/space_2xl">
+
+    <!-- Handle superior -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/space_sm"
+        android:layout_marginBottom="@dimen/space_lg"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Header: título + botón limpiar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_lg">
+
+        <TextView
+            style="@style/CineXplora.Text.Overline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/label_filters" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearSheet"
+            style="@style/CineXplora.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_clear_filters" />
+
+    </LinearLayout>
+
+    <!-- RANGO DE FECHAS -->
+    <TextView
+        style="@style/CineXplora.Text.Overline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_sm"
+        android:textColor="?android:attr/textColorSecondary"
+        android:text="@string/label_date_range" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_lg">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDateFrom"
+            style="@style/CineXplora.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/space_sm"
+            android:hint="@string/hint_date_from">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDateFrom"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="none"
+                android:textColor="?android:attr/textColorPrimary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDateTo"
+            style="@style/CineXplora.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hint_date_to">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDateTo"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="none"
+                android:textColor="?android:attr/textColorPrimary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <!-- VALORACIÓN MÍNIMA -->
+    <TextView
+        style="@style/CineXplora.Text.Overline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_sm"
+        android:textColor="?android:attr/textColorSecondary"
+        android:text="@string/label_min_rating" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_lg">
+
+        <RatingBar
+            android:id="@+id/ratingBarMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:rating="0"
+            android:progressTint="?attr/colorPrimary"
+            android:secondaryProgressTint="?android:attr/textColorSecondary" />
+
+        <TextView
+            android:id="@+id/tvRatingValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="0.0" />
+
+    </LinearLayout>
+
+    <!-- TIPO -->
+    <TextView
+        style="@style/CineXplora.Text.Overline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_sm"
+        android:textColor="?android:attr/textColorSecondary"
+        android:text="@string/label_type" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_xl"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipAll"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_all"
+            android:checked="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMovie"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/type_movie" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSerie"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/type_tv_show" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- CTA: Aplicar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnApplySheet"
+        style="@style/CineXplora.Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/space_lg"
+        android:text="@string/btn_apply_filters" />
+
+</LinearLayout>

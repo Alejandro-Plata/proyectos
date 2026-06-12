@@ -25,10 +25,16 @@ public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.
 
     private List<PersonCredit> filmographyList;
     private final Context context;
+    private final int itemLayoutRes;
     private OnItemClickListener listener;
 
     public FilmographyAdapter(Context context) {
+        this(context, R.layout.item_filmography);
+    }
+
+    public FilmographyAdapter(Context context, int itemLayoutRes) {
         this.context = context;
+        this.itemLayoutRes = itemLayoutRes;
         this.filmographyList = new ArrayList<>();
     }
 
@@ -48,8 +54,7 @@ public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.
     @NonNull
     @Override
     public FilmographyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_filmography, parent, false);
+        View view = LayoutInflater.from(context).inflate(itemLayoutRes, parent, false);
         return new FilmographyViewHolder(view);
     }
 

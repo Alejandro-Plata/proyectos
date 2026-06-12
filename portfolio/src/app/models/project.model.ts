@@ -35,9 +35,8 @@ export const PROJECTS: Project[] = [
   {
     title: 'PlayFutBet',
     description:
-      'App móvil multiplataforma de predicciones de fútbol: pronósticos de resultados, simulación ' +
-      'de partidos y gestión de plantillas. API REST propia documentada con Swagger y autenticación ' +
-      'con JWT. Empaquetada para Android/iOS con Capacitor.',
+      'Aplicación web de predicciones de fútbol con una liga simulada automáticamente. Interfaz responsive con Ionic + Angular y API REST propia en Node/Express con PostgreSQL, ' +
+      'documentada con Swagger y autenticación JWT.',
     tech: ['Ionic 8', 'Angular 20', 'Capacitor', 'Node.js', 'Express', 'PostgreSQL', 'JWT', 'Swagger'],
     images: [
       'assets/projects/playfutbet.png',
@@ -52,7 +51,7 @@ export const PROJECTS: Project[] = [
       'Aplicación Android nativa para explorar y descubrir contenido de cine (API de TMDB), con ' +
       'interfaz adaptada a orientación vertical y horizontal. Autenticación con Firebase (Google y ' +
       'email), datos en Firestore y almacenamiento en Supabase.',
-    tech: ['Java', 'Android SDK', 'Gradle', 'Firebase', 'Firestore', 'Retrofit', 'Glide', 'Material'],
+    tech: ['Java', 'Android SDK', 'Gradle', 'Firebase'],
     images: [
       'assets/projects/android.png',
       'https://placehold.co/800x500/18181b/e4e4e7?text=CineXplora+2',

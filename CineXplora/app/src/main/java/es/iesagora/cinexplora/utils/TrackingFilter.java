@@ -8,6 +8,7 @@ public class TrackingFilter {
     private String dateTo;
     private Float ratingMin;
     private Float ratingMax;
+    private String mediaType;
     public TrackingFilter() {
         this.sortField = "createdAt";
         this.sortAscending = false;
@@ -54,9 +55,18 @@ public class TrackingFilter {
     public void setRatingMax(Float ratingMax) {
         this.ratingMax = ratingMax;
     }
+    public String getMediaType() {
+        return mediaType;
+    }
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
     // Tendrá los filtros activos si algunos de los filtros (como mínimo) es no nulo
     public boolean hasActiveFilters() {
-        return (searchQuery != null && !searchQuery.isEmpty()) || dateFrom != null || dateTo != null || ratingMin != null || ratingMax != null;
+        return (searchQuery != null && !searchQuery.isEmpty())
+                || dateFrom != null || dateTo != null
+                || ratingMin != null || ratingMax != null
+                || (mediaType != null && !mediaType.equals("all"));
     }
 }
 

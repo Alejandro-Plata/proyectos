@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo colorSurface con esquinas superiores redondeadas -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/colorSurface" />
+            <corners
+                android:topLeftRadius="@dimen/radius_md"
+                android:topRightRadius="@dimen/radius_md" />
+        </shape>
+    </item>
+    <!-- Borde superior dorado al 30% -->
+    <item
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp"
+        android:bottom="-2000dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/border_hairline" android:color="#4DD4AF37" />
+            <corners
+                android:topLeftRadius="@dimen/radius_md"
+                android:topRightRadius="@dimen/radius_md" />
+        </shape>
+    </item>
+</layer-list>

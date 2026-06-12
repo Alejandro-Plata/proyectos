@@ -1,49 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/space_xs"
-    app:cardCornerRadius="@dimen/radius_sm"
-    app:cardElevation="0dp"
-    app:strokeWidth="@dimen/card_border_width"
-    app:strokeColor="?android:attr/listDivider">
+    android:layout_margin="@dimen/space_xs">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Foto de retrato 2:3 — sin círculo, sin marco -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgFavoriteActorPhoto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_avatar"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.CineXplora.SmallCorner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2:3" />
+
+    <!-- Scrim inferior para legibilidad del texto -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@drawable/gradient_overlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Departamento (overline dorada) -->
+    <TextView
+        android:id="@+id/txtFavoriteActorDept"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorPrimary"
+        android:letterSpacing="0.10"
+        android:textAllCaps="true"
+        android:paddingStart="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_sm"
+        android:paddingBottom="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtFavoriteActorName" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgFavoriteActorPhoto"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_default_avatar"
-            app:shapeAppearanceOverlay="@style/CircleImageView" />
+    <!-- Nombre del actor sobre el scrim -->
+    <TextView
+        android:id="@+id/txtFavoriteActorName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#F2EDE3"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:paddingStart="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_sm"
+        android:paddingBottom="@dimen/space_sm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/txtFavoriteActorName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+    <!-- Badge cumpleaños (GONE por defecto, visible solo el día de su cumpleaños) -->
+    <TextView
+        android:id="@+id/txtBirthdayBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/badge_birthday"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:textColor="@color/dark_on_accent"
+        android:textAllCaps="true"
+        android:background="@drawable/bg_badge_birthday"
+        android:layout_margin="@dimen/space_xs"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/txtFavoriteActorDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="11sp" />
-
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

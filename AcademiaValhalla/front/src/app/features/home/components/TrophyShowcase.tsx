@@ -68,20 +68,20 @@ export const TrophyShowcase = () => {
                 {selectedTrophy && (
                     <div className="flex flex-col items-center text-center">
                         {/* hex-shield emblem — BB-11 */}
-                        <div className={`w-24 h-24 mb-5 flex items-center justify-center bg-white dark:bg-[#050505] border shadow-sm transition-all duration-300 ${
+                        <div className={`w-28 h-28 mb-5 flex items-center justify-center border transition-all duration-300 ${
                             selectedTrophy.is_unlocked
-                                ? 'border-emerald-500/30 shadow-emerald-500/10'
-                                : 'border-emerald-500/10 opacity-70 grayscale'
+                                ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 to-transparent dark:from-emerald-500/10 shadow-[0_0_30px_-8px_rgba(16,185,129,0.65)]'
+                                : 'border-emerald-500/10 bg-white dark:bg-[#050505] opacity-70 grayscale'
                         }`}>
                             {getEmblemUrl(selectedTrophy.emblem_url) ? (
                                 <img
                                     src={getEmblemUrl(selectedTrophy.emblem_url)!}
                                     alt={selectedTrophy.title}
-                                    className="hex-shield w-16 h-16 object-contain"
+                                    className="hex-shield w-20 h-20 object-contain"
                                 />
                             ) : (
-                                <span className={selectedTrophy.is_unlocked ? 'text-emerald-500' : 'text-slate-400 dark:text-slate-600'}>
-                                    {getAchievementIcon(selectedTrophy.trigger_type, 'w-10 h-10')}
+                                <span className={selectedTrophy.is_unlocked ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-slate-400 dark:text-slate-600'}>
+                                    {getAchievementIcon(selectedTrophy.trigger_type, 'w-16 h-16')}
                                 </span>
                             )}
                         </div>
@@ -133,28 +133,32 @@ export const TrophyShowcase = () => {
                 <div className="mb-4">
                     <h2 className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Colección</h2>
                 </div>
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
                     {trophies.map((trophy) => (
                         <button
                             key={trophy.achievement_id}
                             onClick={() => setSelectedId(trophy.achievement_id)}
-                            className={`relative aspect-square flex items-center justify-center transition-all duration-200 border bg-slate-50 dark:bg-[#050505] hover:bg-white dark:hover:bg-white/5 ${
+                            className={`relative aspect-square flex items-center justify-center transition-all duration-200 border ${
                                 selectedId === trophy.achievement_id
                                     ? 'border-emerald-500 ring-1 ring-emerald-500'
                                     : 'border-emerald-500/15 dark:border-emerald-500/10 hover:border-emerald-500/40'
+                            } ${
+                                trophy.is_unlocked
+                                    ? 'bg-gradient-to-br from-emerald-500/15 to-transparent dark:from-emerald-500/10 shadow-[0_0_18px_-6px_rgba(16,185,129,0.6)] hover:from-emerald-500/25'
+                                    : 'bg-slate-50 dark:bg-[#050505] hover:bg-white dark:hover:bg-white/5'
                             }`}
                         >
                             {getEmblemUrl(trophy.emblem_url) ? (
                                 <img
                                     src={getEmblemUrl(trophy.emblem_url)!}
                                     alt={trophy.title}
-                                    className={`hex-shield w-3/5 h-3/5 object-contain transition-all duration-300 ${
+                                    className={`hex-shield w-4/5 h-4/5 object-contain transition-all duration-300 ${
                                         trophy.is_unlocked ? 'opacity-100' : 'opacity-30 grayscale'
                                     }`}
                                 />
                             ) : (
-                                <span className={`transition-all duration-300 ${trophy.is_unlocked ? 'text-emerald-500' : 'text-slate-400 dark:text-slate-600 opacity-40'}`}>
-                                    {getAchievementIcon(trophy.trigger_type, 'w-6 h-6')}
+                                <span className={`transition-all duration-300 ${trophy.is_unlocked ? 'text-emerald-500 drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]' : 'text-slate-400 dark:text-slate-600 opacity-40'}`}>
+                                    {getAchievementIcon(trophy.trigger_type, 'w-11 h-11')}
                                 </span>
                             )}
                             {trophy.is_unlocked && (

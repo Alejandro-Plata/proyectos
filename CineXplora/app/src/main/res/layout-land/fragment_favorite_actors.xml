@@ -6,40 +6,87 @@
     android:orientation="horizontal"
     android:background="?android:attr/windowBackground">
 
-    <!-- Panel izquierdo: cabecera y estado vacio -->
+    <!-- Panel izquierdo: cabecera con contador, ordenación y búsqueda -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:orientation="vertical"
         android:background="?attr/colorSurface"
-        android:padding="@dimen/space_lg"
-        android:gravity="top">
+        android:padding="@dimen/space_lg">
 
-        <TextView
-            style="@style/CineXplora.Text.HeadlineLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nav_favorite_actors"
-            android:layout_marginBottom="@dimen/space_xl" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_favorite_border"
-            app:tint="?android:attr/textColorSecondary"
-            android:alpha="0.5"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/space_lg" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/headerActors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_sm"
-            android:gravity="center"
-            android:text="@string/msg_add_favorite_actors_hint"
-            android:textSize="13sp"
-            android:textColor="?android:attr/textColorSecondary" />
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_sm"
+            android:paddingBottom="@dimen/space_sm">
+
+            <!-- Fila: overline contador + botones -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_sm">
+
+                <TextView
+                    android:id="@+id/tvActorCount"
+                    style="@style/CineXplora.Text.Overline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nav_favorite_actors" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSearchActors"
+                    style="@style/CineXplora.Button.Icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="@dimen/space_xs"
+                    android:text=""
+                    app:icon="@drawable/ic_search"
+                    app:iconSize="18dp"
+                    app:iconGravity="textStart"
+                    android:contentDescription="@string/hint_search_actors" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSortActors"
+                    style="@style/CineXplora.Button.Icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text=""
+                    app:icon="@drawable/ic_sort"
+                    app:iconSize="18dp"
+                    app:iconGravity="textStart"
+                    android:contentDescription="@string/btn_sort" />
+
+            </LinearLayout>
+
+            <!-- Campo de búsqueda (GONE por defecto) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSearchActors"
+                style="@style/CineXplora.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:hint="@string/hint_search_actors"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="?android:attr/textColorSecondary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearchActors"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- Divisor vertical -->
@@ -68,14 +115,31 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
+            android:paddingHorizontal="@dimen/space_xl"
             android:visibility="visible">
 
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_favorite_border"
+                android:alpha="0.85"
+                app:tint="?attr/colorPrimary" />
+
             <TextView
+                style="@style/CineXplora.Text.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
                 android:gravity="center"
-                android:text="@string/msg_no_favorite_actors"
-                android:textSize="16sp"
+                android:text="@string/msg_no_favorite_actors" />
+
+            <TextView
+                style="@style/CineXplora.Text.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:gravity="center"
+                android:text="@string/msg_add_favorite_actors_hint"
                 android:textColor="?android:attr/textColorSecondary" />
         </LinearLayout>
     </FrameLayout>

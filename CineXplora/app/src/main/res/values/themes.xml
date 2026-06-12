@@ -8,7 +8,6 @@
         <item name="colorSecondary">@color/light_accent_secondary</item>
         <item name="colorOnSecondary">@color/light_on_accent</item>
 
-
         <item name="android:windowBackground">@color/light_background</item>
         <item name="colorSurface">@color/light_surface</item>
         <item name="colorSurfaceVariant">@color/light_surface_elevated</item>
@@ -21,10 +20,14 @@
 
         <item name="colorControlNormal">@color/light_text_secondary</item>
         <item name="colorControlActivated">@color/light_accent_primary</item>
+        <!-- Ripple dorado al tocar elementos -->
+        <item name="colorControlHighlight">#1A8C6D1F</item>
         <item name="colorError">@color/light_error</item>
 
         <item name="android:statusBarColor">@color/light_background</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/light_background</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
         <item name="android:listDivider">@color/light_divider</item>
 
@@ -40,6 +43,7 @@
         <item name="materialButtonStyle">@style/CineXplora.Button</item>
         <item name="materialCardViewStyle">@style/CineXplora.Card</item>
         <item name="alertDialogTheme">@style/CineXplora.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/CineXplora.AlertDialog</item>
     </style>
 
     <style name="Theme.CineXplora" parent="Base.Theme.CineXplora" />

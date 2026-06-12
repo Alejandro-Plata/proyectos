@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:background="?android:attr/windowBackground">
 
-    <!-- Panel izquierdo: titulo y filtros de tipo -->
+    <!-- Panel izquierdo: titulo y segmented control vertical -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -22,60 +22,40 @@
             android:text="@string/nav_watchlist"
             android:layout_marginBottom="@dimen/space_xl" />
 
-        <RadioGroup
-            android:id="@+id/radioGroupFilters"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@id/btnAll">
 
-            <RadioButton
-                android:id="@+id/radioAll"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAll"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingVertical="@dimen/space_sm"
-                android:paddingHorizontal="@dimen/space_md"
-                android:checked="true"
-                android:layout_marginBottom="@dimen/space_xs" />
+                android:layout_marginBottom="@dimen/space_xs"
+                android:text="@string/filter_all" />
 
-            <RadioButton
-                android:id="@+id/radioMovies"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMovies"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/type_movie"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingVertical="@dimen/space_sm"
-                android:paddingHorizontal="@dimen/space_md"
-                android:layout_marginBottom="@dimen/space_xs" />
+                android:layout_marginBottom="@dimen/space_xs"
+                android:text="@string/type_movie" />
 
-            <RadioButton
-                android:id="@+id/radioSeries"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSeries"
+                style="@style/CineXplora.Button.Segment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/type_tv_show"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/selector_text_filter"
-                android:button="@null"
-                android:background="@drawable/selector_underline"
-                android:paddingVertical="@dimen/space_sm"
-                android:paddingHorizontal="@dimen/space_md" />
-        </RadioGroup>
+                android:text="@string/type_tv_show" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:layout_marginTop="@dimen/space_sm"
-            android:background="?android:attr/listDivider" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
     </LinearLayout>
 
     <!-- Divisor vertical -->
@@ -103,25 +83,33 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
+            android:paddingHorizontal="@dimen/space_xl"
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:src="@drawable/ic_popcorn_empty"
-                app:tint="?android:attr/textColorSecondary"
-                android:alpha="0.5" />
+                android:alpha="0.85"
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/tvEmptyMessage"
+                style="@style/CineXplora.Text.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_md"
-                android:text="@string/empty_watchlist_title"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="?android:attr/textColorPrimary" />
+                android:text="@string/empty_watchlist_title" />
+
+            <TextView
+                style="@style/CineXplora.Text.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:gravity="center"
+                android:text="@string/empty_watchlist_subtitle"
+                android:textColor="?android:attr/textColorSecondary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoToExplore"

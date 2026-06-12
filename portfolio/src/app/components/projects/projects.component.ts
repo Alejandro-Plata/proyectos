@@ -10,6 +10,54 @@ import { PROJECTS, Project } from '../../models/project.model';
 export class ProjectsComponent {
   projects: Project[] = PROJECTS;
 
+  /** Tecnologías expandidas (descripción "ver más") por título de proyecto. */
+  private expandedTitles = signal<Set<string>>(new Set<string>());
+
+  isExpanded(title: string): boolean {
+    return this.expandedTitles().has(title);
+  }
+
+  toggleDescription(title: string): void {
+    const next = new Set(this.expandedTitles());
+    if (next.has(title)) next.delete(title);
+    else next.add(title);
+    this.expandedTitles.set(next);
+  }
+
+  /** Mapa tecnología -> clase de icono Devicon. Las que no estén aquí se muestran como texto. */
+  private readonly iconMap: Record<string, string> = {
+    'React 19': 'devicon-react-original colored',
+    'TypeScript': 'devicon-typescript-plain colored',
+    'Vite': 'devicon-vitejs-plain colored',
+    'TailwindCSS': 'devicon-tailwindcss-original colored',
+    'Node.js': 'devicon-nodejs-plain colored',
+    'Express': 'devicon-express-original',
+    'PostgreSQL': 'devicon-postgresql-plain colored',
+    'Socket.io': 'devicon-socketio-original',
+    'Three.js': 'devicon-threejs-original',
+    'Ionic 8': 'devicon-ionic-original colored',
+    'Angular 20': 'devicon-angularjs-plain colored',
+    'Swagger': 'devicon-swagger-plain colored',
+    'Java': 'devicon-java-plain colored',
+    'Android SDK': 'devicon-android-plain colored',
+    'Gradle': 'devicon-gradle-plain colored',
+    'Firebase': 'devicon-firebase-plain colored',
+    'Firestore': 'devicon-firebase-plain colored',
+  };
+
+  techIcon(tech: string): string | null {
+    return this.iconMap[tech] ?? null;
+  }
+
+  /** Texto del tooltip; por defecto el nombre, salvo overrides. */
+  private readonly labelMap: Record<string, string> = {
+    'Firebase': 'Firestore y Firebase',
+  };
+
+  techLabel(tech: string): string {
+    return this.labelMap[tech] ?? tech;
+  }
+
   // Estado del modal con signals (Angular 19)
   isModalOpen = signal<boolean>(false);
   currentImages = signal<string[]>([]);

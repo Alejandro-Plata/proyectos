@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado pressed: oro más oscuro -->
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <gradient
+                android:angle="135"
+                android:startColor="#D4A830"
+                android:endColor="#7A5D18"
+                android:type="linear" />
+        </shape>
+    </item>
+    <!-- Estado normal: degradado dorado -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:angle="135"
+                android:startColor="@color/gold_gradient_start"
+                android:centerColor="@color/gold_gradient_mid"
+                android:endColor="@color/gold_gradient_end"
+                android:type="linear" />
+        </shape>
+    </item>
+</selector>

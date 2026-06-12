@@ -140,6 +140,7 @@
     <string name="login_welcome">Welcome</string>
     <string name="login_subtitle">Sign in to continue</string>
     <string name="login_or_continue_with">Or continue with</string>
+    <string name="btn_google_signin">Continue with Google</string>
     <string name="error_login_invalid">Incorrect email or password</string>
 
     <!-- Add tracking -->
@@ -216,4 +217,59 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Filtros fase 2 -->
+    <string name="filter_all">All</string>
+    <string name="label_filters">Filters</string>
+    <string name="label_min_rating">Minimum Rating</string>
+    <string name="btn_sort">Sort</string>
+    <string name="sort_newest">Newest first</string>
+    <string name="sort_oldest">Oldest first</string>
+    <string name="sort_best_rated">Best rated</string>
+    <string name="sort_worst_rated">Worst rated</string>
+    <string name="chip_date">Date: %s – %s</string>
+    <string name="chip_rating">★ %s+</string>
+    <string name="chip_type_movie">Type: Movie</string>
+    <string name="chip_type_serie">Type: TV Show</string>
+
+    <!-- Actores favoritos fase 2 -->
+    <string name="label_your_actors">Your actors · %d</string>
+    <string name="sort_added_recently">Added recently</string>
+    <string name="sort_name_az">Name A–Z</string>
+    <string name="sort_department">Department</string>
+    <string name="hint_search_actors">Search actors…</string>
+    <string name="badge_birthday">Birthday</string>
+    <string name="menu_remove_favorite">Remove from favorites</string>
+    <string name="menu_view_filmography">View filmography</string>
+
+    <!-- Explorar filters -->
+    <string name="filter_popular">Popular</string>
+    <string name="filter_top_rated">Top Rated</string>
+    <string name="filter_newest">Newest</string>
+    <string name="filter_revenue">Box Office</string>
+    <string name="label_all_genres">All genres</string>
+    <string name="label_genre">Genre</string>
+    <string name="label_movies">Movies</string>
+    <string name="label_series">Series</string>
+    <string name="msg_adjust_filters">Try adjusting your filters</string>
+
+    <!-- Settings sections -->
+    <string name="section_profile">Profile</string>
+    <string name="section_preferences">Preferences</string>
+    <string name="section_data">Data &amp; Storage</string>
+    <string name="section_account">Account</string>
+
+    <!-- TMDB departments -->
+    <string name="dept_acting">Acting</string>
+    <string name="dept_directing">Directing</string>
+    <string name="dept_writing">Writing</string>
+    <string name="dept_production">Production</string>
+    <string name="dept_camera">Camera</string>
+    <string name="dept_art">Art</string>
+    <string name="dept_sound">Sound</string>
+    <string name="dept_visual_effects">Visual Effects</string>
+    <string name="dept_editing">Editing</string>
+    <string name="dept_costume">Costume &amp; Make-Up</string>
+    <string name="dept_lighting">Lighting</string>
+    <string name="dept_crew">Crew</string>
 </resources>

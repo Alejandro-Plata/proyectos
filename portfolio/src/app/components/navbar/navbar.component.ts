@@ -24,7 +24,7 @@ export class NavbarComponent {
   links: NavLink[] = [
     { label: 'Sobre mí', fragment: 'sobre-mi' },
     { label: 'Proyectos', fragment: 'proyectos' },
-    { label: 'Experiencia & Educación', fragment: 'experiencia' },
+    { label: 'Experiencia', fragment: 'experiencia' },
     { label: 'Contacto', fragment: 'contacto' },
   ];
 }

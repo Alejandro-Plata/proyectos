@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-
-    <solid android:color="?attr/surfaceElevated" />
-
-    <stroke
-        android:width="1dp"
-        android:color="?android:attr/listDivider" />
-
-    <corners android:radius="@dimen/radius_sm" />
-
-    <padding
-        android:bottom="12dp"
-        android:left="16dp"
-        android:right="16dp"
-        android:top="12dp" />
-
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo superficie elevada -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/surfaceElevated" />
+            <corners android:radius="@dimen/radius_sm" />
+        </shape>
+    </item>
+    <!-- Barra lateral izquierda dorada -->
+    <item android:right="999dp">
+        <shape>
+            <solid android:color="?attr/colorPrimary" />
+            <corners
+                android:topLeftRadius="@dimen/radius_sm"
+                android:bottomLeftRadius="@dimen/radius_sm" />
+        </shape>
+    </item>
+    <!-- Borde exterior hairline -->
+    <item>
+        <shape>
+            <stroke
+                android:width="@dimen/border_hairline"
+                android:color="?android:attr/listDivider" />
+            <corners android:radius="@dimen/radius_sm" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -85,7 +85,7 @@ public class SettingsFragment extends Fragment {
                                                 break;
                                             case ERROR:
                                                 binding.btnChangePhoto.setEnabled(true);
-                                                new AlertDialog.Builder(requireContext())
+                                                new MaterialAlertDialogBuilder(requireContext())
                                                         .setMessage(uploadRes.message)
                                                         .setPositiveButton(getString(R.string.dialog_accept), null)
                                                         .show();
@@ -115,7 +115,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void showLogoutDialog() {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.dialog_logout_title))
                 .setMessage(getString(R.string.dialog_logout_message))
                 .setPositiveButton(getString(R.string.dialog_logout_confirm), (dialog, which) -> {
@@ -162,7 +162,7 @@ public class SettingsFragment extends Fragment {
 
             viewmodel.applyLanguage(requireContext());
 
-            new AlertDialog.Builder(requireContext())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.msg_settings_saved))
                     .setPositiveButton(getString(R.string.dialog_accept), (dialog, which) -> {
                         requireActivity().recreate();
@@ -180,7 +180,7 @@ public class SettingsFragment extends Fragment {
             viewmodel.applyLanguage(requireContext());
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-            new AlertDialog.Builder(requireContext())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.msg_settings_reset))
                     .setPositiveButton(getString(R.string.dialog_accept), (dialog, which) -> {
                         requireActivity().recreate();

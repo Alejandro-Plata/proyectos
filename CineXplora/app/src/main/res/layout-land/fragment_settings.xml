@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!-- Panel izquierdo: perfil de usuario -->
+        <!-- Panel izquierdo: perfil + cuenta -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -19,8 +19,7 @@
             android:orientation="vertical"
             android:background="?attr/colorSurface"
             android:paddingHorizontal="@dimen/space_xl"
-            android:paddingVertical="@dimen/space_xl"
-            android:gravity="center_horizontal">
+            android:paddingVertical="@dimen/space_xl">
 
             <TextView
                 style="@style/CineXplora.Text.HeadlineLarge"
@@ -29,52 +28,56 @@
                 android:text="@string/title_settings"
                 android:layout_marginBottom="@dimen/space_xl" />
 
-            <!-- Tarjeta de perfil -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- PERFIL section -->
+            <TextView
+                style="@style/CineXplora.Text.Overline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_profile"
+                android:layout_marginBottom="@dimen/space_sm" />
+
+            <!-- Avatar + photo button -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/radius_sm"
-                app:cardElevation="0dp"
-                app:strokeWidth="@dimen/card_border_width"
-                app:strokeColor="?android:attr/listDivider"
-                app:cardBackgroundColor="?attr/colorSurface"
-                android:layout_marginBottom="@dimen/space_lg">
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/space_md">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgProfileSettings"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_default_avatar"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="?attr/colorPrimary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnChangePhoto"
+                    style="@style/CineXplora.Button.Text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:padding="@dimen/space_lg">
+                    android:text="@string/btn_change_photo"
+                    app:icon="@drawable/ic_add_photo"
+                    app:iconSize="16dp"
+                    android:layout_marginTop="@dimen/space_xs" />
+            </LinearLayout>
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/imgProfileSettings"
-                        android:layout_width="@dimen/avatar_size_md"
-                        android:layout_height="@dimen/avatar_size_md"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_default_avatar"
-                        app:shapeAppearanceOverlay="@style/CircleImageView"
-                        app:strokeWidth="2dp"
-                        app:strokeColor="?android:attr/listDivider" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnChangePhoto"
-                        style="@style/CineXplora.Button.Text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/btn_change_photo"
-                        android:layout_marginTop="@dimen/space_sm" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Nombre de usuario -->
-            <TextView
+            <View
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginBottom="@dimen/space_md" />
+
+            <!-- Username -->
+            <TextView
+                style="@style/CineXplora.Text.Overline"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_username"
-                android:textStyle="bold"
-                android:textColor="?android:attr/textColorPrimary"
-                android:layout_marginBottom="@dimen/space_sm" />
+                android:layout_marginBottom="@dimen/space_xs" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilUsername"
@@ -93,16 +96,27 @@
                     android:textColorHint="?android:attr/textColorSecondary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Cerrar sesion -->
+            <!-- CUENTA section -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginBottom="@dimen/space_lg" />
+
+            <TextView
+                style="@style/CineXplora.Text.Overline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_account"
+                android:layout_marginBottom="@dimen/space_sm" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
+                style="@style/CineXplora.Button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:text="@string/btn_logout"
-                android:textStyle="bold"
-                android:backgroundTint="?attr/colorError"
-                android:textColor="?attr/colorOnPrimary"
-                app:cornerRadius="@dimen/radius_sm"
+                app:backgroundTint="?attr/colorError"
                 app:icon="@drawable/ic_logout"
                 app:iconGravity="textStart" />
         </LinearLayout>
@@ -113,7 +127,7 @@
             android:layout_height="match_parent"
             android:background="?android:attr/listDivider" />
 
-        <!-- Panel derecho: ajustes de la app -->
+        <!-- Panel derecho: preferencias + datos + botones -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -122,113 +136,168 @@
             android:paddingHorizontal="@dimen/space_xl"
             android:paddingVertical="@dimen/space_xl">
 
-            <!-- Idioma -->
+            <!-- PREFERENCIAS section -->
             <TextView
+                style="@style/CineXplora.Text.Overline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_preferred_language"
-                android:textStyle="bold"
-                android:textColor="?android:attr/textColorPrimary"
+                android:text="@string/section_preferences"
                 android:layout_marginBottom="@dimen/space_sm" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerLanguage"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:background="@drawable/bg_spinner_outline"
-                android:paddingStart="@dimen/space_md"
-                android:layout_marginBottom="@dimen/space_xl" />
-
-            <!-- Almacenamiento de datos -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_data_storage"
-                android:textStyle="bold"
-                android:textColor="?android:attr/textColorPrimary"
-                android:layout_marginBottom="@dimen/space_md" />
-
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CineXplora.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_wifi_only"
-                        android:textStyle="bold"
-                        android:textColor="?android:attr/textColorPrimary" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_wifi_subtitle"
-                        android:textSize="12sp"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchWifi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:thumbTint="?android:attr/textColorPrimary"
-                    app:trackTint="?attr/colorPrimary" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_height"
-                android:background="?android:attr/listDivider"
-                android:layout_marginTop="@dimen/space_lg"
-                android:layout_marginBottom="@dimen/space_xl" />
-
-            <!-- Apariencia -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_appearance"
-                android:textStyle="bold"
-                android:textColor="?android:attr/textColorPrimary"
-                android:layout_marginBottom="@dimen/space_sm" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/toggleTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:singleSelection="true"
-                app:selectionRequired="true"
-                app:checkedButton="@id/btnLight"
                 android:layout_marginBottom="@dimen/space_xl">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnLight"
-                    style="@style/CineXplora.Button.Outlined"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_light"
-                    app:icon="@drawable/ic_sun"
-                    app:iconTint="?attr/colorPrimary" />
+                    android:orientation="vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDark"
-                    style="@style/CineXplora.Button.Outlined"
-                    android:layout_width="0dp"
+                    <!-- Language row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="@dimen/space_lg"
+                        android:paddingVertical="@dimen/space_md">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/label_preferred_language"
+                            android:textStyle="bold"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="14sp" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spinnerLanguage"
+                            android:layout_width="140dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_spinner_outline"
+                            android:paddingStart="@dimen/space_md" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:layout_marginHorizontal="@dimen/space_lg" />
+
+                    <!-- Appearance -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/space_lg"
+                        android:paddingTop="@dimen/space_md"
+                        android:paddingBottom="@dimen/space_lg">
+
+                        <TextView
+                            style="@style/CineXplora.Text.Overline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_appearance"
+                            android:layout_marginBottom="@dimen/space_sm" />
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/toggleTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"
+                            app:selectionRequired="true"
+                            app:checkedButton="@id/btnLight">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnLight"
+                                style="@style/CineXplora.Button.Segment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/btn_light"
+                                app:icon="@drawable/ic_sun"
+                                app:iconSize="16dp"
+                                app:iconTint="?attr/colorPrimary" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnDark"
+                                style="@style/CineXplora.Button.Segment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/btn_dark"
+                                app:icon="@drawable/ic_moon"
+                                app:iconSize="16dp"
+                                app:iconTint="?attr/colorPrimary" />
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- DATOS section -->
+            <TextView
+                style="@style/CineXplora.Text.Overline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_data"
+                android:layout_marginBottom="@dimen/space_sm" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CineXplora.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_xl">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_dark"
-                    app:icon="@drawable/ic_moon"
-                    app:iconTint="?attr/colorPrimary" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/space_lg"
+                    android:paddingVertical="@dimen/space_md">
 
-            <!-- Acciones de guardado -->
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_wifi_off"
+                        android:layout_marginEnd="@dimen/space_md"
+                        app:tint="?attr/colorPrimary"
+                        android:alpha="0.85" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_wifi_only"
+                            android:textStyle="bold"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            style="@style/CineXplora.Text.BodyMedium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_wifi_subtitle" />
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchWifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:thumbTint="?android:attr/textColorPrimary"
+                        app:trackTint="?attr/colorPrimary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Action buttons -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 style="@style/CineXplora.Button"
@@ -244,6 +313,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/btn_reset_defaults"
                 android:textColor="?attr/colorError" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

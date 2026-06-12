@@ -11,7 +11,7 @@ import es.iesagora.cinexplora.controller.repository.SharedPreferencesRepository;
 import es.iesagora.cinexplora.model.Language;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSetupNameDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.dialog_welcome_title))
                 .setMessage(getString(R.string.dialog_welcome_message))
                 .setPositiveButton(getString(R.string.dialog_go_to_settings), (dialog, which) -> {
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         String mensaje = getString(R.string.dialog_tracking_pending_message,
                 name, typeStr, item.getTitle());
 
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.dialog_tracking_pending_title))
                 .setMessage(mensaje)
                 .setPositiveButton(getString(R.string.dialog_add_tracking), (dialog, which) -> {
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.dialog_logout_title))
                 .setMessage(getString(R.string.dialog_logout_message))
                 .setPositiveButton(getString(R.string.dialog_logout_confirm), (dialog, which) -> {

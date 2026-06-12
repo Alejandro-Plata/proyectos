@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -78,7 +78,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void showSuccesfulDialog() {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Correo enviado")
                 .setMessage("Revisa tu bandeja de entrada. Hemos enviado un enlace para restablecer tu contraseña.")
                 .setPositiveButton("Volver al Login", (dialog, which) -> {

@@ -3,30 +3,35 @@
 
     <!-- ===== BOTONES ===== -->
 
-    <!-- Boton principal (CTA) -->
+    <!-- Boton principal CTA — fondo degradado dorado -->
     <style name="CineXplora.Button" parent="Widget.Material3.Button">
         <item name="cornerRadius">@dimen/radius_sm</item>
         <item name="android:minHeight">@dimen/button_height</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/bg_button_gold</item>
+        <item name="android:textColor">@color/dark_on_accent</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">0.02</item>
+        <item name="android:letterSpacing">0.06</item>
         <item name="android:textAllCaps">false</item>
+        <item name="iconTint">@color/dark_on_accent</item>
     </style>
 
     <style name="CineXplora.Button.Large" parent="CineXplora.Button">
         <item name="android:minHeight">@dimen/button_height_large</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.07</item>
     </style>
 
-    <!-- Boton secundario (outlined) -->
+    <!-- Boton secundario (outlined oro) -->
     <style name="CineXplora.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
         <item name="cornerRadius">@dimen/radius_sm</item>
         <item name="android:minHeight">@dimen/button_height</item>
         <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.04</item>
     </style>
 
     <!-- Boton de texto -->
@@ -38,14 +43,20 @@
     <!-- ===== CARDS ===== -->
 
     <style name="CineXplora.Card" parent="Widget.Material3.CardView.Filled">
-        <item name="cardCornerRadius">@dimen/radius_sm</item>
+        <item name="cardCornerRadius">@dimen/radius_md</item>
         <item name="cardElevation">0dp</item>
         <item name="strokeWidth">@dimen/card_border_width</item>
         <item name="strokeColor">?android:attr/listDivider</item>
         <item name="cardBackgroundColor">?attr/colorSurface</item>
     </style>
 
-    <!-- Card sin borde (para posters / imagenes) -->
+    <!-- Card destacada — borde dorado sutil -->
+    <style name="CineXplora.Card.Featured" parent="CineXplora.Card">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Card sin borde (posters / imágenes) -->
     <style name="CineXplora.Card.Media" parent="CineXplora.Card">
         <item name="strokeWidth">0dp</item>
     </style>
@@ -58,30 +69,53 @@
         <item name="boxCornerRadiusBottomStart">@dimen/radius_sm</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/radius_sm</item>
         <item name="boxStrokeColor">?android:attr/listDivider</item>
-        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxStrokeWidthFocused">1.5dp</item>
         <item name="hintTextColor">?attr/colorPrimary</item>
+        <item name="boxBackgroundColor">?attr/surfaceElevated</item>
     </style>
 
-    <!-- ===== ALERTDIALOG ===== -->
+    <!-- ===== ALERTDIALOG Material3 ===== -->
 
     <style name="CineXplora.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">@drawable/bg_dialog</item>
         <item name="android:windowMinWidthMajor">80%</item>
         <item name="android:windowMinWidthMinor">90%</item>
-        <item name="buttonBarPositiveButtonStyle">@style/CineXplora.AlertDialog.Button</item>
+        <!-- Esquinas del contenedor del diálogo -->
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.CineXplora.Dialog</item>
+        <!-- Botones -->
+        <item name="buttonBarPositiveButtonStyle">@style/CineXplora.AlertDialog.Button.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/CineXplora.AlertDialog.Button.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/CineXplora.AlertDialog.Button.Neutral</item>
     </style>
 
-    <style name="CineXplora.AlertDialog.Button" parent="Widget.Material3.Button.TextButton">
+    <!-- Forma del diálogo: bordes rectos, 4dp de radio -->
+    <style name="ShapeAppearance.CineXplora.Dialog" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radius_md</item>
+    </style>
+
+    <!-- Botón positivo: dorado bold -->
+    <style name="CineXplora.AlertDialog.Button.Positive" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.04</item>
         <item name="android:textAllCaps">false</item>
+        <item name="rippleColor">?attr/accentGlow</item>
     </style>
 
-    <style name="CineXplora.AlertDialog.Button.Negative" parent="Widget.Material3.Button.TextButton">
+    <!-- Botón negativo: texto secundario -->
+    <style name="CineXplora.AlertDialog.Button.Negative" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <!-- Botón neutral: texto dorado sin bold -->
+    <style name="CineXplora.AlertDialog.Button.Neutral" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Alias para retrocompatibilidad con alertDialogTheme -->
+    <style name="CineXplora.AlertDialog.Button" parent="CineXplora.AlertDialog.Button.Positive" />
 
     <!-- ===== TOOLBAR ===== -->
 
@@ -94,15 +128,17 @@
     <!-- ===== BOTTOM NAVIGATION ===== -->
 
     <style name="CineXplora.BottomNav" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">?android:attr/windowBackground</item>
+        <item name="android:background">@drawable/bg_bottom_nav</item>
         <item name="elevation">0dp</item>
         <item name="itemIconTint">@color/selector_nav_item</item>
         <item name="itemTextColor">@color/selector_nav_text</item>
         <item name="itemActiveIndicatorStyle">@style/CineXplora.BottomNav.Indicator</item>
     </style>
 
+    <!-- Indicador activo rectangular plano -->
     <style name="CineXplora.BottomNav.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">?attr/accentGlow</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.CineXplora.SmallCorner</item>
     </style>
 
     <!-- ===== CHIP ===== -->
@@ -112,7 +148,17 @@
         <item name="chipBackgroundColor">?attr/surfaceElevated</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="chipStrokeColor">?android:attr/listDivider</item>
-        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeWidth">@dimen/card_border_width</item>
+    </style>
+
+    <!-- Chip seleccionado (activo = oro) -->
+    <style name="CineXplora.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="chipCornerRadius">@dimen/radius_xs</item>
+        <item name="chipBackgroundColor">@color/selector_chip_bg</item>
+        <item name="android:textColor">@color/selector_chip_text</item>
+        <item name="chipStrokeColor">@color/selector_chip_stroke</item>
+        <item name="chipStrokeWidth">@dimen/card_border_width</item>
+        <item name="checkedIconVisible">false</item>
     </style>
 
     <!-- ===== TAB LAYOUT ===== -->
@@ -120,6 +166,7 @@
     <style name="CineXplora.TabLayout" parent="">
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
         <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
         <item name="tabSelectedTextColor">?android:attr/textColorPrimary</item>
         <item name="tabTextColor">?android:attr/textColorSecondary</item>
         <item name="tabRippleColor">@android:color/transparent</item>
@@ -133,13 +180,14 @@
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="CineXplora.Text.HeadlineMedium">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="CineXplora.Text.TitleLarge">
@@ -157,18 +205,28 @@
     <style name="CineXplora.Text.BodyLarge">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:lineSpacingExtra">6dp</item>
     </style>
 
     <style name="CineXplora.Text.BodyMedium">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:lineSpacingExtra">4dp</item>
+    </style>
+
+    <!-- Overline: etiquetas de sección premium ("EN CARTELERA", "REPARTO", etc.) -->
+    <style name="CineXplora.Text.Overline">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:letterSpacing">0.12</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="CineXplora.Text.LabelSmall">
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:letterSpacing">0.04</item>
     </style>
 
@@ -223,10 +281,78 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <!-- ===== SEGMENTED CONTROL (Pendientes) ===== -->
+
+    <style name="CineXplora.Button.Segment" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="cornerRadius">@dimen/radius_sm</item>
+        <item name="backgroundTint">@color/selector_segment_bg</item>
+        <item name="android:textColor">@color/selector_segment_text</item>
+        <item name="strokeColor">@color/selector_segment_stroke</item>
+        <item name="strokeWidth">@dimen/border_hairline</item>
+        <item name="rippleColor">?attr/accentGlow</item>
+    </style>
+
+    <!-- ===== ICON BUTTON (para Sort y Filter en cabeceras) ===== -->
+
+    <style name="CineXplora.Button.Icon" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/radius_sm</item>
+        <item name="strokeColor">?android:attr/listDivider</item>
+        <item name="strokeWidth">@dimen/border_hairline</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">?android:attr/textColorPrimary</item>
+    </style>
+
+    <!-- Active state of icon button (filter button with filters applied) -->
+    <style name="CineXplora.Button.Icon.Active" parent="CineXplora.Button.Icon">
+        <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="iconTint">?attr/colorPrimary</item>
+        <item name="backgroundTint">?attr/accentGlow</item>
+    </style>
+
+    <!-- ===== BOTTOM SHEET ===== -->
+
+    <style name="CineXplora.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CineXplora.BottomSheet.Style</item>
+    </style>
+
+    <style name="CineXplora.BottomSheet.Style" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/ShapeAppearance.CineXplora.BottomSheet</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+    <style name="ShapeAppearance.CineXplora.BottomSheet" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/radius_md</item>
+        <item name="cornerSizeTopRight">@dimen/radius_md</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
     <!-- ===== SHAPE APPEARANCES ===== -->
 
     <style name="ShapeAppearance.CineXplora.SmallCorner" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/radius_sm</item>
     </style>
+
 </resources>

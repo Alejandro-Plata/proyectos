@@ -9,18 +9,22 @@
     <dimen name="space_2xl">32dp</dimen>
     <dimen name="space_3xl">48dp</dimen>
 
-    <!-- Border Radius -->
-    <dimen name="radius_xs">2dp</dimen>
-    <dimen name="radius_sm">4dp</dimen>
+    <!-- Border Radius — estética premium, bordes casi rectos -->
+    <dimen name="radius_xs">0dp</dimen>
+    <dimen name="radius_sm">2dp</dimen>
     <dimen name="radius_md">4dp</dimen>
     <dimen name="radius_lg">4dp</dimen>
+
+    <!-- Bordes -->
+    <dimen name="border_hairline">0.75dp</dimen>
+    <dimen name="border_accent">2dp</dimen>
 
     <!-- Componentes -->
     <dimen name="button_height">48dp</dimen>
     <dimen name="button_height_large">56dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="bottom_nav_height">64dp</dimen>
-    <dimen name="card_border_width">1dp</dimen>
+    <dimen name="card_border_width">0.75dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="icon_size_sm">16dp</dimen>
     <dimen name="icon_size_md">24dp</dimen>
