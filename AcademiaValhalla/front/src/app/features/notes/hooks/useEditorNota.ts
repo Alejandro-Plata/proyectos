@@ -93,7 +93,7 @@ export const useEditorNota = (noteId: string) => {
     return {
         loading,
         title, setTitle,
-        selectedTags,
+        selectedTags, setSelectedTags,
         selectedLanguage, setSelectedLanguage,
         selectedDifficulty, setSelectedDifficulty,
         blocks, setBlocks,

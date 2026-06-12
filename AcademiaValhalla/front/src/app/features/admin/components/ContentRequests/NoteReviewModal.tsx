@@ -75,7 +75,7 @@ export const NoteReviewModal = ({ request, onReview, onClose }: Props) => {
                                     className="px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider border bg-violet-500/[0.08] text-violet-600 border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-400"
                                     style={{ clipPath: NOTCH_SM }}
                                 >
-                                    Apunte
+                                    Nota
                                 </span>
                             </div>
                             <p className="font-mono text-sm uppercase tracking-[0.1em] text-slate-900 dark:text-white leading-tight">

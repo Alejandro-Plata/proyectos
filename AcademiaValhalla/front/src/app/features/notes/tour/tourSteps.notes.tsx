@@ -150,7 +150,7 @@ export const notesTourSteps: TourStep[] = [
         route: CREATE_ROUTE,
         target: 'create-save',
         title: '¡Guarda tu apunte!',
-        body: 'Cuando estés listo, pulsa "Guardar apunte". Ganarás XP y el apunte aparecerá en tu lista personal inmediatamente.',
+        body: 'Cuando estés listo, pulsa "Guardar". Ganarás experiencia y la nota aparecerá en tu lista personal inmediatamente.',
         placement: 'bottom',
     },
 

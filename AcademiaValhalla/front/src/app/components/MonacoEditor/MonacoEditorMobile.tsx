@@ -44,7 +44,8 @@ export const MonacoEditorMobile = ({
     editable = false,
     onChange,
     theme,
-    options
+    options,
+    showCopyButton = true
 }: MonacoEditorMobileProps) => {
 
     const isSystemDark = useTailwindTheme();
@@ -145,7 +146,7 @@ export const MonacoEditorMobile = ({
                     ...options
                 }}
             />
-            {!editable && (
+            {!editable && showCopyButton && (
                 <button
                     onClick={handleCopy}
                     className="absolute top-2 right-2 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 active:bg-white dark:active:bg-slate-700 transition-all shadow-sm backdrop-blur-sm"

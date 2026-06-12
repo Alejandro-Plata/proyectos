@@ -53,7 +53,8 @@ export const CodeBlockDesktop = ({ code, language = 'javascript' }: CodeBlockPro
                     code={code}
                     language={language}
                     editable={false}
-                    theme={true} 
+                    showCopyButton={false}
+                    theme={true}
                     options={{
                         readOnly: true,
                         minimap: { enabled: false },

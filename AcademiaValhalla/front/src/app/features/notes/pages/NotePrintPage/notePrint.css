@@ -35,6 +35,12 @@
         font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         color: #0f172a;
     }
+
+    /* Durante la captura de html2pdf: sin sombra ni márgenes de pantalla */
+    .pdf-exporting .a4-sheet {
+        margin: 0 auto;
+        box-shadow: none;
+    }
 }
 
 /* ── Tipografía (conversión px-pantalla → pt-papel) ──────────────────────── */

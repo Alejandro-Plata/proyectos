@@ -15,6 +15,7 @@ export interface PropsEditorMonacoDesktop {
     theme?: boolean; // true = dark, false = light
     options?: editor.IStandaloneEditorConstructionOptions;
     filePath?: string;
+    showCopyButton?: boolean;
 }
 
 export interface IMonacoTypeScript {
@@ -35,6 +36,7 @@ export interface PropsEditorMonacoMobile {
     onChange?: (value: string | undefined, event: editor.IModelContentChangedEvent) => void;
     theme?: boolean;
     options?: editor.IStandaloneEditorConstructionOptions;
+    showCopyButton?: boolean;
 }
 
 export interface PropsBarraLateral {

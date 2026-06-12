@@ -4,7 +4,6 @@ import type { Block, BlockType } from '../types/types';
 import { generateId } from '../utils';
 import { API_BASE, authHeaders } from '../../../services/apiClient';
 import type { XPRewardResponse } from '../../../services/xpService';
-import { useDraft, clearDraft } from '../../../hooks/useDraft';
 
 export const useCreadorNota = () => {
     const navigate = useNavigate();
@@ -16,12 +15,6 @@ export const useCreadorNota = () => {
     const [blocks, setBlocks] = useState<Block[]>([
         { id: generateId(), type: 'text', value: '' }
     ]);
-
-    useDraft<{ title: string; blocks: Block[] }>(
-        'create-note',
-        { title, blocks },
-        (v) => { setTitle(v.title); setBlocks(v.blocks); }
-    );
 
     const [isSaving, setIsSaving] = useState(false);
     const [shareToForum, setShareToForum] = useState(false);
@@ -82,7 +75,7 @@ export const useCreadorNota = () => {
 
             if (res.ok) {
                 const data = await res.json();
-                clearDraft('create-note');
+                localStorage.removeItem('draft:create-note');
                 if (data.communityPending) setCommunityPending(true);
                 if (data.xpReward && onXPReward) {
                     onXPReward(data.xpReward, data.unlockedAchievements ?? []);

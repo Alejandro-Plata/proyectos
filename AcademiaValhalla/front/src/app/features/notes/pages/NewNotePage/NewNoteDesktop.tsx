@@ -30,15 +30,28 @@ export const NewNoteDesktop = () => {
                         <span className="capitalize text-slate-500">{note.language}</span>
                     </div>
                     {note.source === 'personal' && (
-                        <button
-                            onClick={() => window.open(`/dashboard/notes/${noteId}/print`, '_blank')}
-                            className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
-                            style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
-                            title="Exportar como PDF"
-                        >
-                            <PdfIcon />
-                            PDF
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <Link
+                                to={`/dashboard/notes/${noteId}/edit`}
+                                className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] border border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/[0.08] hover:border-emerald-500/60 transition-colors"
+                                style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
+                                title="Editar apunte"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                                Editar
+                            </Link>
+                            <button
+                                onClick={() => window.open(`/dashboard/notes/${noteId}/print`, '_blank')}
+                                className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                                style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
+                                title="Descargar como PDF"
+                            >
+                                <PdfIcon />
+                                PDF
+                            </button>
+                        </div>
                     )}
                 </nav>
 

@@ -46,6 +46,7 @@ export const CodeBlockMobile = ({ code, language = 'javascript' }: CodeBlockProp
                     code={code}
                     language={language}
                     editable={false}
+                    showCopyButton={false}
                 />
             </div>
         </div>

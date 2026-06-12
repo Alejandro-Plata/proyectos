@@ -20,8 +20,13 @@ export class ControladorNotaUsuario {
         if (!req.file) {
             return res.status(400).json({ msg: 'No se subió ninguna imagen' });
         }
-        const url = await subirArchivo(req.file, 'notes', 'note');
-        res.status(201).json({ url });
+        try {
+            const url = await subirArchivo(req.file, 'notes', 'note');
+            res.status(201).json({ url });
+        } catch (error: any) {
+            console.error('[subirImagen]', error?.message ?? error);
+            res.status(500).json({ msg: error?.message ?? 'Error al subir la imagen' });
+        }
     };
 
     static crearNota = async (req: Request, res: Response) => {

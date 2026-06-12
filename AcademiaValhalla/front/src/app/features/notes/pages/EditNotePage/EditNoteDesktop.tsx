@@ -5,7 +5,8 @@ import { MonacoEditorDesktop } from '../../../../components/MonacoEditor/MonacoE
 import { CodeBlockDesktop } from '../../../../components/CodeBlock/CodeBlockDesktop';
 import { BlockModal } from '../../components/BlockModal';
 import type { BlockType } from '../../types/types';
-import { AVAILABLE_TAGS, LANGUAGES, DIFFICULTIES, getFileExtension, renderContent } from '../../utils';
+import { LANGUAGES, DIFFICULTIES, getFileExtension, renderContent } from '../../utils';
+import { TagInput } from '../../components/TagInput';
 import { NoteTextBlock } from '../../components/NoteTextBlock';
 import { useEditorNota } from '../../hooks/useEditorNota';
 import { uploadNoteImage } from '../../services/uploadNoteImage';
@@ -23,14 +24,13 @@ export const EditNoteDesktop = ({ noteId }: Props) => {
     const {
         loading,
         title, setTitle,
-        selectedTags,
+        selectedTags, setSelectedTags,
         selectedLanguage, setSelectedLanguage,
         selectedDifficulty, setSelectedDifficulty,
         blocks,
         isSaving,
         revisionPending, setRevisionPending,
         communityStatus,
-        toggleTag,
         addBlock: addBlockHook,
         updateBlock,
         removeBlock,
@@ -205,21 +205,7 @@ export const EditNoteDesktop = ({ noteId }: Props) => {
                                         </div>
                                         <div className="space-y-2 border-t border-slate-100 dark:border-white/5 pt-4">
                                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Etiquetas</label>
-                                            <div className="flex flex-wrap gap-2">
-                                                {AVAILABLE_TAGS.map(tag => (
-                                                    <button
-                                                        key={tag}
-                                                        onClick={() => toggleTag(tag)}
-                                                        className={`px-2.5 py-1 rounded-sm text-[11px] font-mono border transition-colors ${
-                                                            selectedTags.includes(tag)
-                                                                ? 'bg-slate-800 dark:bg-white text-white dark:text-black border-slate-800 dark:border-white'
-                                                                : 'bg-transparent border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300 dark:hover:border-white/20'
-                                                        }`}
-                                                    >
-                                                        #{tag}
-                                                    </button>
-                                                ))}
-                                            </div>
+                                            <TagInput tags={selectedTags} onChange={setSelectedTags} />
                                         </div>
                                     </div>
                                 </div>
@@ -234,10 +220,12 @@ export const EditNoteDesktop = ({ noteId }: Props) => {
                                 <div key={block.id} className="group relative">
                                     <button
                                         onClick={() => removeBlock(block.id)}
-                                        className="absolute -left-8 top-3 opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-all p-1"
+                                        className="absolute -top-2 -left-2 z-20 w-5 h-5 rounded-full bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/40 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 transition-all"
                                         title="Eliminar bloque"
                                     >
-                                        {Icons.close}
+                                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
                                     </button>
 
                                     {block.type === 'text' && (
