@@ -47,7 +47,6 @@ coverage/
 
 # ===== Archivos grandes (superan límite de GitHub 100 MB) =====
 *.webm
-*.mp4
 *.mov
 
 # ===== Herramientas locales =====
