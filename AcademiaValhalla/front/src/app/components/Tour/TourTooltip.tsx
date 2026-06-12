@@ -34,7 +34,7 @@ function computePosition(
         if (spaceBottom >= TOOLTIP_H_APPROX + GAP) resolved = 'bottom';
         else if (spaceTop >= TOOLTIP_H_APPROX + GAP) resolved = 'top';
         else if (spaceRight >= TOOLTIP_W + GAP) resolved = 'right';
-        else resolved = 'left';
+        else resolved = 'bottom'; // fallback: bottom con clamping en lugar de left
     }
 
     const centerX = rect.x + rect.width / 2;
@@ -44,11 +44,11 @@ function computePosition(
 
     switch (resolved) {
         case 'bottom':
-            top  = rect.y + rect.height + GAP;
+            top  = Math.min(rect.y + rect.height + GAP, vh - TOOLTIP_H_APPROX - 8);
             left = Math.max(8, Math.min(centerX - TOOLTIP_W / 2, vw - TOOLTIP_W - 8));
             break;
         case 'top':
-            top  = rect.y - TOOLTIP_H_APPROX - GAP;
+            top  = Math.max(8, rect.y - TOOLTIP_H_APPROX - GAP);
             left = Math.max(8, Math.min(centerX - TOOLTIP_W / 2, vw - TOOLTIP_W - 8));
             break;
         case 'right':

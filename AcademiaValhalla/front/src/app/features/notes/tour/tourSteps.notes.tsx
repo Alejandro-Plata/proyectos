@@ -107,7 +107,24 @@ export const notesTourSteps: TourStep[] = [
         interactive: true,
     },
 
-    /* ── Paso 8: Vista previa del bloque ── */
+    /* ── Paso 8: Atajos de teclado ── */
+    {
+        id: 'create-shortcuts',
+        route: CREATE_ROUTE,
+        target: 'create-shortcuts',
+        title: 'Atajos de teclado',
+        body: (
+            <>
+                Pulsa este botón para ver la <strong>guía completa de atajos</strong>:
+                negrita, encabezados, términos técnicos y más, sin levantar las manos
+                del teclado.
+            </>
+        ),
+        placement: 'bottom',
+        interactive: true,
+    },
+
+    /* ── Paso 9: Vista previa del bloque ── */
     {
         id: 'create-preview',
         route: CREATE_ROUTE,
@@ -117,27 +134,27 @@ export const notesTourSteps: TourStep[] = [
         placement: 'left',
     },
 
-    /* ── Paso 9: Compartir con comunidad ── */
+    /* ── Paso 10: Compartir con comunidad ── */
     {
         id: 'create-share',
         route: CREATE_ROUTE,
         target: 'create-share',
         title: 'Comparte con la comunidad',
         body: 'Activa esta opción para enviar tu apunte a revisión. Si los moderadores lo aprueban, aparecerá en la sección de comunidad para todos.',
-        placement: 'top',
+        placement: 'bottom',
     },
 
-    /* ── Paso 10: Guardar ── */
+    /* ── Paso 11: Guardar ── */
     {
         id: 'create-save',
         route: CREATE_ROUTE,
         target: 'create-save',
         title: '¡Guarda tu apunte!',
         body: 'Cuando estés listo, pulsa "Guardar apunte". Ganarás XP y el apunte aparecerá en tu lista personal inmediatamente.',
-        placement: 'top',
+        placement: 'bottom',
     },
 
-    /* ── Paso 11: Editar apunte (en tarjeta) ── */
+    /* ── Paso 12: Editar apunte (en tarjeta) ── */
     {
         id: 'note-card-edit',
         route: NOTES_ROUTE,

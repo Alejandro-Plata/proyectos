@@ -27,8 +27,9 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ item, isExpanded, isAc
             </div>
 
             <div className={`
-                overflow-hidden whitespace-nowrap transition-[max-width,opacity,margin-left] duration-300 ease-in-out
-                ${isExpanded ? 'max-w-[180px] opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'}
+                overflow-hidden whitespace-nowrap
+                transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]
+                ${isExpanded ? 'max-w-[180px] opacity-100 translate-x-0 ml-3' : 'max-w-0 opacity-0 -translate-x-2 ml-0'}
             `}>
                 <span className="font-mono text-[11px] uppercase tracking-[0.15em]">{item.label}</span>
             </div>
@@ -66,23 +67,24 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
 
     const handleMouseEnter = () => {
         if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
-        openTimer.current = setTimeout(() => setIsHovered(true), 250);
+        openTimer.current = setTimeout(() => setIsHovered(true), 120);
     };
     const handleMouseLeave = () => {
         if (isPinned) return;
         if (openTimer.current) { clearTimeout(openTimer.current); openTimer.current = null; }
-        closeTimer.current = setTimeout(() => setIsHovered(false), 180);
+        closeTimer.current = setTimeout(() => setIsHovered(false), 250);
     };
 
     return (
         <aside
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            style={{ willChange: 'width' }}
             className={`
                 group/sidebar fixed inset-y-0 left-0 z-[100] flex flex-col h-full
                 bg-white dark:bg-[#0a0b0e]
                 border-r border-emerald-500/15 dark:border-emerald-500/10 shadow-lg shadow-emerald-500/5
-                transition-[width] duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)]
+                transition-[width] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]
                 ${isExpanded ? 'w-72' : 'w-20'}
             `}
         >
@@ -113,8 +115,9 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
                     </div>
 
                     <div className={`
-                        flex-1 min-w-0 overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out flex flex-col justify-center
-                        ${isExpanded ? 'opacity-100 max-w-[160px] ml-3' : 'opacity-0 max-w-0 ml-0'}
+                        flex-1 min-w-0 overflow-hidden whitespace-nowrap flex flex-col justify-center
+                        transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]
+                        ${isExpanded ? 'opacity-100 translate-x-0 max-w-[160px] ml-3' : 'opacity-0 -translate-x-2 max-w-0 ml-0'}
                     `}>
                         <span className="font-orbitron font-bold text-lg tracking-wider text-slate-900 dark:text-white leading-none">
                             VALHALLA
@@ -129,15 +132,15 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
                         onClick={() => setIsPinned(p => !p)}
                         title={isPinned ? 'Desfijar barra lateral' : 'Fijar barra lateral'}
                         className={`
-                            ml-auto shrink-0 flex items-center justify-center rounded
+                            shrink-0 flex items-center justify-center rounded
                             transition-all duration-200
                             ${isPinned
                                 ? 'text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20'
                                 : 'text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/[0.06]'
                             }
                             ${isExpanded
-                                ? 'opacity-100 pointer-events-auto w-7 h-7'
-                                : 'opacity-0 pointer-events-none w-0 h-0 overflow-hidden'
+                                ? 'opacity-100 pointer-events-auto w-7 h-7 ml-auto'
+                                : 'opacity-0 pointer-events-none w-0 h-0 ml-0 overflow-hidden'
                             }
                         `}
                     >
@@ -196,8 +199,9 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
                         <div className="w-5 h-5 shrink-0">{Icons.signOut}</div>
 
                         <div className={`
-                            overflow-hidden whitespace-nowrap transition-[max-width,opacity,margin-left] duration-300 ease-in-out
-                            ${isExpanded ? 'max-w-[120px] opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'}
+                            overflow-hidden whitespace-nowrap
+                            transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]
+                            ${isExpanded ? 'max-w-[120px] opacity-100 translate-x-0 ml-3' : 'max-w-0 opacity-0 -translate-x-2 ml-0'}
                         `}>
                             <span className="font-mono text-[11px] uppercase tracking-[0.15em]">Salir</span>
                         </div>

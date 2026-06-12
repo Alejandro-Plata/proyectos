@@ -72,14 +72,14 @@ export const NoteFormatToolbar = ({ onAction, onHelp, editor, className = '' }: 
                                 onAction(btn.action);
                             }}
                             title={btn.shortcut ? `${btn.label}  (${btn.shortcut})` : btn.label}
-                            className={[
-                                'w-11 h-11 transition-colors flex items-center justify-center shrink-0',
-                                active
-                                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/[0.08] dark:bg-emerald-500/[0.12]'
-                                    : 'text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 active:bg-emerald-500/[0.06]',
-                            ].join(' ')}
+                            className="w-11 h-11 flex items-center justify-center shrink-0 group/btn"
                         >
-                            <span className="w-5 h-5 flex items-center justify-center">
+                            <span className={[
+                                'w-7 h-7 rounded flex items-center justify-center transition-colors',
+                                active
+                                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/[0.10] ring-1 ring-inset ring-emerald-500/30'
+                                    : 'text-slate-500 dark:text-slate-400 group-hover/btn:text-emerald-600 dark:group-hover/btn:text-emerald-400',
+                            ].join(' ')}>
                                 {btn.icon}
                             </span>
                         </button>
@@ -92,14 +92,17 @@ export const NoteFormatToolbar = ({ onAction, onHelp, editor, className = '' }: 
                     <div className="w-px h-5 bg-slate-200 dark:bg-emerald-500/20 mx-0.5 shrink-0" />
                     <button
                         type="button"
+                        data-tour="create-shortcuts"
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={onHelp}
                         title="Atajos de teclado"
-                        className="w-11 h-11 transition-colors text-slate-400 hover:text-emerald-500 dark:text-slate-500 dark:hover:text-emerald-400 flex items-center justify-center shrink-0 active:bg-emerald-500/[0.06]"
+                        className="w-11 h-11 flex items-center justify-center shrink-0 group/btn"
                     >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
-                        </svg>
+                        <span className="w-7 h-7 rounded flex items-center justify-center transition-colors text-slate-400 dark:text-slate-500 group-hover/btn:text-emerald-500 dark:group-hover/btn:text-emerald-400">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg>
+                        </span>
                     </button>
                 </>
             )}
