@@ -5,6 +5,7 @@ export interface EstadisticasAdmin {
     totalGlobalNotes: number;
     pendingRequests: number;
     reportedPosts: number;
+    pendingRevisions: number;
 }
 
 export interface UsuarioAdmin {

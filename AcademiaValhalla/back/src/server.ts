@@ -1,6 +1,4 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import passport from './config/passport.js';
 import { db } from './config/db.js';
 import rutaAuth from './rutas/rutaAuth.js';
@@ -67,7 +65,6 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(passport.initialize());
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Swagger UI 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

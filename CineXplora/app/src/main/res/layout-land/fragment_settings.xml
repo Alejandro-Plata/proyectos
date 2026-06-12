@@ -178,7 +178,10 @@
                             android:layout_width="140dp"
                             android:layout_height="48dp"
                             android:background="@drawable/bg_spinner_outline"
-                            android:paddingStart="@dimen/space_md" />
+                            android:paddingStart="@dimen/space_md"
+                            android:paddingEnd="40dp"
+                            android:gravity="center_vertical"
+                            android:spinnerMode="dropdown" />
                     </LinearLayout>
 
                     <View

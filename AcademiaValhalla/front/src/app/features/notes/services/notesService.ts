@@ -13,6 +13,8 @@ const mapNote = (n: any, source: 'personal' | 'community' = 'personal'): Concept
     content: n.content || [],
     community_status: n.community_status || 'personal',
     source,
+    pendingRevision: n.pendingRevision ?? null,
+    rejectedRevision: n.rejectedRevision ?? null,
 });
 
 export const notesService = {
@@ -49,5 +51,30 @@ export const notesService = {
             body: JSON.stringify({ community_status: 'pending' }),
         });
         if (!res.ok) throw new Error('Error al solicitar publicación en comunidad');
+    },
+
+    update: async (noteId: string, datos: Record<string, any>): Promise<{ revisionPending?: boolean }> => {
+        const res = await fetch(`${API_BASE}/notes/${noteId}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify(datos),
+        });
+        if (!res.ok) throw new Error('Error al actualizar la nota');
+        return res.json();
+    },
+
+    listRevisions: async (): Promise<any[]> => {
+        const res = await fetch(`${API_BASE}/admin/note-revisions`, { headers: authHeaders() });
+        if (!res.ok) throw new Error('Error al obtener revisiones');
+        return res.json();
+    },
+
+    resolveRevision: async (revisionId: string, action: 'approve' | 'reject', comment?: string): Promise<void> => {
+        const res = await fetch(`${API_BASE}/admin/note-revisions/${revisionId}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify({ action, comment }),
+        });
+        if (!res.ok) throw new Error('Error al resolver la revisión');
     },
 };

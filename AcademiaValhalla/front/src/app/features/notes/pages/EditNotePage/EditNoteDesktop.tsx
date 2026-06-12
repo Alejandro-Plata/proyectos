@@ -7,61 +7,35 @@ import { BlockModal } from '../../components/BlockModal';
 import type { BlockType } from '../../types/types';
 import { AVAILABLE_TAGS, LANGUAGES, DIFFICULTIES, getFileExtension, renderContent } from '../../utils';
 import { NoteTextBlock } from '../../components/NoteTextBlock';
-import { useCreadorNota } from '../../hooks';
+import { useEditorNota } from '../../hooks/useEditorNota';
 import { uploadNoteImage } from '../../services/uploadNoteImage';
 import { resolveAssetUrl } from '../../../../utils/getAvatarUrl';
-import { useXPReward } from '../../../../hooks/useXPReward';
-import XPRewardModal from '../../components/XPRewardModal';
-import { useAchievements } from '../../../../context/AchievementContext';
-import { useUser } from '../../../../context/UserContext';
 
-export const CrearNotaDesktop = () => {
+interface Props { noteId: string; }
+
+export const EditNoteDesktop = ({ noteId }: Props) => {
     const navigate = useNavigate();
-    const { updateUser } = useUser();
-    const { xpReward, showModal, triggerXPModal, closeModal } = useXPReward();
-    const { encolarLogros } = useAchievements();
 
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
     const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
 
     const {
+        loading,
         title, setTitle,
         selectedTags,
         selectedLanguage, setSelectedLanguage,
         selectedDifficulty, setSelectedDifficulty,
         blocks,
         isSaving,
-        shareToForum, setShareToForum,
-        communityPending, setCommunityPending,
+        revisionPending, setRevisionPending,
+        communityStatus,
         toggleTag,
         addBlock: addBlockHook,
         updateBlock,
         removeBlock,
-        handleSave
-    } = useCreadorNota();
-
-    const handleSaveWithXP = () => {
-        // Retira el foco de Monaco antes de guardar para evitar el ERR Canceled
-        // que lanza internamente cuando sus widgets de sugerencia son descartados
-        // por un clic externo mientras el evento aún se está procesando.
-        (document.activeElement as HTMLElement | null)?.blur();
-        handleSave((reward, unlockedAchievements) => {
-            triggerXPModal(reward);
-            if (unlockedAchievements?.length > 0) encolarLogros(unlockedAchievements);
-        });
-    };
-
-    const handleCloseXPModal = () => {
-        if (xpReward) {
-            updateUser({
-                experience_points: xpReward.newTotalXP,
-                current_level: xpReward.newLevel,
-            });
-        }
-        closeModal();
-        navigate('/dashboard/notes', { state: { noteSaved: true } });
-    };
+        handleSave,
+    } = useEditorNota(noteId);
 
     const handleAddBlock = (type: BlockType) => {
         addBlockHook(type);
@@ -82,6 +56,16 @@ export const CrearNotaDesktop = () => {
             updateBlock(id, 'value', '');
         }
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 dark:bg-[#020202] flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    const isApproved = communityStatus === 'approved';
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-[#020202] text-slate-900 dark:text-slate-200 pb-32">
@@ -113,7 +97,6 @@ export const CrearNotaDesktop = () => {
                         Escritura
                     </button>
                     <button
-                        data-tour="create-preview"
                         onClick={() => setActiveTab('preview')}
                         className={`px-5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${
                             activeTab === 'preview'
@@ -126,29 +109,17 @@ export const CrearNotaDesktop = () => {
                 </div>
 
                 <div className="ml-auto flex items-center gap-3">
+                    {isApproved && (
+                        <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">
+                            Los cambios pasarán por moderación
+                        </span>
+                    )}
                     <button
-                        data-tour="create-share"
-                        type="button"
-                        onClick={() => setShareToForum(v => !v)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
-                            shareToForum
-                                ? 'bg-indigo-500/10 border-indigo-500/40 text-indigo-600 dark:text-indigo-400'
-                                : 'border-slate-200 dark:border-white/10 text-slate-400 hover:border-slate-300 dark:hover:border-white/20'
-                        }`}
-                        title="Compartir en la comunidad tras guardar"
-                    >
-                        <div className={`w-7 h-4 rounded-full transition-colors relative shrink-0 ${shareToForum ? 'bg-indigo-500' : 'bg-slate-200 dark:bg-white/10'}`}>
-                            <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${shareToForum ? 'translate-x-3.5' : 'translate-x-0.5'}`} />
-                        </div>
-                        Comunidad
-                    </button>
-                    <button
-                        data-tour="create-save"
-                        onClick={handleSaveWithXP}
+                        onClick={handleSave}
                         disabled={isSaving || !title.trim() || blocks.length === 0}
                         className="px-5 py-2 rounded-lg text-xs font-bold transition-colors bg-emerald-500 hover:bg-emerald-600 text-white disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                        {isSaving ? 'Guardando...' : 'Guardar'}
+                        {isSaving ? 'Guardando...' : 'Guardar cambios'}
                     </button>
                 </div>
             </header>
@@ -159,7 +130,6 @@ export const CrearNotaDesktop = () => {
                 {activeTab === 'write' && (
                     <div className="space-y-8">
 
-                        {/* Título */}
                         <input
                             type="text"
                             placeholder="Título..."
@@ -169,7 +139,7 @@ export const CrearNotaDesktop = () => {
                         />
 
                         {/* Configuración colapsable */}
-                        <div data-tour="create-meta" className="rounded-sm bg-white dark:bg-[#0a0b0e] border border-slate-200 dark:border-white/5 overflow-hidden transition-all">
+                        <div className="rounded-sm bg-white dark:bg-[#0a0b0e] border border-slate-200 dark:border-white/5 overflow-hidden transition-all">
                             <div
                                 onClick={() => setIsFiltersOpen(!isFiltersOpen)}
                                 className="flex items-center justify-between p-4 cursor-pointer select-none"
@@ -270,7 +240,6 @@ export const CrearNotaDesktop = () => {
                                         {Icons.close}
                                     </button>
 
-                                    {/* TEXT */}
                                     {block.type === 'text' && (
                                         <NoteTextBlock
                                             value={block.value}
@@ -278,7 +247,6 @@ export const CrearNotaDesktop = () => {
                                         />
                                     )}
 
-                                    {/* DEFINITION */}
                                     {block.type === 'definition' && (
                                         <div className="border-l-2 border-emerald-500 pl-4 py-3 rounded-sm bg-emerald-50/50 dark:bg-emerald-500/5">
                                             <input
@@ -298,7 +266,6 @@ export const CrearNotaDesktop = () => {
                                         </div>
                                     )}
 
-                                    {/* CODE */}
                                     {block.type === 'code' && (
                                         <div className="rounded-sm overflow-hidden border border-slate-200 dark:border-white/10 bg-[#1e1e1e]">
                                             <div className="flex justify-between items-center px-3 py-2 bg-[#252526] border-b border-white/5">
@@ -339,7 +306,6 @@ export const CrearNotaDesktop = () => {
                                         </div>
                                     )}
 
-                                    {/* IMAGE */}
                                     {block.type === 'image' && (
                                         <div className="rounded-sm border border-dashed p-4 text-center transition-colors relative overflow-hidden group/image border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#0f1115] hover:border-slate-300 dark:hover:border-white/20">
                                             {block.value ? (
@@ -362,7 +328,6 @@ export const CrearNotaDesktop = () => {
                             ))}
 
                             <button
-                                data-tour="create-add-block"
                                 onClick={() => setIsBlockModalOpen(true)}
                                 className="w-full py-3 rounded-sm border border-dashed text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors border-slate-200 dark:border-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-white/20"
                             >
@@ -375,8 +340,6 @@ export const CrearNotaDesktop = () => {
                 {/* === MODO PREVISUALIZACIÓN === */}
                 {activeTab === 'preview' && (
                     <div className="space-y-10">
-
-                        {/* Header del apunte */}
                         <div className="pb-8 border-b border-slate-100 dark:border-white/5">
                             <div className="flex items-center gap-2 mb-5">
                                 <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-widest border bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10">
@@ -386,11 +349,9 @@ export const CrearNotaDesktop = () => {
                                     {selectedDifficulty}
                                 </span>
                             </div>
-
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-5 leading-tight">
                                 {title || <span className="opacity-20">Sin Título</span>}
                             </h1>
-
                             {selectedTags.length > 0 && (
                                 <div className="flex flex-wrap gap-3">
                                     {selectedTags.map(tag => (
@@ -400,10 +361,9 @@ export const CrearNotaDesktop = () => {
                             )}
                         </div>
 
-                        {/* Contenido de bloques */}
                         <div className="space-y-8">
                             {blocks.length === 0 && (
-                                <p className="text-slate-400 text-sm italic">Sin contenido aún. Añade bloques en el modo Escritura.</p>
+                                <p className="text-slate-400 text-sm italic">Sin contenido aún.</p>
                             )}
                             {blocks.map(block => (
                                 <div key={block.id}>
@@ -414,7 +374,6 @@ export const CrearNotaDesktop = () => {
                                             </div>
                                         </div>
                                     )}
-
                                     {block.type === 'definition' && (
                                         <div className="border-l-2 border-emerald-500 pl-4 py-2 bg-emerald-50/50 dark:bg-emerald-500/5 rounded-sm">
                                             <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-2">
@@ -425,14 +384,9 @@ export const CrearNotaDesktop = () => {
                                             </div>
                                         </div>
                                     )}
-
                                     {block.type === 'code' && block.value && (
-                                        <CodeBlockDesktop
-                                            code={block.value}
-                                            language={block.language || 'javascript'}
-                                        />
+                                        <CodeBlockDesktop code={block.value} language={block.language || 'javascript'} />
                                     )}
-
                                     {block.type === 'image' && block.value && !block.value.startsWith('blob:') && (
                                         <div className="rounded-sm overflow-hidden border border-slate-200 dark:border-white/5">
                                             <img src={resolveAssetUrl(block.value)} alt="Contenido" className="w-full h-auto object-cover" />
@@ -445,34 +399,26 @@ export const CrearNotaDesktop = () => {
                 )}
             </div>
 
-            {xpReward && (
-                <XPRewardModal
-                    reward={xpReward}
-                    visible={showModal}
-                    onClose={handleCloseXPModal}
-                />
-            )}
-
-            {/* Modal: nota pendiente de revisión */}
-            {communityPending && (
+            {/* Modal: cambios enviados a revisión */}
+            {revisionPending && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
                     <div className="bg-white dark:bg-[#0a0b0e] border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl max-w-sm w-full p-8 flex flex-col items-center gap-5 text-center animate-in fade-in zoom-in-95 duration-200">
-                        <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                        <div className="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500">
                             <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                         </div>
                         <div>
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                                Nota enviada a revisión
+                                Cambios enviados a revisión
                             </h3>
                             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                                Tu nota se ha guardado correctamente y está <span className="font-semibold text-indigo-600 dark:text-indigo-400">pendiente de revisión</span> por un administrador antes de publicarse en la comunidad.
+                                Esta nota está publicada en la comunidad. Tus cambios están <span className="font-semibold text-amber-600 dark:text-amber-400">pendientes de aprobación</span> por un moderador antes de aplicarse.
                             </p>
                         </div>
                         <button
-                            onClick={() => { setCommunityPending(false); navigate('/dashboard/notes', { state: { noteSaved: true } }); }}
-                            className="w-full py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-bold transition-colors"
+                            onClick={() => { setRevisionPending(false); navigate('/dashboard/notes', { state: { noteSaved: true } }); }}
+                            className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold transition-colors"
                         >
                             Entendido
                         </button>
@@ -482,6 +428,3 @@ export const CrearNotaDesktop = () => {
         </div>
     );
 };
-
-
-

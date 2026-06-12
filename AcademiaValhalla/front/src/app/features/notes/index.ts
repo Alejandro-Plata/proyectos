@@ -1,6 +1,8 @@
 // Pages
 export { NotesPage } from './pages/NotesPage/NotesPage';
 export { CreateNotePage } from './pages/CreateNotePage/CreateNotePage';
+export { EditNotePage } from './pages/EditNotePage/EditNotePage';
+export { NotePrintPage } from './pages/NotePrintPage/NotePrintPage';
 export { NewNotePage } from './pages/NewNotePage/NewNotePage';
 
 // Components

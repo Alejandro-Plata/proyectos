@@ -4,8 +4,14 @@ import { renderContent } from '../../utils';
 import { MonacoEditorDesktop } from '../../../../components/MonacoEditor/MonacoEditorDesktop';
 import { resolveAssetUrl } from '../../../../utils/getAvatarUrl';
 
+const PdfIcon = () => (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+    </svg>
+);
+
 export const NewNoteDesktop = () => {
-    const { note, navigation } = useNoteDetail();
+    const { note, navigation, noteId } = useNoteDetail();
 
     if (!note) return null;
 
@@ -15,13 +21,55 @@ export const NewNoteDesktop = () => {
             <div className="max-w-3xl mx-auto px-8 py-12 md:py-16 relative">
 
                 {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-xs text-slate-400 mb-10 font-medium">
-                    <Link to="/dashboard/notes" className="hover:text-emerald-500 transition-colors">
-                        Apuntes
-                    </Link>
-                    <span>/</span>
-                    <span className="capitalize text-slate-500">{note.language}</span>
+                <nav className="flex items-center justify-between gap-2 text-xs text-slate-400 mb-10 font-medium">
+                    <div className="flex items-center gap-2">
+                        <Link to="/dashboard/notes" className="hover:text-emerald-500 transition-colors">
+                            Apuntes
+                        </Link>
+                        <span>/</span>
+                        <span className="capitalize text-slate-500">{note.language}</span>
+                    </div>
+                    {note.source === 'personal' && (
+                        <button
+                            onClick={() => window.open(`/dashboard/notes/${noteId}/print`, '_blank')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                            style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
+                            title="Exportar como PDF"
+                        >
+                            <PdfIcon />
+                            PDF
+                        </button>
+                    )}
                 </nav>
+
+                {/* Revision banners */}
+                {note.pendingRevision && (
+                    <div className="flex items-center gap-3 p-4 mb-6 border border-amber-500/30 bg-amber-500/[0.05]">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                        <div>
+                            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400 font-bold">En revisión</p>
+                            <p className="text-xs text-amber-700 dark:text-amber-300/70 mt-0.5">Hay cambios pendientes de aprobación por un moderador.</p>
+                        </div>
+                    </div>
+                )}
+                {!note.pendingRevision && note.rejectedRevision && (
+                    <div className="flex items-start gap-3 p-4 mb-6 border border-rose-500/30 bg-rose-500/[0.05]">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 mt-1 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-rose-600 dark:text-rose-400 font-bold mb-1">Cambios rechazados</p>
+                            {note.rejectedRevision.review_comment && (
+                                <p className="text-xs text-rose-700 dark:text-rose-300/70 mb-3">"{note.rejectedRevision.review_comment}"</p>
+                            )}
+                            <button
+                                onClick={() => window.location.href = `/dashboard/notes/${noteId}/edit`}
+                                className="font-mono text-[10px] uppercase tracking-[0.15em] px-3 py-1.5 border border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/[0.08] transition-colors"
+                                style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
+                            >
+                                Editar de nuevo →
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Header */}
                 <header className="mb-10 space-y-4">

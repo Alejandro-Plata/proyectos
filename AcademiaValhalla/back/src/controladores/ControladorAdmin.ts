@@ -3,7 +3,7 @@ import {
     Usuario, Reto, LenguajeReto, LenguajeProgramacion,
     Publicacion, ContenidoAcademia, NotaUsuario,
     Etiqueta, SolicitudContenido, ReportePublicacion,
-    Logro, LogroUsuario, ComentarioUsuario,
+    Logro, LogroUsuario, ComentarioUsuario, RevisionNota,
 } from '../modelos/Modelos.js';
 import { Op } from 'sequelize';
 import { db } from '../config/db.js';
@@ -15,13 +15,14 @@ export class ControladorAdmin {
 
     static obtenerEstadisticas = async (req: Request, res: Response) => {
         try {
-            const [totalUsers, totalChallenges, totalPosts, totalGlobalNotes, pendingRequests, reportedPosts] = await Promise.all([
+            const [totalUsers, totalChallenges, totalPosts, totalGlobalNotes, pendingRequests, reportedPosts, pendingRevisions] = await Promise.all([
                 Usuario.count(),
                 Reto.count(),
                 Publicacion.count(),
                 ContenidoAcademia.count(),
                 SolicitudContenido.count({ where: { status: 'pending' } }),
                 ReportePublicacion.count({ where: { status: 'pending' } }),
+                RevisionNota.count({ where: { status: 'pending' } }),
             ]);
 
             res.json({
@@ -32,6 +33,7 @@ export class ControladorAdmin {
                 totalGlobalNotes,
                 pendingRequests,
                 reportedPosts,
+                pendingRevisions,
             });
         } catch (error) {
             console.error(error);

@@ -67,6 +67,11 @@ p {
 }
 
 /* ───── Animations ───── */
+@keyframes tour-ring-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 2px rgba(16,185,129,0.7); }
+  50%       { opacity: 0.6; box-shadow: 0 0 0 4px rgba(16,185,129,0.3); }
+}
+
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-12px); }
   to   { opacity: 1; transform: translateY(0); }

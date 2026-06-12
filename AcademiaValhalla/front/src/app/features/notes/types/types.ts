@@ -12,6 +12,13 @@ export type Dificultad = "Todas" | "Básico" | "Intermedio" | "Avanzado";
 
 export type EstadoComunidad = 'personal' | 'pending' | 'approved' | 'rejected';
 
+export interface RevisionResumen {
+    revision_id: string;
+    status: 'pending' | 'approved' | 'rejected';
+    review_comment?: string | null;
+    created_at: string;
+}
+
 export interface Concepto {
     id: string;
     title: string;
@@ -24,6 +31,8 @@ export interface Concepto {
     content: Contenido[];
     community_status?: EstadoComunidad;
     source?: FuenteApunte;
+    pendingRevision?: RevisionResumen | null;
+    rejectedRevision?: RevisionResumen | null;
 }
 
 export type TipoLenguaje = 'general' | 'java' | 'javascript' | 'python' | 'php' | 'csharp' | 'go' | 'typescript';

@@ -7,7 +7,9 @@ import { useNotes } from '../../hooks/useNotes';
 import { Toast } from '../../../../components/Toast';
 import type { LanguageType, NoteSource, Note } from '../../types/types';
 
-export const NotesPageDesktop = () => {
+interface Props { onStartTour?: () => void; }
+
+export const NotesPageDesktop = ({ onStartTour = () => {} }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -56,14 +58,26 @@ export const NotesPageDesktop = () => {
                                 : 'Recursos compartidos por la comunidad.'}
                         </p>
                     </div>
-                    <button
-                        onClick={() => navigate('/dashboard/notes/create')}
-                        style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)' }}
-                        className="flex items-center gap-2 px-5 h-9 bg-emerald-500 hover:bg-emerald-400 text-black font-mono text-[11px] uppercase tracking-[0.15em] font-bold transition-colors"
-                    >
-                        <div className="w-4 h-4 flex items-center justify-center">{Icons.plus}</div>
-                        Nuevo
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            data-tour="notes-help"
+                            onClick={onStartTour}
+                            className="w-9 h-9 flex items-center justify-center border border-slate-200 dark:border-white/10 text-slate-400 hover:border-emerald-500/40 hover:text-emerald-500 transition-colors font-mono text-xs font-bold"
+                            style={{ clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%)' }}
+                            title="Tutorial de apuntes"
+                        >
+                            ?
+                        </button>
+                        <button
+                            data-tour="notes-new"
+                            onClick={() => navigate('/dashboard/notes/create')}
+                            style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)' }}
+                            className="flex items-center gap-2 px-5 h-9 bg-emerald-500 hover:bg-emerald-400 text-black font-mono text-[11px] uppercase tracking-[0.15em] font-bold transition-colors"
+                        >
+                            <div className="w-4 h-4 flex items-center justify-center">{Icons.plus}</div>
+                            Nuevo
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-5">
@@ -71,7 +85,7 @@ export const NotesPageDesktop = () => {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
 
                         {/* Tabs Mis Apuntes / Comunidad */}
-                        <div className="flex p-1 border bg-slate-100 dark:bg-[#111214] border-emerald-500/15 dark:border-emerald-500/10 w-full md:w-auto">
+                        <div data-tour="notes-tabs" className="flex p-1 border bg-slate-100 dark:bg-[#111214] border-emerald-500/15 dark:border-emerald-500/10 w-full md:w-auto">
                             <button
                                 onClick={() => setActiveTab('personal')}
                                 className={`flex-1 md:flex-none px-5 py-1.5 text-xs font-bold font-mono uppercase tracking-[0.15em] transition-colors ${
@@ -95,7 +109,7 @@ export const NotesPageDesktop = () => {
                         </div>
 
                         {/* Buscador */}
-                        <div className="w-full md:w-80">
+                        <div data-tour="notes-search" className="w-full md:w-80">
                             <SearchInput
                                 placeholder="Buscar apuntes..."
                                 value={searchQuery}

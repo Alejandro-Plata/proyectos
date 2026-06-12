@@ -17,13 +17,15 @@ import { useContentRequests } from '../../hooks/useContentRequests';
 import { useAchievementManagement } from '../../hooks/useAchievementManagement';
 import { TabBar } from '../../../../components/TabBar';
 import type { TabItem } from '../../../../components/TabBar';
+import { NoteRevisionsTable } from '../../components/NoteRevisions/NoteRevisionsTable';
 
-type SeccionAdmin = 'dashboard' | 'challenges' | 'requests' | 'moderation' | 'achievements';
+type SeccionAdmin = 'dashboard' | 'challenges' | 'requests' | 'revisiones' | 'moderation' | 'achievements';
 
-const SECCIONES: { id: SeccionAdmin; label: string; badge?: 'pendingRequests' | 'reportedPosts' }[] = [
+const SECCIONES: { id: SeccionAdmin; label: string; badge?: 'pendingRequests' | 'reportedPosts' | 'pendingRevisions' }[] = [
     { id: 'dashboard',    label: 'Resumen' },
     { id: 'challenges',   label: 'Retos' },
     { id: 'requests',     label: 'Solicitudes', badge: 'pendingRequests' },
+    { id: 'revisiones',   label: 'Revisiones',  badge: 'pendingRevisions' },
     { id: 'moderation',   label: 'Foro',        badge: 'reportedPosts' },
     { id: 'achievements', label: 'Logros' },
 ];
@@ -41,7 +43,7 @@ export const PanelAdminMobile = () => {
     const isModerator = user?.role === 'MODERADOR';
     const [seccionActiva, setSeccionActiva] = useState<SeccionAdmin>(isModerator ? 'moderation' : 'dashboard');
 
-    const { stats, decrementPendingRequests } = useAdminStats();
+    const { stats, decrementPendingRequests, decrementPendingRevisions } = useAdminStats();
     const userMgmt       = useUserManagement();
     const challengeMgmt  = useChallengeManagement();
     const noteMgmt       = useNoteManagement();
@@ -146,6 +148,16 @@ export const PanelAdminMobile = () => {
                                 </>
                             )}
                         </div>
+                    </div>
+                )}
+
+                {/* Revisiones de edición */}
+                {seccionActiva === 'revisiones' && (
+                    <div className="space-y-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                            Cambios propuestos en apuntes de comunidad
+                        </p>
+                        <NoteRevisionsTable onResolved={decrementPendingRevisions} />
                     </div>
                 )}
 

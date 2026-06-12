@@ -6,6 +6,8 @@ import { ProtectedRoute } from './app/features/auth/components/ProtectedRoute';
 import { RoleGuard } from './app/features/auth/components/RoleGuard';
 import { AchievementProvider } from './app/context/AchievementContext';
 import { MessagingProvider } from './app/context/MessagingProvider';
+import { TourProvider } from './app/components/Tour/TourProvider';
+import { notesTourSteps, NOTES_TOUR_ID } from './app/features/notes/tour/tourSteps.notes';
 
 const LayoutPanel        = lazy(() => import('./app/layouts').then(m => ({ default: m.LayoutPanel })));
 const LandingPage        = lazy(() => import('./app/features/landing/LandingPage').then(m => ({ default: m.LandingPage })));
@@ -24,6 +26,8 @@ const SettingsPage   = lazy(() => import('./app/features/settings').then(m => ({
 const NotesPage      = lazy(() => import('./app/features/notes').then(m => ({ default: m.NotesPage })));
 const NewNotePage    = lazy(() => import('./app/features/notes').then(m => ({ default: m.NewNotePage })));
 const CreateNotePage = lazy(() => import('./app/features/notes').then(m => ({ default: m.CreateNotePage })));
+const EditNotePage   = lazy(() => import('./app/features/notes').then(m => ({ default: m.EditNotePage })));
+const NotePrintPage  = lazy(() => import('./app/features/notes').then(m => ({ default: m.NotePrintPage })));
 const PaginaRetos    = lazy(() => import('./app/features/retos').then(m => ({ default: m.PaginaRetos })));
 const ForumPage      = lazy(() => import('./app/features/community').then(m => ({ default: m.ForumPage })));
 const CreatePostPage = lazy(() => import('./app/features/community').then(m => ({ default: m.CreatePostPage })));
@@ -46,6 +50,7 @@ export default function App() {
         <AchievementProvider>
           <MessagingProvider>
             <BrowserRouter>
+              <TourProvider tours={{ [NOTES_TOUR_ID]: notesTourSteps }}>
               <Suspense fallback={<PageFallback />}>
                 <Routes>
                   <Route path="/" element={<LandingPage />} />
@@ -58,11 +63,15 @@ export default function App() {
                   <Route path="/terminos" element={<TerminosCondiciones />} />
 
                   <Route element={<ProtectedRoute />}>
+                    {/* Ruta de impresión: autenticada pero sin layout del dashboard */}
+                    <Route path="dashboard/notes/:noteId/print" element={<NotePrintPage />} />
+
                     <Route path="dashboard" element={<LayoutPanel />}>
                       <Route index element={<PaginaPerfil />} />
                       <Route path="settings" element={<SettingsPage />} />
                       <Route path="notes" element={<NotesPage />} />
                       <Route path="notes/create" element={<CreateNotePage />} />
+                      <Route path="notes/:noteId/edit" element={<EditNotePage />} />
                       <Route path="notes/:noteId" element={<NewNotePage />} />
                       <Route path="challenges" element={<PaginaRetos />} />
                       <Route path="community" element={<ForumPage />} />
@@ -83,6 +92,7 @@ export default function App() {
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </Suspense>
+              </TourProvider>
             </BrowserRouter>
           </MessagingProvider>
         </AchievementProvider>

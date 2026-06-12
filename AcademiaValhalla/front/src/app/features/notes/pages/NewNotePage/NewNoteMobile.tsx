@@ -6,7 +6,7 @@ import { EncabezadoMobile } from '../../../../components/Header/HeaderMobile';
 import { resolveAssetUrl } from '../../../../utils/getAvatarUrl';
 
 export const NewNoteMobile = () => {
-    const { note, navigation } = useNoteDetail();
+    const { note, navigation, noteId } = useNoteDetail();
     const navigate = useNavigate();
 
     if (!note) return null;
@@ -33,10 +33,25 @@ export const NewNoteMobile = () => {
                         </span>
                     </div>
                     <h1 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">{note.title}</h1>
-                    <div className="flex flex-wrap gap-2">
-                        {note.tags.map(tag => (
-                            <span key={tag} className="text-[10px] font-mono text-slate-500">#{tag}</span>
-                        ))}
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-wrap gap-2 flex-1">
+                            {note.tags.map(tag => (
+                                <span key={tag} className="text-[10px] font-mono text-slate-500">#{tag}</span>
+                            ))}
+                        </div>
+                        {note.source === 'personal' && (
+                            <button
+                                onClick={() => window.open(`/dashboard/notes/${noteId}/print`, '_blank')}
+                                className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 active:bg-slate-100 dark:active:bg-white/[0.04] transition-colors"
+                                style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%)' }}
+                                title="Exportar como PDF"
+                            >
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                PDF
+                            </button>
+                        )}
                     </div>
                 </header>
 

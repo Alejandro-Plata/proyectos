@@ -7,7 +7,9 @@ import type { LanguageType, Difficulty, NoteSource } from '../../types/types';
 import { SearchInput } from '../../../../components/SearchInput';
 import { Icons } from '../../../../components/Icons';
 
-export const NotesPageMobile = () => {
+interface Props { onStartTour?: () => void; }
+
+export const NotesPageMobile = ({ onStartTour = () => {} }: Props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeTab, setActiveTab] = useState<NoteSource>('personal');
@@ -51,15 +53,25 @@ export const NotesPageMobile = () => {
 
             {/* Header sticky */}
             <div className="px-4 pt-5 pb-3 border-b border-slate-200 dark:border-emerald-500/10 bg-slate-50 dark:bg-[#050505] sticky top-0 z-20">
-                <div className="mb-3">
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="inline-block w-1 h-4 bg-emerald-500 shrink-0" />
-                        <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">Apuntes</span>
+                <div className="mb-3 flex items-start justify-between">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="inline-block w-1 h-4 bg-emerald-500 shrink-0" />
+                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">Apuntes</span>
+                        </div>
+                        <h1 className="font-mono text-xl font-bold uppercase tracking-[0.06em] text-slate-900 dark:text-white">Conocimiento</h1>
                     </div>
-                    <h1 className="font-mono text-xl font-bold uppercase tracking-[0.06em] text-slate-900 dark:text-white">Conocimiento</h1>
+                    <button
+                        data-tour="notes-help"
+                        onClick={onStartTour}
+                        className="mt-1 w-8 h-8 flex items-center justify-center border border-slate-200 dark:border-white/10 text-slate-400 hover:border-emerald-500/40 hover:text-emerald-500 transition-colors font-mono text-xs font-bold shrink-0"
+                        title="Tutorial de apuntes"
+                    >
+                        ?
+                    </button>
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex-1">
+                    <div data-tour="notes-search" className="flex-1">
                         <SearchInput
                             placeholder="Buscar concepto..."
                             value={searchQuery}
@@ -97,7 +109,7 @@ export const NotesPageMobile = () => {
 
                 {/* Tabs Mis Apuntes / Comunidad */}
                 <div className="px-4 py-2">
-                    <div className="flex border border-emerald-500/15 dark:border-emerald-500/10">
+                    <div data-tour="notes-tabs" className="flex border border-emerald-500/15 dark:border-emerald-500/10">
                         {(['personal', 'community'] as NoteSource[]).map((tab) => (
                             <button
                                 key={tab}
@@ -190,6 +202,7 @@ export const NotesPageMobile = () => {
             {/* FAB — Nuevo apunte */}
             {activeTab === 'personal' && (
                 <button
+                    data-tour="notes-new"
                     onClick={() => navigate('/dashboard/notes/create')}
                     className="fixed right-5 z-30 w-14 h-14 bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/20 flex items-center justify-center transition-colors"
                     style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)', bottom: 'var(--fab-bottom)' }}

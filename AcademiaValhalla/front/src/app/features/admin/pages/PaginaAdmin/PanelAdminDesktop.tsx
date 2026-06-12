@@ -17,13 +17,15 @@ import { useForumModeration } from '../../hooks/useForumModeration';
 import { useContentRequests } from '../../hooks/useContentRequests';
 import { useAchievementManagement } from '../../hooks/useAchievementManagement';
 import { useForumPosts } from '../../hooks/useForumPosts';
+import { NoteRevisionsTable } from '../../components/NoteRevisions/NoteRevisionsTable';
 
-type SeccionAdmin = 'dashboard' | 'challenges' | 'requests' | 'moderation' | 'foro' | 'achievements';
+type SeccionAdmin = 'dashboard' | 'challenges' | 'requests' | 'revisiones' | 'moderation' | 'foro' | 'achievements';
 
-const SECCIONES: { id: SeccionAdmin; label: string; badge?: 'pendingRequests' | 'reportedPosts' }[] = [
+const SECCIONES: { id: SeccionAdmin; label: string; badge?: 'pendingRequests' | 'reportedPosts' | 'pendingRevisions' }[] = [
     { id: 'dashboard',    label: 'Dashboard' },
     { id: 'challenges',   label: 'Retos' },
     { id: 'requests',     label: 'Solicitudes',  badge: 'pendingRequests' },
+    { id: 'revisiones',   label: 'Revisiones',   badge: 'pendingRevisions' },
     { id: 'moderation',   label: 'Moderación',   badge: 'reportedPosts' },
     { id: 'foro',         label: 'Foro' },
     { id: 'achievements', label: 'Logros' },
@@ -41,7 +43,7 @@ export const PanelAdminDesktop = () => {
     const { user } = useUser();
     const isModerator = user?.role === 'MODERADOR';
     const [seccionActiva, setSeccionActiva] = useState<SeccionAdmin>(isModerator ? 'moderation' : 'dashboard');
-    const { stats, decrementPendingRequests } = useAdminStats();
+    const { stats, decrementPendingRequests, decrementPendingRevisions } = useAdminStats();
     const userMgmt       = useUserManagement();
     const challengeMgmt  = useChallengeManagement();
     const noteMgmt       = useNoteManagement();
@@ -162,6 +164,19 @@ export const PanelAdminDesktop = () => {
                                     <Paginacion page={challengeMgmt.filters.page} total={challengeMgmt.total} limit={challengeMgmt.filters.limit} onChange={(p) => challengeMgmt.setFilters((f) => ({ ...f, page: p }))} />
                                 </>
                             )}
+                        </div>
+                    )}
+
+                    {/* Revisiones de edición */}
+                    {seccionActiva === 'revisiones' && (
+                        <div className="space-y-4">
+                            <div>
+                                <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Revisiones de edición</h2>
+                                <p className="font-mono text-[10px] text-slate-400 dark:text-slate-500">
+                                    Cambios propuestos en apuntes aprobados por la comunidad.
+                                </p>
+                            </div>
+                            <NoteRevisionsTable onResolved={decrementPendingRevisions} />
                         </div>
                     )}
 

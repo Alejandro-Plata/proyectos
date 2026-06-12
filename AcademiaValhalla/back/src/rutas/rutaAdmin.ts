@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { autenticar, autorizar } from '../middleware/middlewareAuth.js';
 import { ControladorAdmin } from '../controladores/ControladorAdmin.js';
+import { ControladorNotaUsuario } from '../controladores/ControladorNota.js';
 import { subirEscudo } from '../config/subidaArchivos.js';
 
 const router = Router();
@@ -528,5 +529,9 @@ router.patch('/achievements/:achievementId', ...adminOnly, subirEscudo.single('e
  *       '404': { $ref: '#/components/responses/NotFound' }
  */
 router.delete('/achievements/:achievementId', ...adminOnly, ControladorAdmin.eliminarLogro);
+
+// ====== Revisiones de notas aprobadas ======
+router.get('/note-revisions', ...modOrAdmin, ControladorNotaUsuario.listarRevisionesPendientes);
+router.patch('/note-revisions/:revisionId', ...modOrAdmin, ControladorNotaUsuario.resolverRevision);
 
 export default router;

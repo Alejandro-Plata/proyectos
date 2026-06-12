@@ -1,0 +1,224 @@
+/* ═══ Hoja de estilos de impresión DIN A4 ═════════════════════════════════════
+   Solo importada por NotePrintPage. No afecta al resto de la app.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@page {
+    size: A4;                 /* 210 × 297 mm */
+    margin: 20mm 18mm 22mm;   /* sup · lat · inf — márgenes de folio académico */
+}
+
+@media print {
+    html, body {
+        background: #fff !important;
+        color: #0f172a !important;
+    }
+    /* Preservar colores exactos (fondos de código, cajas ámbar, etc.) */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    /* Ocultar barra post-impresión */
+    .print-afterbar { display: none !important; }
+}
+
+/* ── Simulación de folio en pantalla ─────────────────────────────────────── */
+@media screen {
+    body { background: #e5e7eb; }
+
+    .a4-sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 1.5rem auto;
+        padding: 20mm 18mm 22mm;
+        background: #fff;
+        box-shadow: 0 2px 24px rgb(0 0 0 / 0.15);
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        color: #0f172a;
+    }
+}
+
+/* ── Tipografía (conversión px-pantalla → pt-papel) ──────────────────────── */
+.print-note-title {
+    font-size: 20pt;
+    font-weight: 900;
+    color: #0f172a;
+    border-bottom: 1pt solid #e2e8f0;
+    padding-bottom: 6pt;
+    margin-bottom: 6pt;
+    line-height: 1.25;
+}
+
+.print-meta {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 8pt;
+    color: #64748b;
+    margin-bottom: 12pt;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8pt;
+}
+
+.print-meta-badge {
+    border: 0.5pt solid #cbd5e1;
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.print-body { font-size: 11pt; line-height: 1.55; }
+
+/* Headings dentro del contenido */
+.print-body [role="heading"][aria-level="1"] {
+    font-size: 17pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 0.5pt solid #e2e8f0;
+    padding-bottom: 4pt;
+    margin-top: 14pt;
+    margin-bottom: 6pt;
+    break-after: avoid;
+}
+.print-body [role="heading"][aria-level="2"] {
+    font-size: 14pt;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 10pt;
+    margin-bottom: 4pt;
+    break-after: avoid;
+}
+.print-body [role="heading"][aria-level="3"] {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #334155;
+    margin-top: 8pt;
+    margin-bottom: 3pt;
+    break-after: avoid;
+}
+
+/* Código inline */
+.print-body code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 9.5pt;
+    background: #ecfdf5;
+    border: 0.5pt solid #a7f3d0;
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+}
+
+/* Enlace: mantiene el href visible en papel */
+.print-body a {
+    color: #059669;
+    text-decoration: underline;
+}
+.print-body a::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #64748b;
+}
+
+/* Aviso !!...!! */
+.print-body span[class*="amber"] {
+    background: #fffbeb;
+    border-bottom: 2pt solid #fde68a;
+    padding: 0 2pt;
+}
+
+/* Término técnico *'...'* */
+.print-body span[class*="rose"] {
+    background: #fff1f2;
+    padding: 0 2pt;
+}
+
+/* ── Bloque de definición ────────────────────────────────────────────────── */
+.print-definition {
+    border-left: 0.75pt solid #34d399;
+    padding: 6pt 10pt;
+    background: #f0fdf4;
+    margin: 8pt 0;
+    break-inside: avoid;
+}
+.print-definition-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #059669;
+    font-weight: 700;
+    margin-bottom: 4pt;
+}
+.print-definition-body { font-size: 11pt; line-height: 1.5; color: #334155; }
+
+/* ── Bloque de código ────────────────────────────────────────────────────── */
+.print-code {
+    background: #f8fafc;
+    border: 0.5pt solid #e2e8f0;
+    padding: 8pt 10pt;
+    border-radius: 3pt;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #1e293b;
+    margin: 8pt 0;
+    break-inside: avoid;
+}
+.print-code-lang {
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #94a3b8;
+    margin-bottom: 4pt;
+    display: block;
+}
+
+/* ── Imágenes ────────────────────────────────────────────────────────────── */
+figure.print-figure {
+    margin: 8pt 0;
+    break-inside: avoid;
+}
+figure.print-figure img {
+    max-width: 100%;
+    max-height: 180mm;
+    object-fit: contain;
+    display: block;
+}
+figure.print-figure figcaption {
+    font-size: 8pt;
+    color: #94a3b8;
+    text-align: center;
+    margin-top: 3pt;
+    font-style: italic;
+}
+
+/* ── Saltos de página ────────────────────────────────────────────────────── */
+h1, h2, h3 { break-after: avoid; }
+.print-definition, .print-code, figure.print-figure { break-inside: avoid; }
+p { orphans: 3; widows: 3; }
+
+/* ── Cabecera del documento ──────────────────────────────────────────────── */
+.print-doc-header {
+    border-bottom: 0.75pt solid #e2e8f0;
+    padding-bottom: 8pt;
+    margin-bottom: 16pt;
+}
+.print-doc-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #94a3b8;
+    margin-bottom: 6pt;
+}
+
+/* ── Pie del documento ───────────────────────────────────────────────────── */
+.print-doc-footer {
+    margin-top: 24pt;
+    padding-top: 6pt;
+    border-top: 0.5pt solid #e2e8f0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    color: #94a3b8;
+    text-align: center;
+}

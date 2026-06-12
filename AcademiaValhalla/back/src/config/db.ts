@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript'
 import dotenv from 'dotenv';
-import { ContenidoAcademia, Reto, LenguajeReto, ComentarioUsuario, Publicacion, EtiquetaPublicacion, LenguajeProgramacion, TokenRefresh, Etiqueta, Usuario, ProgresoRetoUsuario, NotaUsuario, Voto, EtiquetaReto, Conversacion, ParticipanteConversacion, Mensaje, SolicitudContenido, ReportePublicacion, Logro, LogroUsuario, CodigoRestablecimiento } from '../modelos/Modelos.js';
+import { ContenidoAcademia, Reto, LenguajeReto, ComentarioUsuario, Publicacion, EtiquetaPublicacion, LenguajeProgramacion, TokenRefresh, Etiqueta, Usuario, ProgresoRetoUsuario, NotaUsuario, Voto, EtiquetaReto, Conversacion, ParticipanteConversacion, Mensaje, SolicitudContenido, ReportePublicacion, Logro, LogroUsuario, CodigoRestablecimiento, RevisionNota } from '../modelos/Modelos.js';
 import pg from 'pg'
 dotenv.config();
 
@@ -25,7 +25,7 @@ const sslConfig = requiresSsl(databaseUrl)
     : false;
 
 export const db = new Sequelize(databaseUrl, {
-    models: [EtiquetaReto, EtiquetaPublicacion, LenguajeReto, Usuario, TokenRefresh, ContenidoAcademia, NotaUsuario, Reto, LenguajeProgramacion, ProgresoRetoUsuario, Publicacion, ComentarioUsuario, Voto, Etiqueta, Conversacion, ParticipanteConversacion, Mensaje, SolicitudContenido, ReportePublicacion, Logro, LogroUsuario, CodigoRestablecimiento],
+    models: [EtiquetaReto, EtiquetaPublicacion, LenguajeReto, Usuario, TokenRefresh, ContenidoAcademia, NotaUsuario, RevisionNota, Reto, LenguajeProgramacion, ProgresoRetoUsuario, Publicacion, ComentarioUsuario, Voto, Etiqueta, Conversacion, ParticipanteConversacion, Mensaje, SolicitudContenido, ReportePublicacion, Logro, LogroUsuario, CodigoRestablecimiento],
     logging: false,
     dialectOptions: {
         ssl: sslConfig,

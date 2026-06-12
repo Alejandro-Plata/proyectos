@@ -401,6 +401,9 @@ export class NotaUsuario extends Model {
 
     @BelongsTo(() => Usuario, 'user_id')
     autorNota!: Usuario;
+
+    @HasMany(() => RevisionNota, 'note_id')
+    revisiones!: RevisionNota[];
 }
 
 @Table({ tableName: 'academy_content', timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at' })
@@ -702,6 +705,51 @@ export class CodigoRestablecimiento extends Model {
 
     @BelongsTo(() => Usuario, 'user_id')
     usuario!: Usuario;
+}
+
+// ==========================================
+// Revisiones de notas aprobadas en comunidad
+// ==========================================
+
+@Table({ tableName: 'note_revisions', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class RevisionNota extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    revision_id!: string;
+
+    @ForeignKey(() => NotaUsuario)
+    @Column(DataType.UUID)
+    note_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    author_id!: string;
+
+    @Column(DataType.JSONB)
+    payload!: object;
+
+    @Default('pending')
+    @Column(DataType.ENUM('pending', 'approved', 'rejected'))
+    status!: string;
+
+    @AllowNull(true)
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    reviewed_by!: string | null;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    review_comment!: string | null;
+
+    @BelongsTo(() => NotaUsuario, 'note_id')
+    nota!: NotaUsuario;
+
+    @BelongsTo(() => Usuario, 'author_id')
+    autor!: Usuario;
+
+    @BelongsTo(() => Usuario, 'reviewed_by')
+    revisor!: Usuario;
 }
 
 @Table({

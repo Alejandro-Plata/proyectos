@@ -21,5 +21,9 @@ export const useAdminStats = () => {
         setStats((prev) => prev ? { ...prev, pendingRequests: Math.max(0, prev.pendingRequests - 1) } : prev);
     };
 
-    return { stats, isLoading, decrementPendingRequests };
+    const decrementPendingRevisions = () => {
+        setStats((prev) => prev ? { ...prev, pendingRevisions: Math.max(0, (prev.pendingRevisions ?? 1) - 1) } : prev);
+    };
+
+    return { stats, isLoading, decrementPendingRequests, decrementPendingRevisions };
 };
