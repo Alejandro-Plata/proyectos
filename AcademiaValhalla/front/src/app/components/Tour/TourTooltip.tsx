@@ -28,7 +28,6 @@ function computePosition(
     const spaceBottom = vh - (rect.y + rect.height);
     const spaceTop    = rect.y;
     const spaceRight  = vw - (rect.x + rect.width);
-    const spaceLeft   = rect.x;
 
     let resolved = placement;
     if (placement === 'auto') {

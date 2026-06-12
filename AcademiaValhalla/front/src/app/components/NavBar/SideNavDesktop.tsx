@@ -86,17 +86,20 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
                 ${isExpanded ? 'w-72' : 'w-20'}
             `}
         >
-            {/* Indicador visual cuando está cerrada: aparece al pasar el ratón */}
+            {/* Indicador de expansión — siempre visible al estar cerrado */}
             <div className={`
                 absolute right-0 top-1/2 -translate-y-1/2 translate-x-[3px] flex flex-col items-center gap-1.5
-                pointer-events-none transition-opacity duration-300 z-10
-                ${!isExpanded ? 'opacity-0 group-hover/sidebar:opacity-100' : 'opacity-0'}
+                pointer-events-none transition-all duration-300 z-10
+                ${!isExpanded
+                    ? 'opacity-40 group-hover/sidebar:opacity-100 group-hover/sidebar:translate-x-[5px]'
+                    : 'opacity-0 translate-x-2'
+                }
             `}>
-                <div className="w-0.5 h-8 rounded-full bg-emerald-500/60" />
-                <svg className="w-3 h-3 text-emerald-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <div className="w-0.5 h-8 rounded-full bg-emerald-500" />
+                <svg className="w-3 h-3 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
-                <div className="w-0.5 h-8 rounded-full bg-emerald-500/60" />
+                <div className="w-0.5 h-8 rounded-full bg-emerald-500" />
             </div>
 
             <div className="h-20 flex items-center shrink-0 border-b border-emerald-500/10 relative overflow-hidden scanline-bottom">
@@ -126,13 +129,16 @@ export const SidebarDesktop: React.FC<SidebarProps> = ({ isOpen }) => {
                         onClick={() => setIsPinned(p => !p)}
                         title={isPinned ? 'Desfijar barra lateral' : 'Fijar barra lateral'}
                         className={`
-                            ml-auto shrink-0 w-7 h-7 flex items-center justify-center rounded
+                            ml-auto shrink-0 flex items-center justify-center rounded
                             transition-all duration-200
                             ${isPinned
                                 ? 'text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20'
                                 : 'text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/[0.06]'
                             }
-                            ${isExpanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+                            ${isExpanded
+                                ? 'opacity-100 pointer-events-auto w-7 h-7'
+                                : 'opacity-0 pointer-events-none w-0 h-0 overflow-hidden'
+                            }
                         `}
                     >
                         {/* Icono thumbtack: rotado 45° cuando no fijado, vertical cuando fijado */}

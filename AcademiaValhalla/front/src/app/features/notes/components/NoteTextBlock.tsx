@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useEditor } from '@tiptap/react';
-import type { Editor } from '@tiptap/core';
 import { NoteFormatToolbar } from './NoteFormatToolbar';
 import { ShortcutsModal } from './ShortcutsModal';
 import type { FormatAction } from '../hooks/useNoteFormatToolbar';
@@ -63,7 +62,7 @@ export const NoteTextBlock = ({ value, onChange, placeholder = 'Escribe aquí…
         if (!editor || editor.isDestroyed) return;
         if (value === lastSerializedRef.current) return;
         lastSerializedRef.current = value;
-        editor.commands.setContent(markerParser(value), false);
+        editor.commands.setContent(markerParser(value), { emitUpdate: false });
     }, [value, editor]);
 
     const applyFormat = useCallback((action: FormatAction) => {
