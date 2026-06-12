@@ -24,7 +24,7 @@
 
   /* Botón secundario: contorno azul con glow al pasar */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg text-sm font-bold uppercase tracking-wider
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-sm text-sm font-bold uppercase tracking-wider
            text-blue-300 bg-transparent border border-blue-500/50 font-orbitron transition-all duration-300;
 
     &:hover {
@@ -37,7 +37,7 @@
 
   /* Botón de envío del formulario: contorno azul que se rellena al pasar el ratón */
   .btn-submit {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg text-sm font-bold tracking-wide
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-sm text-sm font-bold tracking-wide
            bg-transparent transition-all duration-300;
     color: #38bdf8;
     border: 1px solid #38bdf8;
