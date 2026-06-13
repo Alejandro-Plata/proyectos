@@ -4,7 +4,6 @@ interface AudioMessageProps {
     src: string;
     seed?: string;
     isDark?: boolean;
-    isOwn?: boolean;
     durationSec?: number;
 }
 
@@ -28,7 +27,6 @@ export const AudioMessage = ({
     src,
     seed = '',
     isDark = false,
-    isOwn = false,
     durationSec,
 }: AudioMessageProps) => {
     const audioRef = useRef<HTMLAudioElement>(null);

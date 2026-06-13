@@ -152,7 +152,6 @@ export const TarjetaMensaje = ({
                                             src={attachment_url}
                                             seed={message.id}
                                             isDark={isDark}
-                                            isOwn={isOwn}
                                             durationSec={message.attachment_meta?.durationSec}
                                         />
                                     </div>
