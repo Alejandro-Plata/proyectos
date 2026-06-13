@@ -46,7 +46,7 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
 }
 
 export const TarjetaMensaje = ({
-    message, isOwn, isDark, senderUsername, onReply, isGroup,
+    message, isOwn, isDark, senderUsername, onReply,
 }: PropsTarjetaMensaje) => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const timeLabel = formatMessageTime(message.timestamp);

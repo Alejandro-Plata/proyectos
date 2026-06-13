@@ -23,14 +23,19 @@ export const ConversationItem = ({
     onClose,
     currentUserId,
 }: ConversationItemProps) => {
-    const { participant, last_message, last_message_time, last_message_sender_id, unread_count, is_archived } = conversation;
+    const { last_message, last_message_time, last_message_sender_id, unread_count, is_archived } = conversation;
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    if (!participant) return null;
+    const isGroup = conversation.is_group;
+    const displayName = isGroup ? conversation.name : conversation.participant.username;
+    const avatarUrl = isGroup ? conversation.avatar_url : conversation.participant.avatar_url;
+    const isOnline = !isGroup && conversation.participant.is_online;
 
     const isOwnMessage = last_message_sender_id === currentUserId;
-    const messagePrefix = last_message_sender_id ? (isOwnMessage ? 'Tú: ' : `${participant.username}: `) : '';
+    const messagePrefix = last_message_sender_id
+        ? (isOwnMessage ? 'Tú: ' : (!isGroup ? `${conversation.participant.username}: ` : ''))
+        : '';
 
     useClickOutside(menuRef, () => setMenuOpen(false), menuOpen);
 
@@ -49,11 +54,11 @@ export const ConversationItem = ({
                 {/* Avatar con indicador online */}
                 <div className="relative shrink-0">
                     <img
-                        src={getAvatarUrl(participant.username, participant.avatar_url)}
-                        alt={participant.username}
+                        src={getAvatarUrl(displayName, avatarUrl)}
+                        alt={displayName}
                         className="w-10 h-10 rounded-full object-cover"
                     />
-                    {participant.is_online && (
+                    {isOnline && (
                         <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-[#0a0b0e]" />
                     )}
                 </div>
@@ -62,7 +67,7 @@ export const ConversationItem = ({
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                         <span className="font-medium text-sm truncate text-slate-900 dark:text-white">
-                            {participant.username}
+                            {displayName}
                         </span>
                         <span className="text-xs shrink-0 text-slate-400 dark:text-slate-500">
                             {formatMessageTime(last_message_time)}
