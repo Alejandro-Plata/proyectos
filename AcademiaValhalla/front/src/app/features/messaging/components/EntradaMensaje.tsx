@@ -185,20 +185,33 @@ export const EntradaMensaje = ({
                 </div>
             )}
 
-            {/* Audio preview */}
+            {/* Audio preview — reproductor + descartar + enviar en una sola fila */}
             {audioBlob && recordState === 'preview' && (
                 <div className="flex items-center gap-2 px-4 pt-3 pb-0">
                     <div className="flex-1 border border-emerald-500/20 px-2 py-1">
-                        <AudioMessage
-                            src={URL.createObjectURL(audioBlob)}
-                            isDark={isDark}
-                        />
+                        <AudioMessage src={URL.createObjectURL(audioBlob)} isDark={isDark} />
                     </div>
-                    <button onClick={discardAudio} className="shrink-0 text-slate-400 hover:text-red-500 transition-colors">
+                    <button
+                        onClick={discardAudio}
+                        title="Descartar"
+                        className="shrink-0 w-8 h-8 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
+                    >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                    {uploadPct === null && (
+                        <button
+                            onClick={handleSendAttachment}
+                            title="Enviar audio"
+                            className="shrink-0 w-9 h-9 flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 text-black transition-all"
+                            aria-label="Enviar audio"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                                <path d="M3.105 2.288a.75.75 0 0 0-.826.95l1.414 4.926A1.5 1.5 0 0 0 5.135 9.25h6.115a.75.75 0 0 1 0 1.5H5.135a1.5 1.5 0 0 0-1.442 1.086l-1.414 4.926a.75.75 0 0 0 .826.95 28.897 28.897 0 0 0 15.293-7.155.75.75 0 0 0 0-1.114A28.897 28.897 0 0 0 3.105 2.288Z" />
+                            </svg>
+                        </button>
+                    )}
                 </div>
             )}
 
@@ -288,8 +301,8 @@ export const EntradaMensaje = ({
                     </div>
                 )}
 
-                {/* Caption field when media selected */}
-                {hasMedia && recordState !== 'recording' && (
+                {/* Caption field — solo para imagen/vídeo, no para audio */}
+                {attachment && recordState !== 'recording' && (
                     <div className="flex-1 relative flex items-center border border-emerald-500/20 dark:border-emerald-500/15 focus-within:border-emerald-500/50 transition-colors">
                         <textarea
                             ref={textareaRef}
@@ -303,7 +316,7 @@ export const EntradaMensaje = ({
                     </div>
                 )}
 
-                {/* Send button */}
+                {/* Send button — texto sin adjunto */}
                 {!hasMedia && recordState === 'idle' && (
                     <button
                         onClick={onSend}
@@ -321,8 +334,8 @@ export const EntradaMensaje = ({
                     </button>
                 )}
 
-                {/* Send media button */}
-                {(hasMedia || recordState === 'preview') && uploadPct === null && (
+                {/* Send media button — solo para imagen/vídeo (audio tiene su propio botón arriba) */}
+                {attachment && uploadPct === null && (
                     <button
                         onClick={handleSendAttachment}
                         className="shrink-0 w-9 h-9 flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 text-black transition-all"
