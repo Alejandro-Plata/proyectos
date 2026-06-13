@@ -22,7 +22,9 @@ const chatFileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFil
     const allowedImages = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     const allowedAudio  = ['audio/webm', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/mp3'];
     const allowedVideo  = ['video/mp4', 'video/webm'];
-    if ([...allowedImages, ...allowedAudio, ...allowedVideo].includes(file.mimetype)) {
+    // Los navegadores envían el codec en el mimetype (ej: "audio/webm;codecs=opus"), hay que comparar solo el tipo base
+    const baseMime = file.mimetype.split(';')[0].trim();
+    if ([...allowedImages, ...allowedAudio, ...allowedVideo].includes(baseMime)) {
         cb(null, true);
     } else {
         cb(new Error('Tipo de archivo no permitido en mensajes.'));
