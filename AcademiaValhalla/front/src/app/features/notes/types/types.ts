@@ -37,6 +37,14 @@ export interface Concepto {
 
 export type TipoLenguaje = 'general' | 'java' | 'javascript' | 'python' | 'php' | 'csharp' | 'go' | 'typescript';
 
+/**
+ * Valor del filtro de lenguaje en la página de apuntes:
+ * - 'todos'   → apuntes de todo tipo (sin filtrar)
+ * - 'general' → solo apuntes de temática general
+ * - resto     → apuntes del lenguaje concreto
+ */
+export type FiltroLenguaje = 'todos' | TipoLenguaje;
+
 export type TipoBloque = 'text' | 'code' | 'image' | 'definition';
 
 export interface Bloque {
@@ -72,6 +80,7 @@ export interface ConfigLenguaje {
 }
 
 // Backward-compat aliases
+export type LanguageFilter = FiltroLenguaje;
 export type CommunityStatus = EstadoComunidad;
 export type Content = Contenido;
 export type Difficulty = Dificultad;

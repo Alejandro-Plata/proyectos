@@ -18,6 +18,21 @@ const REPO = 'https://github.com/Alejandro-Plata/proyectos';
 
 export const PROJECTS: Project[] = [
   {
+    title: 'Academia Valhalla',
+    description:
+      'Plataforma web full-stack para aprender programación (Proyecto Fin de Ciclo): editor de ' +
+      'código integrado con Monaco, contenido 3D interactivo, chat en tiempo real con Socket.io e ' +
+      'integración de IA. Autenticación local y OAuth con Google y GitHub.',
+    tech: ['React 19', 'TypeScript', 'Vite', 'TailwindCSS', 'Node.js', 'Express', 'PostgreSQL', 'Socket.io', 'Three.js'],
+    images: [
+      'assets/projects/academia.png',
+      'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+2',
+      'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+3',
+    ],
+    demoUrl: 'https://academia-valhalla-psi.vercel.app/',
+    githubUrl: REPO,
+  },
+  {
     title: 'PlayFutBet',
     description:
       'Aplicación web de predicciones de fútbol con una liga simulada automáticamente. Interfaz responsive con Ionic + Angular y API REST propia en Node/Express con PostgreSQL, ' +
@@ -41,21 +56,6 @@ export const PROJECTS: Project[] = [
       'assets/projects/android.png'
     ],
     videoUrl: 'assets/projects/cinexplora_review.mp4',
-    githubUrl: REPO,
-  },
-  {
-    title: 'Academia Valhalla',
-    description:
-      'Plataforma web full-stack para aprender programación (Proyecto Fin de Ciclo): editor de ' +
-      'código integrado con Monaco, contenido 3D interactivo, chat en tiempo real con Socket.io e ' +
-      'integración de IA. Autenticación local y OAuth con Google y GitHub.',
-    tech: ['React 19', 'TypeScript', 'Vite', 'TailwindCSS', 'Node.js', 'Express', 'PostgreSQL', 'Socket.io', 'Three.js'],
-    images: [
-      'assets/projects/academia.png',
-      'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+2',
-      'https://placehold.co/800x500/18181b/e4e4e7?text=Academia+Valhalla+3',
-    ],
-    demoUrl: 'https://academia-valhalla-psi.vercel.app/',
     githubUrl: REPO,
   },
 ];

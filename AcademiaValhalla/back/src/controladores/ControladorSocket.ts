@@ -4,9 +4,19 @@ import { Op } from 'sequelize';
 
 const connectedUsers = new Map<string, string>();
 
+const SUPABASE_URL_PREFIX = (process.env.SUPABASE_URL ?? '').replace(/\/$/, '');
+
+function placeholderUltimoMensaje(messageType: string, content?: string): string {
+    const caption = content?.trim();
+    if (messageType === 'text') return caption ?? '';
+    if (messageType === 'image') return caption ? `📷 ${caption}` : '📷 Foto';
+    if (messageType === 'video') return caption ? `🎥 ${caption}` : '🎥 Vídeo';
+    if (messageType === 'audio') return caption ? `🎤 ${caption}` : '🎤 Audio';
+    return caption ?? '';
+}
+
 export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): void {
     const userId: string = socket.data.userId;
-    const username: string = socket.data.user.username;
 
     connectedUsers.set(userId, socket.id);
     socket.join(userId);
@@ -16,12 +26,30 @@ export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): 
 
     socket.on('send_message', async (payload: {
         conversation_id: string;
-        content: string;
+        content?: string;
         reply_to_id?: string;
+        message_type?: string;
+        attachment_url?: string;
+        attachment_meta?: object;
     }) => {
         try {
-            const { conversation_id, content, reply_to_id } = payload;
-            if (!content?.trim()) return;
+            const { conversation_id, content, reply_to_id, attachment_meta } = payload;
+            const messageType = payload.message_type ?? 'text';
+
+            // Validation
+            if (messageType === 'text') {
+                if (!content?.trim()) return;
+            } else {
+                if (!payload.attachment_url) {
+                    socket.emit('error', { message: 'attachment_url requerida para mensajes multimedia' });
+                    return;
+                }
+                // Ensure the URL belongs to our own Supabase bucket
+                if (SUPABASE_URL_PREFIX && !payload.attachment_url.startsWith(SUPABASE_URL_PREFIX)) {
+                    socket.emit('error', { message: 'URL de adjunto no permitida' });
+                    return;
+                }
+            }
 
             const participant = await ParticipanteConversacion.findOne({
                 where: { conversation_id, user_id: userId },
@@ -33,23 +61,29 @@ export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): 
 
             let replyContent: string | null = null;
             let replySenderId: string | null = null;
+            let replyMessageType: string = 'text';
             if (reply_to_id) {
-                const original = await Mensaje.findByPk(reply_to_id, { attributes: ['content', 'sender_id'] });
+                const original = await Mensaje.findByPk(reply_to_id, { attributes: ['content', 'sender_id', 'message_type'] });
                 if (original) {
-                    replyContent  = (original as any).content;
-                    replySenderId = (original as any).sender_id;
+                    replyContent   = (original as any).content ?? null;
+                    replySenderId  = (original as any).sender_id;
+                    replyMessageType = (original as any).message_type ?? 'text';
                 }
             }
 
             const message = await Mensaje.create({
                 conversation_id,
                 sender_id: userId,
-                content: content.trim(),
+                content: content?.trim() || null,
+                message_type: messageType,
+                attachment_url: payload.attachment_url ?? null,
+                attachment_meta: attachment_meta ?? null,
                 reply_to_id: reply_to_id ?? null,
             });
 
+            const lastMsg = placeholderUltimoMensaje(messageType, content);
             await Conversacion.update(
-                { last_message: content.trim(), last_message_time: new Date(), last_message_sender_id: userId },
+                { last_message: lastMsg, last_message_time: new Date(), last_message_sender_id: userId },
                 { where: { conversation_id } },
             );
 
@@ -64,15 +98,22 @@ export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): 
                 replySenderUsername = (sender as any)?.username ?? null;
             }
 
+            const replyContentFinal = replyContent !== null
+                ? (replyMessageType !== 'text' ? placeholderUltimoMensaje(replyMessageType, replyContent) : replyContent)
+                : null;
+
             io.to(conversation_id).emit('new_message', {
                 id: message.message_id,
                 conversation_id,
                 sender_id: userId,
-                content: content.trim(),
+                content: content?.trim() || null,
+                message_type: messageType,
+                attachment_url: payload.attachment_url ?? null,
+                attachment_meta: attachment_meta ?? null,
                 timestamp: message.createdAt,
                 read: false,
                 reply_to_id: reply_to_id ?? null,
-                reply_to_content: replyContent,
+                reply_to_content: replyContentFinal,
                 reply_to_sender: replySenderUsername,
             });
         } catch (error) {

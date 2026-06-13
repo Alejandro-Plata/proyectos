@@ -35,17 +35,20 @@
     }
   }
 
-  /* Botón de envío del formulario: contorno azul que se rellena al pasar el ratón */
+  /* Botón de envío del formulario: contorno cian con glow neón que se rellena al pasar el ratón */
   .btn-submit {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-sm text-sm font-bold tracking-wide
-           bg-transparent transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-sm text-sm font-bold uppercase tracking-wider
+           bg-transparent font-orbitron transition-all duration-300;
     color: #38bdf8;
-    border: 1px solid #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
 
     &:hover:not(:disabled) {
       background-color: #38bdf8;
       color: #0a0a0a;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      border-color: #38bdf8;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.6), 0 0 38px rgba(56, 189, 248, 0.25);
+      transform: translateY(-1px);
     }
 
     &:disabled {

@@ -16,7 +16,7 @@ export const MessagingDesktop = () => {
 
     useEffect(() => {
         if (!startWithUserId || conversations === undefined) return;
-        const existing = conversations.find(c => c.participant.user_id === startWithUserId);
+        const existing = conversations.find(c => !c.is_group && c.participant.user_id === startWithUserId);
         if (existing) {
             selectConversation(existing.id);
             setSearchParams({}, { replace: true });

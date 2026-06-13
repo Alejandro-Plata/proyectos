@@ -1,17 +1,29 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import type { LanguageType, Difficulty, Concept } from "../types/types";
+import type { FiltroLenguaje, Difficulty, Concept } from "../types/types";
 import { notesService } from "../services/notesService";
+
+/** Etiqueta legible para cada opción del filtro de lenguaje. */
+export const etiquetaLenguaje = (lang: FiltroLenguaje): string => {
+    if (lang === 'todos') return 'Todo tipo';
+    if (lang === 'general') return 'Temática general';
+    if (lang === 'csharp') return 'C#';
+    if (lang === 'javascript') return 'JavaScript';
+    if (lang === 'typescript') return 'TypeScript';
+    if (lang === 'php') return 'PHP';
+    return lang.charAt(0).toUpperCase() + lang.slice(1);
+};
 
 export const useNotes = () => {
     const location = useLocation();
-    const [selectedLanguage, setSelectedLanguage] = useState<LanguageType>('general');
+    const [selectedLanguage, setSelectedLanguage] = useState<FiltroLenguaje>('todos');
     const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('Todas');
     const [searchQuery, setSearchQuery] = useState('');
     const [allNotes, setAllNotes] = useState<Concept[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const languages: LanguageType[] = ['general', 'java', 'javascript', 'python', 'php', 'csharp', 'go', 'typescript'];
+    // 'todos' = sin filtrar · 'general' = solo temática general · resto = lenguaje concreto
+    const languages: FiltroLenguaje[] = ['todos', 'general', 'java', 'javascript', 'python', 'php', 'csharp', 'go', 'typescript'];
     const difficulties: Difficulty[] = ['Todas', 'Básico', 'Intermedio', 'Avanzado'];
 
     const cargarNotas = useCallback(() => {
@@ -36,8 +48,9 @@ export const useNotes = () => {
 
     const filteredNotes = useMemo(() => {
         return allNotes.filter(note => {
-            // 'general' actúa como "todas" — muestra notas de cualquier lenguaje
-            const matchesLanguage = selectedLanguage === 'general' || note.language === selectedLanguage;
+            const matchesLanguage =
+                selectedLanguage === 'todos' ||
+                note.language === selectedLanguage;
             const matchesDifficulty = selectedDifficulty === 'Todas' || note.difficulty === selectedDifficulty;
             const query = searchQuery.toLowerCase();
             const matchesSearch = !query ||

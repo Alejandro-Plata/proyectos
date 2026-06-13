@@ -1,9 +1,9 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { NoteCardMobile } from '../../components/NoteCard/NoteCardMobile';
-import { useNotes } from '../../hooks/useNotes';
+import { useNotes, etiquetaLenguaje } from '../../hooks/useNotes';
 import { Toast } from '../../../../components/Toast';
-import type { LanguageType, Difficulty, NoteSource } from '../../types/types';
+import type { LanguageType, FiltroLenguaje, Difficulty, NoteSource } from '../../types/types';
 import { SearchInput } from '../../../../components/SearchInput';
 import { Icons } from '../../../../components/Icons';
 
@@ -81,7 +81,7 @@ export const NotesPageMobile = ({ onStartTour = () => {} }: Props) => {
                     </div>
                     {/* Filter button */}
                     {(() => {
-                        const activeCount = (selectedLanguage !== 'general' ? 1 : 0) + (selectedDifficulty !== 'Todas' ? 1 : 0);
+                        const activeCount = (selectedLanguage !== 'todos' ? 1 : 0) + (selectedDifficulty !== 'Todas' ? 1 : 0);
                         return (
                             <button
                                 onClick={() => setFiltersOpen(o => !o)}
@@ -132,26 +132,23 @@ export const NotesPageMobile = ({ onStartTour = () => {} }: Props) => {
                 {/* Filtros desplegable */}
                 {filtersOpen && (
                     <div className="px-4 pb-3 space-y-2 border-t border-emerald-500/10">
-                        {/* Lenguajes */}
+                        {/* Apuntes: todo tipo / temática general / lenguaje concreto */}
                         <div>
-                            <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-500 block mb-1.5 pt-2">Lenguaje</span>
-                            <div className="w-full overflow-x-auto scrollbar-hide">
-                                <div className="flex gap-1.5 min-w-max">
-                                    {languages.map((lang: LanguageType) => (
-                                        <button
-                                            key={lang}
-                                            onClick={() => setSelectedLanguage(lang)}
-                                            className={`
-                                                whitespace-nowrap px-3 h-9 text-[10px] font-bold font-mono uppercase tracking-[0.15em] border transition-colors
-                                                ${selectedLanguage === lang
-                                                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                                                    : 'border-slate-200 dark:border-emerald-500/10 text-slate-500 dark:text-slate-500 bg-white dark:bg-[#0a0b0e] hover:border-emerald-500/20 hover:text-slate-700 dark:hover:text-slate-300'
-                                                }
-                                            `}
-                                        >
-                                            {lang === 'general' ? 'Todos' : lang.charAt(0).toUpperCase() + lang.slice(1)}
-                                        </button>
+                            <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-500 block mb-1.5 pt-2">Apuntes</span>
+                            <div className="relative w-full">
+                                <select
+                                    value={selectedLanguage}
+                                    onChange={(e) => setSelectedLanguage(e.target.value as FiltroLenguaje)}
+                                    className="w-full appearance-none h-9 pl-3 pr-8 text-[10px] font-bold font-mono uppercase tracking-[0.15em] bg-white dark:bg-[#0a0b0e] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-emerald-500/10 focus:outline-none focus:border-emerald-500/40 transition-colors"
+                                >
+                                    {languages.map((lang: FiltroLenguaje) => (
+                                        <option key={lang} value={lang} className="bg-white dark:bg-[#0b1015]">
+                                            {etiquetaLenguaje(lang)}
+                                        </option>
                                     ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 dark:text-slate-500">
+                                    <div className="w-3.5 h-3.5">{Icons.arrowDown}</div>
                                 </div>
                             </div>
                         </div>

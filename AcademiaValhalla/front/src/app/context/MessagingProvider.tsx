@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } fro
 import { MessagingContext, type MessagingContextType } from './MessagingContext';
 import { messagingService, createWebSocket } from '../features/messaging/services/messagingService';
 import { useUser } from './UserContext';
-import type { Conversation, Message, WsEvent } from '../features/messaging/types/types';
+import type { Conversation, ConversationGroup, Message, WsEvent, MessageType } from '../features/messaging/types/types';
 
 export const MessagingProvider = ({ children }: { children: ReactNode }) => {
     const { user, isAuthenticated } = useUser();
@@ -13,7 +13,6 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
     const [idUsuarioEscribiendo, setIdUsuarioEscribiendo] = useState<string | null>(null);
     const [estaCargando, setEstaCargando] = useState(false);
 
-    // refs para acceder al estado actual dentro del listener WS sin re-suscribirse
     const refConvActiva = useRef(conversacionActiva);
     refConvActiva.current = conversacionActiva;
     const refUsuario = useRef(user);
@@ -30,15 +29,12 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         if (!isAuthenticated || !user?.token) return;
-
         ws.connect(user.token);
-
         setEstaCargando(true);
         messagingService.getConversations()
             .then(setConversaciones)
             .catch(console.error)
             .finally(() => setEstaCargando(false));
-
         return () => {
             ws.disconnect();
             setConversaciones([]);
@@ -60,7 +56,6 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
 
                     if (msg.conversation_id === idActivo) {
                         setMensajes((prev) => {
-                            // si es propio, reemplazar el mensaje optimista temporal
                             if (msg.sender_id === idUsuarioActual) {
                                 const idxTemp = prev.findIndex(
                                     (m) => m.id.startsWith('temp-') && m.content === msg.content
@@ -78,8 +73,6 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
 
                     setConversaciones((prev) => {
                         const existe = prev.some((c) => c.id === msg.conversation_id);
-
-                        // si la conv no existe aún (usuario estaba offline), refrescar la lista entera
                         if (!existe) {
                             if (!refFetchConv.current.has(msg.conversation_id)) {
                                 refFetchConv.current.add(msg.conversation_id);
@@ -88,24 +81,18 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                                         setConversaciones(fresh);
                                         refFetchConv.current.delete(msg.conversation_id);
                                     })
-                                    .catch(() => {
-                                        refFetchConv.current.delete(msg.conversation_id);
-                                    });
+                                    .catch(() => { refFetchConv.current.delete(msg.conversation_id); });
                             }
                             return prev;
                         }
-
                         const actualizado = prev.map((c) =>
                             c.id === msg.conversation_id
                                 ? {
                                     ...c,
-                                    last_message: msg.content,
+                                    last_message: msg.content ?? (msg.message_type === 'image' ? '📷 Foto' : msg.message_type === 'video' ? '🎥 Vídeo' : msg.message_type === 'audio' ? '🎤 Audio' : ''),
                                     last_message_time: msg.timestamp,
                                     last_message_sender_id: msg.sender_id,
-                                    unread_count:
-                                        c.id === idActivo
-                                            ? c.unread_count
-                                            : c.unread_count + 1,
+                                    unread_count: c.id === idActivo ? c.unread_count : c.unread_count + 1,
                                 }
                                 : c
                         );
@@ -129,22 +116,34 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                 case 'message_read': {
                     const { conversation_id } = event.payload;
                     setConversaciones((prev) =>
-                        prev.map((c) =>
-                            c.id === conversation_id ? { ...c, unread_count: 0 } : c
-                        )
+                        prev.map((c) => c.id === conversation_id ? { ...c, unread_count: 0 } : c)
                     );
                     break;
                 }
                 case 'user_online':
                 case 'user_offline': {
                     const estaEnLinea = event.type === 'user_online';
+                    const uid = event.payload.user_id;
                     setConversaciones((prev) =>
-                        prev.map((c) =>
-                            c.participant.user_id === event.payload.user_id
-                                ? { ...c, participant: { ...c.participant, is_online: estaEnLinea } }
-                                : c
-                        )
+                        prev.map((c) => {
+                            if (!c.is_group && c.participant.user_id === uid) {
+                                return { ...c, participant: { ...c.participant, is_online: estaEnLinea } };
+                            }
+                            if (c.is_group && c.participants.some(p => p.user_id === uid)) {
+                                return { ...c, participants: c.participants.map(p => p.user_id === uid ? { ...p, is_online: estaEnLinea } : p) };
+                            }
+                            return c;
+                        })
                     );
+                    if (refConvActiva.current?.is_group) {
+                        const conv = refConvActiva.current as ConversationGroup;
+                        if (conv.participants.some(p => p.user_id === uid)) {
+                            setConversacionActiva(prev => prev?.is_group
+                                ? { ...prev, participants: (prev as ConversationGroup).participants.map(p => p.user_id === uid ? { ...p, is_online: estaEnLinea } : p) }
+                                : prev
+                            );
+                        }
+                    }
                     break;
                 }
                 case 'typing':
@@ -157,9 +156,34 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                         prev === event.payload.user_id ? null : prev
                     );
                     break;
+                case 'removed_from_group': {
+                    const { conversation_id } = event.payload;
+                    setConversaciones((prev) => prev.filter((c) => c.id !== conversation_id));
+                    if (refConvActiva.current?.id === conversation_id) setConversacionActiva(null);
+                    break;
+                }
+                case 'group_updated': {
+                    const updatedGroup = event.payload;
+                    setConversaciones((prev) =>
+                        prev.map((c) => c.id === updatedGroup.id ? { ...c, ...updatedGroup } : c)
+                    );
+                    if (refConvActiva.current?.id === updatedGroup.id) {
+                        setConversacionActiva(prev => prev ? { ...prev, ...updatedGroup } : prev);
+                    }
+                    break;
+                }
+                case 'group_participant_removed': {
+                    const { conversation_id, user_id } = event.payload;
+                    setConversaciones((prev) =>
+                        prev.map((c) => {
+                            if (c.id !== conversation_id || !c.is_group) return c;
+                            return { ...c, participants: c.participants.filter(p => p.user_id !== user_id) };
+                        })
+                    );
+                    break;
+                }
             }
         });
-
         return unsubscribe;
     }, [ws]);
 
@@ -198,11 +222,10 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
             if (!conversacionActiva || !contenido.trim()) return;
             ws.send({
                 type: 'send_message',
-                payload: { conversation_id: conversacionActiva.id, content: contenido.trim(), reply_to_id: replyToId },
+                payload: { conversation_id: conversacionActiva.id, content: contenido.trim(), reply_to_id: replyToId, message_type: 'text' },
             });
             const idEmisor = user?.user_id ?? '';
             const texto = contenido.trim();
-
             const msgRespuesta = replyToId ? refMensajes.current.find(m => m.id === replyToId) : null;
 
             const mensajeOptimista: Message = {
@@ -210,11 +233,18 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                 conversation_id: conversacionActiva.id,
                 sender_id: idEmisor,
                 content: texto,
+                message_type: 'text',
                 timestamp: new Date().toISOString(),
                 read: false,
                 reply_to_id: replyToId,
                 reply_to_content: msgRespuesta?.content,
-                reply_to_sender: msgRespuesta ? (msgRespuesta.sender_id === idEmisor ? refUsuario.current?.username : conversacionActiva.participant.username) : undefined,
+                reply_to_sender: msgRespuesta
+                    ? (msgRespuesta.sender_id === idEmisor
+                        ? refUsuario.current?.username
+                        : !conversacionActiva.is_group
+                            ? conversacionActiva.participant.username
+                            : (conversacionActiva as ConversationGroup).participants.find(p => p.user_id === msgRespuesta.sender_id)?.username)
+                    : undefined,
             };
             setMensajes((prev) => [...prev, mensajeOptimista]);
             setConversaciones((prev) => {
@@ -234,6 +264,31 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
         [conversacionActiva, user?.user_id, ws]
     );
 
+    const enviarMensajeMedia = useCallback(
+        async (
+            file: File,
+            messageType: MessageType,
+            caption?: string,
+            replyToId?: string,
+            onProgress?: (pct: number) => void
+        ) => {
+            if (!conversacionActiva) return;
+            const { url, meta } = await messagingService.subirAdjunto(conversacionActiva.id, file, onProgress);
+            ws.send({
+                type: 'send_message',
+                payload: {
+                    conversation_id: conversacionActiva.id,
+                    content: caption?.trim() || undefined,
+                    reply_to_id: replyToId,
+                    message_type: messageType,
+                    attachment_url: url,
+                    attachment_meta: meta,
+                },
+            });
+        },
+        [conversacionActiva, ws]
+    );
+
     const marcarComoLeida = useCallback(() => {
         if (!conversacionActiva) return;
         ws.send({ type: 'mark_read', payload: { conversation_id: conversacionActiva.id } });
@@ -247,6 +302,17 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
     const iniciarConversacion = useCallback(
         async (idUsuarioDestino: string) => {
             const conv = await messagingService.startConversation(idUsuarioDestino);
+            setConversaciones((prev) =>
+                prev.some((c) => c.id === conv.id) ? prev : [conv, ...prev]
+            );
+            setConversacionActiva(conv);
+        },
+        []
+    );
+
+    const crearGrupo = useCallback(
+        async (name: string, participantIds: string[]) => {
+            const conv = await messagingService.createGroup(name, participantIds);
             setConversaciones((prev) =>
                 prev.some((c) => c.id === conv.id) ? prev : [conv, ...prev]
             );
@@ -281,9 +347,11 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
         selectConversation: seleccionarConversacion,
         openConversation: abrirConversacion,
         sendMessage: enviarMensaje,
+        sendMediaMessage: enviarMensajeMedia,
         markAsRead: marcarComoLeida,
         sendCommand: enviarComando,
         startConversation: iniciarConversacion,
+        createGroup: crearGrupo,
         archiveConversation: archivarConversacion,
         unarchiveConversation: desarchivarConversacion,
         closeConversation: cerrarConversacion,

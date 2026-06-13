@@ -127,6 +127,8 @@
     "seed:admins": "tsx src/scripts/seedAdmins.ts",
     "seed:logros": "tsx src/scripts/seedLogros.ts",
     "seed:retos": "tsx src/scripts/seedRetos.ts",
+    "seed:misiones": "tsx src/scripts/seedMisiones.ts",
+    "seed:notas-java": "tsx src/scripts/seedNotasJava.ts",
     "gen:api-client": "openapi-typescript http://localhost:3000/api/docs.json -o ../front/src/types/api-client.ts"
   },
   "author": "Alejandro Plata Cortés",

@@ -467,6 +467,23 @@ export class Conversacion extends Model {
     @Column(DataType.UUID)
     last_message_sender_id?: string;
 
+    @Default(false)
+    @Column(DataType.BOOLEAN)
+    is_group!: boolean;
+
+    @AllowNull(true)
+    @Column(DataType.STRING(100))
+    name?: string;
+
+    @AllowNull(true)
+    @Column(DataType.STRING(500))
+    avatar_url?: string;
+
+    @AllowNull(true)
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    created_by?: string;
+
     @HasMany(() => Mensaje)
     mensajes!: Mensaje[];
 
@@ -492,6 +509,10 @@ export class ParticipanteConversacion extends Model {
     @Column(DataType.BOOLEAN)
     is_archived!: boolean;
 
+    @Default('member')
+    @Column(DataType.ENUM('owner', 'admin', 'member'))
+    role!: string;
+
     @BelongsTo(() => Conversacion)
     conversacion!: Conversacion;
 
@@ -514,8 +535,21 @@ export class Mensaje extends Model {
     @Column(DataType.UUID)
     sender_id!: string;
 
+    @AllowNull(true)
     @Column(DataType.TEXT)
-    content!: string;
+    content?: string;
+
+    @Default('text')
+    @Column(DataType.STRING(10))
+    message_type!: string;
+
+    @AllowNull(true)
+    @Column(DataType.STRING(500))
+    attachment_url?: string;
+
+    @AllowNull(true)
+    @Column(DataType.JSONB)
+    attachment_meta?: object;
 
     @Default(false)
     @Column(DataType.BOOLEAN)

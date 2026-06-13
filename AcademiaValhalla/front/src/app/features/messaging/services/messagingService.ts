@@ -1,5 +1,5 @@
 import { io, type Socket } from 'socket.io-client';
-import type { Message, Conversation, WsEvent, WsCommand } from '../types/types';
+import type { Message, Conversation, ConversationGroup, WsEvent, WsCommand, AttachmentMeta } from '../types/types';
 import { API_BASE, WS_URL, authHeaders as postHeaders, getToken } from '../../../services/apiClient';
 
 const getHeaders = (): HeadersInit => {
@@ -10,26 +10,14 @@ const getHeaders = (): HeadersInit => {
 export const messagingService = {
 
     getConversations: async (): Promise<Conversation[]> => {
-        const res = await fetch(`${API_BASE}/messages/conversations`, {
-            headers: getHeaders(),
-        });
-        if (!res.ok) {
-            const body = await res.text().catch(() => '');
-            console.error(`[messaging] GET /messages/conversations → ${res.status}`, body);
-            throw new Error('Error al cargar las conversaciones');
-        }
+        const res = await fetch(`${API_BASE}/messages/conversations`, { headers: getHeaders() });
+        if (!res.ok) throw new Error('Error al cargar las conversaciones');
         return res.json();
     },
 
     getMessages: async (conversationId: string): Promise<Message[]> => {
-        const res = await fetch(`${API_BASE}/messages/${conversationId}`, {
-            headers: getHeaders(),
-        });
-        if (!res.ok) {
-            const body = await res.text().catch(() => '');
-            console.error(`[messaging] GET /messages/${conversationId} → ${res.status}`, body);
-            throw new Error('Error al cargar los mensajes');
-        }
+        const res = await fetch(`${API_BASE}/messages/${conversationId}`, { headers: getHeaders() });
+        if (!res.ok) throw new Error('Error al cargar los mensajes');
         return res.json();
     },
 
@@ -44,9 +32,7 @@ export const messagingService = {
     },
 
     searchUsers: async (query: string): Promise<{ user_id: string; username: string; avatar_url?: string }[]> => {
-        const res = await fetch(`${API_BASE}/users/search?q=${encodeURIComponent(query)}`, {
-            headers: getHeaders(),
-        });
+        const res = await fetch(`${API_BASE}/users/search?q=${encodeURIComponent(query)}`, { headers: getHeaders() });
         if (!res.ok) throw new Error('Error al buscar usuarios');
         return res.json();
     },
@@ -70,11 +56,89 @@ export const messagingService = {
     },
 
     getSuggestedUsers: async (): Promise<{ user_id: string; username: string; avatar_url?: string }[]> => {
-        const res = await fetch(`${API_BASE}/users/suggestions`, {
-            headers: getHeaders(),
-        });
+        const res = await fetch(`${API_BASE}/users/suggestions`, { headers: getHeaders() });
         if (!res.ok) return [];
         return res.json();
+    },
+
+    subirAdjunto: (
+        conversationId: string,
+        file: File,
+        onProgress?: (pct: number) => void
+    ): Promise<{ url: string; meta: AttachmentMeta }> => {
+        return new Promise((resolve, reject) => {
+            const token = getToken();
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('conversation_id', conversationId);
+
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
+            });
+
+            xhr.addEventListener('load', () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try { resolve(JSON.parse(xhr.responseText)); }
+                    catch { reject(new Error('Respuesta inválida del servidor')); }
+                } else {
+                    try {
+                        const body = JSON.parse(xhr.responseText);
+                        reject(new Error(body.msg ?? 'Error al subir el archivo'));
+                    } catch {
+                        reject(new Error('Error al subir el archivo'));
+                    }
+                }
+            });
+
+            xhr.addEventListener('error', () => reject(new Error('Error de red al subir el archivo')));
+            xhr.addEventListener('abort', () => reject(new Error('Subida cancelada')));
+
+            xhr.open('POST', `${API_BASE}/messages/adjuntos`);
+            if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            xhr.send(formData);
+        });
+    },
+
+    // ── Grupos ─────────────────────────────────────────────────
+
+    createGroup: async (name: string, participantIds: string[]): Promise<ConversationGroup> => {
+        const res = await fetch(`${API_BASE}/messages/grupos`, {
+            method: 'POST',
+            headers: postHeaders(),
+            body: JSON.stringify({ name, participant_ids: participantIds }),
+        });
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body.msg ?? 'Error al crear el grupo');
+        }
+        return res.json();
+    },
+
+    addGroupParticipants: async (groupId: string, userIds: string[]): Promise<void> => {
+        const res = await fetch(`${API_BASE}/messages/grupos/${groupId}/participantes`, {
+            method: 'POST',
+            headers: postHeaders(),
+            body: JSON.stringify({ user_ids: userIds }),
+        });
+        if (!res.ok) throw new Error('Error al añadir participantes');
+    },
+
+    removeGroupParticipant: async (groupId: string, userId: string): Promise<void> => {
+        const res = await fetch(`${API_BASE}/messages/grupos/${groupId}/participantes/${userId}`, {
+            method: 'DELETE',
+            headers: getHeaders(),
+        });
+        if (!res.ok) throw new Error('Error al eliminar participante');
+    },
+
+    updateGroupRole: async (groupId: string, userId: string, role: 'admin' | 'member'): Promise<void> => {
+        const res = await fetch(`${API_BASE}/messages/grupos/${groupId}/participantes/${userId}`, {
+            method: 'PATCH',
+            headers: postHeaders(),
+            body: JSON.stringify({ role }),
+        });
+        if (!res.ok) throw new Error('Error al actualizar rol');
     },
 };
 
@@ -93,24 +157,20 @@ export function createWebSocket() {
             reconnectionDelay: 3000,
         });
 
-        socket.on('connect', () => {});
-
         const eventTypes: WsEvent['type'][] = [
             'new_message', 'new_conversation', 'message_read',
             'user_online', 'user_offline', 'typing', 'stop_typing',
+            'removed_from_group', 'group_updated', 'group_participant_removed',
         ];
 
         eventTypes.forEach((eventType) => {
             socket!.on(eventType, (payload: WsEvent['payload']) => {
-                const event = { type: eventType, payload } as WsEvent;
-                listeners.forEach((listener) => listener(event));
+                listeners.forEach((l) => l({ type: eventType, payload } as WsEvent));
             });
         });
 
-        socket.on('disconnect', (_reason) => {});
-
         socket.on('connect_error', (err) => {
-            console.error('[Socket.IO] Error de conexión:', err.message, (err as unknown as { data?: unknown }).data);
+            console.error('[Socket.IO] Error:', err.message);
         });
     }
 
@@ -118,15 +178,13 @@ export function createWebSocket() {
         if (socket?.connected) {
             socket.emit(command.type, command.payload);
         } else {
-            console.warn('[Socket.IO] No conectado. Comando descartado:', command.type);
+            console.warn('[Socket.IO] No conectado:', command.type);
         }
     }
 
     function subscribe(listener: (event: WsEvent) => void): () => void {
         listeners.push(listener);
-        return () => {
-            listeners = listeners.filter((l) => l !== listener);
-        };
+        return () => { listeners = listeners.filter((l) => l !== listener); };
     }
 
     function disconnect() {

@@ -1,7 +1,5 @@
 import multer from 'multer';
 
-// Las imágenes ya no se guardan en disco (efímero en Render), sino en memoria
-// para subirlas a Supabase Storage desde los controladores (ver ServicioStorage).
 const storage = multer.memoryStorage();
 
 const fileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
@@ -19,3 +17,20 @@ export const subirEscudo = multer(opciones);
 export const subirAvatar = multer(opciones);
 export const subirImagenNota = multer(opciones);
 export const subirImagenPost = multer(opciones);
+
+const chatFileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+    const allowedImages = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedAudio  = ['audio/webm', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/mp3'];
+    const allowedVideo  = ['video/mp4', 'video/webm'];
+    if ([...allowedImages, ...allowedAudio, ...allowedVideo].includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Tipo de archivo no permitido en mensajes.'));
+    }
+};
+
+export const subirAdjuntoMensaje = multer({
+    storage,
+    fileFilter: chatFileFilter,
+    limits: { fileSize: 50 * 1024 * 1024 },
+});

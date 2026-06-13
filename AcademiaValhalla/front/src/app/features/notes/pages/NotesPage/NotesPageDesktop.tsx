@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Icons } from '../../../../components/Icons';
 import { NoteCardDesktop } from '../../components/NoteCard/NoteCardDesktop';
 import { SearchInput } from '../../../../components/SearchInput';
-import { useNotes } from '../../hooks/useNotes';
+import { useNotes, etiquetaLenguaje } from '../../hooks/useNotes';
 import { Toast } from '../../../../components/Toast';
-import type { LanguageType, NoteSource, Note } from '../../types/types';
+import type { LanguageType, FiltroLenguaje, Difficulty, NoteSource, Note } from '../../types/types';
 
 interface Props { onStartTour?: () => void; }
 
@@ -27,8 +27,11 @@ export const NotesPageDesktop = ({ onStartTour = () => {} }: Props) => {
 
     const {
         languages,
+        difficulties,
         selectedLanguage,
         setSelectedLanguage,
+        selectedDifficulty,
+        setSelectedDifficulty,
         searchQuery,
         setSearchQuery,
         filteredNotes
@@ -119,24 +122,61 @@ export const NotesPageDesktop = ({ onStartTour = () => {} }: Props) => {
                         </div>
                     </div>
 
-                    {/* Filtros de Lenguaje */}
-                    <nav className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar items-center p-1 bg-slate-100/80 dark:bg-[#111214] border border-emerald-500/15 dark:border-emerald-500/10">
-                        {languages.map((lang) => (
+                    {/* Filtros desplegables: lenguaje + dificultad */}
+                    <div data-tour="notes-filters" className="flex flex-wrap items-center gap-3">
+                        <div className="flex flex-col gap-1">
+                            <label className="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-500">
+                                Apuntes
+                            </label>
+                            <div className="relative">
+                                <select
+                                    value={selectedLanguage}
+                                    onChange={(e) => setSelectedLanguage(e.target.value as FiltroLenguaje)}
+                                    className="appearance-none h-9 w-52 pl-3 pr-8 text-[11px] font-bold font-mono uppercase tracking-[0.15em] bg-white dark:bg-[#111214] text-slate-700 dark:text-slate-300 border border-emerald-500/15 dark:border-emerald-500/10 focus:outline-none focus:border-emerald-500/40 transition-colors cursor-pointer"
+                                >
+                                    {languages.map((lang) => (
+                                        <option key={lang} value={lang} className="bg-white dark:bg-[#0b1015]">
+                                            {etiquetaLenguaje(lang)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 dark:text-slate-500">
+                                    <div className="w-3.5 h-3.5">{Icons.arrowDown}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <label className="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-500">
+                                Dificultad
+                            </label>
+                            <div className="relative">
+                                <select
+                                    value={selectedDifficulty}
+                                    onChange={(e) => setSelectedDifficulty(e.target.value as Difficulty)}
+                                    className="appearance-none h-9 w-44 pl-3 pr-8 text-[11px] font-bold font-mono uppercase tracking-[0.15em] bg-white dark:bg-[#111214] text-slate-700 dark:text-slate-300 border border-emerald-500/15 dark:border-emerald-500/10 focus:outline-none focus:border-emerald-500/40 transition-colors cursor-pointer"
+                                >
+                                    {difficulties.map((diff) => (
+                                        <option key={diff} value={diff} className="bg-white dark:bg-[#0b1015]">
+                                            {diff === 'Todas' ? 'Todas' : diff}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 dark:text-slate-500">
+                                    <div className="w-3.5 h-3.5">{Icons.arrowDown}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {(selectedLanguage !== 'todos' || selectedDifficulty !== 'Todas') && (
                             <button
-                                key={lang}
-                                onClick={() => setSelectedLanguage(lang)}
-                                className={`
-                                    shrink-0 px-3.5 py-1.5 text-[11px] font-bold font-mono uppercase tracking-[0.15em] transition-colors
-                                    ${selectedLanguage === lang
-                                        ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
-                                        : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                                    }
-                                `}
+                                onClick={() => { setSelectedLanguage('todos'); setSelectedDifficulty('Todas'); }}
+                                className="self-end h-9 px-3 font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400 hover:text-emerald-500 border border-transparent hover:border-emerald-500/20 transition-colors"
                             >
-                                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                                Limpiar filtros
                             </button>
-                        ))}
-                    </nav>
+                        )}
+                    </div>
                 </div>
 
                 {/* Grid de notas */}

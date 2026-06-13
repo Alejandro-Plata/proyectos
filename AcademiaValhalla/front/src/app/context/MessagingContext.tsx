@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { Conversation, Message, WsCommand } from '../features/messaging/types/types';
+import type { Conversation, Message, WsCommand, MessageType } from '../features/messaging/types/types';
 
 export interface MessagingContextType {
     conversations: Conversation[];
@@ -10,11 +10,13 @@ export interface MessagingContextType {
     isLoading: boolean;
 
     selectConversation: (conversationId: string) => void;
-    openConversation: (conv: import('../features/messaging/types/types').Conversation) => Promise<void>;
+    openConversation: (conv: Conversation) => Promise<void>;
     sendMessage: (content: string, replyToId?: string) => void;
+    sendMediaMessage: (file: File, messageType: MessageType, caption?: string, replyToId?: string, onProgress?: (pct: number) => void) => Promise<void>;
     markAsRead: () => void;
     sendCommand: (command: WsCommand) => void;
     startConversation: (targetUserId: string) => Promise<void>;
+    createGroup: (name: string, participantIds: string[]) => Promise<void>;
     archiveConversation: (conversationId: string) => Promise<void>;
     unarchiveConversation: (conversationId: string) => Promise<void>;
     closeConversation: (conversationId: string) => Promise<void>;

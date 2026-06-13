@@ -9,7 +9,9 @@ export const useConversations = () => {
         if (!searchQuery.trim()) return conversations;
         const q = searchQuery.toLowerCase();
         return conversations.filter((c) =>
-            c.participant?.username?.toLowerCase().includes(q)
+            c.is_group
+                ? c.name.toLowerCase().includes(q)
+                : c.participant.username.toLowerCase().includes(q)
         );
     }, [conversations, searchQuery]);
 
