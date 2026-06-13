@@ -237,6 +237,7 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
                     onCancelReply={handleCancelReply}
                     replyToUsername={replyTo ? getUsername(replyTo.sender_id) : undefined}
                     conversationId={activeConversation.id}
+                    isDark={isDark}
                 />
             </div>
         </div>

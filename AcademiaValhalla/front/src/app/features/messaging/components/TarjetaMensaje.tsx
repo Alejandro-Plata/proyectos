@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Message } from '../types/types';
 import { formatMessageTime } from '../utils/formatMessageTime';
+import { AudioMessage } from './AudioMessage';
 
 interface PropsTarjetaMensaje {
     message: Message;
@@ -9,18 +10,6 @@ interface PropsTarjetaMensaje {
     senderUsername?: string;
     onReply?: (message: Message) => void;
     isGroup?: boolean;
-}
-
-function AudioPlayer({ url }: { url: string }) {
-    return (
-        <audio
-            controls
-            src={url}
-            preload="metadata"
-            className="w-full h-8 max-w-[240px]"
-            style={{ colorScheme: 'dark' }}
-        />
-    );
 }
 
 function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
@@ -159,7 +148,13 @@ export const TarjetaMensaje = ({
 
                                 {message_type === 'audio' && attachment_url && (
                                     <div className="mb-1.5">
-                                        <AudioPlayer url={attachment_url} />
+                                        <AudioMessage
+                                            src={attachment_url}
+                                            seed={message.id}
+                                            isDark={isDark}
+                                            isOwn={isOwn}
+                                            durationSec={message.attachment_meta?.durationSec}
+                                        />
                                     </div>
                                 )}
 

@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import type { Message, MessageType } from '../types/types';
+import { AudioMessage } from './AudioMessage';
 
 type RecordState = 'idle' | 'recording' | 'preview';
 
@@ -19,11 +20,12 @@ interface PropsEntradaMensaje {
     onCancelReply?: () => void;
     replyToUsername?: string;
     conversationId?: string;
+    isDark?: boolean;
 }
 
 export const EntradaMensaje = ({
     value, onChange, onSend, onKeyDown, onSendMedia,
-    replyTo, onCancelReply, replyToUsername,
+    replyTo, onCancelReply, replyToUsername, isDark = false,
 }: PropsEntradaMensaje) => {
     const hasContent = value.trim().length > 0;
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -186,7 +188,12 @@ export const EntradaMensaje = ({
             {/* Audio preview */}
             {audioBlob && recordState === 'preview' && (
                 <div className="flex items-center gap-2 px-4 pt-3 pb-0">
-                    <audio controls src={URL.createObjectURL(audioBlob)} className="h-8 flex-1" />
+                    <div className="flex-1 border border-emerald-500/20 px-2 py-1">
+                        <AudioMessage
+                            src={URL.createObjectURL(audioBlob)}
+                            isDark={isDark}
+                        />
+                    </div>
                     <button onClick={discardAudio} className="shrink-0 text-slate-400 hover:text-red-500 transition-colors">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
