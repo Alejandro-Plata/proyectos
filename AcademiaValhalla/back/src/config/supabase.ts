@@ -26,7 +26,7 @@ export function getSupabase(): SupabaseClient {
 
     cliente = createClient(url, key, {
         auth: { persistSession: false },
-        realtime: { transport: ws },
+        realtime: { transport: ws as any },
     });
     return cliente;
 }
