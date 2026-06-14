@@ -1,8 +1,124 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import type { Trophy } from '../types/types';
 import { fetchUserAchievements } from '../services/dashboardService';
 import { getAchievementIcon } from '../../../utils/achievementIcons';
 import { getEmblemUrl } from '../../../utils/getAvatarUrl';
+
+function TrophyModal({ trophy, onClose }: { trophy: Trophy; onClose: () => void }) {
+    const emblemUrl = getEmblemUrl(trophy.emblem_url);
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        document.addEventListener('keydown', handler);
+        return () => document.removeEventListener('keydown', handler);
+    }, [onClose]);
+
+    return (
+        <div
+            className="fixed inset-0 z-[500] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={onClose}
+        >
+            <div
+                className="relative max-w-sm w-[90vw] flex flex-col items-center p-8 bg-white dark:bg-[#0a0b0e] border border-emerald-500/20"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button
+                    onClick={onClose}
+                    className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                {/* Emblem large */}
+                <div className={`relative w-40 h-40 mb-6 flex items-center justify-center border transition-all duration-500 ${
+                    trophy.is_unlocked
+                        ? 'border-emerald-500/40 bg-gradient-to-br from-emerald-500/20 via-transparent to-emerald-500/5 shadow-[0_0_50px_-10px_rgba(16,185,129,0.7)]'
+                        : 'border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#050505] grayscale opacity-60'
+                }`}>
+                    {trophy.is_unlocked && (
+                        <div className="absolute inset-0 animate-pulse bg-emerald-500/5 pointer-events-none" />
+                    )}
+                    {emblemUrl ? (
+                        <img
+                            src={emblemUrl}
+                            alt={trophy.title}
+                            className="hex-shield w-32 h-32 object-contain"
+                        />
+                    ) : (
+                        <span className={trophy.is_unlocked ? 'text-emerald-500 drop-shadow-[0_0_12px_rgba(16,185,129,0.7)]' : 'text-slate-400'}>
+                            {getAchievementIcon(trophy.trigger_type, 'w-24 h-24')}
+                        </span>
+                    )}
+                </div>
+
+                {/* Unlocked badge */}
+                {trophy.is_unlocked && (
+                    <div className="flex items-center gap-2 mb-4 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30">
+                        <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 font-bold">
+                            Desbloqueado
+                        </span>
+                    </div>
+                )}
+
+                {!trophy.is_unlocked && (
+                    <div className="flex items-center gap-2 mb-4 px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                        <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </svg>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">
+                            Bloqueado
+                        </span>
+                    </div>
+                )}
+
+                {/* Title */}
+                <h3 className="font-mono text-base uppercase tracking-[0.08em] text-slate-900 dark:text-white mb-2 text-center leading-tight">
+                    {trophy.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-sm text-slate-600 dark:text-slate-400 text-center leading-relaxed mb-4">
+                    {trophy.description}
+                </p>
+
+                {/* XP reward */}
+                {trophy.xp_reward > 0 && (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
+                        +{trophy.xp_reward} XP
+                    </span>
+                )}
+
+                {/* Unlock date */}
+                {trophy.is_unlocked && trophy.unlocked_at && (
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-3">
+                        Obtenido el {new Date(trophy.unlocked_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                )}
+
+                {/* Progress for locked */}
+                {!trophy.is_unlocked && (
+                    <div className="w-full mt-3">
+                        <div className="flex justify-between font-mono text-[10px] uppercase tracking-[0.15em] text-slate-500 mb-1.5">
+                            <span>Progreso</span>
+                            <span>{trophy.progress}%</span>
+                        </div>
+                        <div className="h-2 w-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                            <div
+                                className="h-full bg-slate-400 dark:bg-slate-500 transition-all duration-500"
+                                style={{ width: `${trophy.progress}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
 
 const RARITY_STYLES: Record<string, string> = {
     common: 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-white/5 dark:text-slate-400 dark:border-white/10',
@@ -21,7 +137,9 @@ const RARITY_ES: Record<string, string> = {
 export const TrophyShowcase = () => {
     const [trophies, setTrophies] = useState<Trophy[]>([]);
     const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [modalTrophy, setModalTrophy] = useState<Trophy | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const closeModal = useCallback(() => setModalTrophy(null), []);
 
     useEffect(() => {
         fetchUserAchievements()
@@ -54,6 +172,8 @@ export const TrophyShowcase = () => {
     }
 
     return (
+        <>
+        {modalTrophy && <TrophyModal trophy={modalTrophy} onClose={closeModal} />}
         <div className="bg-white dark:bg-[#0a0b0e] border border-emerald-500/15 dark:border-emerald-500/10 shadow-sm shadow-emerald-500/5 overflow-hidden flex flex-col md:flex-row transition-colors duration-300">
 
             {/* Panel de Detalles (Izquierda en Desktop, Arriba en Mobile) */}
@@ -137,7 +257,7 @@ export const TrophyShowcase = () => {
                     {trophies.map((trophy) => (
                         <button
                             key={trophy.achievement_id}
-                            onClick={() => setSelectedId(trophy.achievement_id)}
+                            onClick={() => { setSelectedId(trophy.achievement_id); setModalTrophy(trophy); }}
                             className={`relative aspect-square flex items-center justify-center transition-all duration-200 border ${
                                 selectedId === trophy.achievement_id
                                     ? 'border-emerald-500 ring-1 ring-emerald-500'
@@ -173,5 +293,6 @@ export const TrophyShowcase = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
