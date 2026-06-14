@@ -1,6 +1,6 @@
 <nav class="fixed top-0 w-full bg-[#0a0b0e]/80 backdrop-blur border-b border-emerald-500/15 z-40">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-2.5 sm:py-4 flex justify-between items-center">
-    <a href="#sobre-mi" aria-label="Inicio" class="shrink-0">
+    <a href="#sobre-mi" aria-label="Inicio" class="shrink-0" (click)="navigate('sobre-mi', $event)">
       <img src="assets/logo.png" alt="Alejandro Plata" class="h-8 sm:h-10 w-auto" />
     </a>
 
@@ -8,7 +8,7 @@
       <!-- Navegacion escritorio -->
       <div class="hidden md:flex gap-6 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-400">
         @for (link of links; track link.fragment) {
-          <a [href]="'#' + link.fragment" class="hover:text-emerald-400 transition-colors">{{ i18n.t().nav[link.key] }}</a>
+          <a [href]="'#' + link.fragment" (click)="navigate(link.fragment, $event)" class="hover:text-emerald-400 transition-colors">{{ i18n.t().nav[link.key] }}</a>
         }
       </div>
 
@@ -46,7 +46,7 @@
     <div class="md:hidden border-t border-emerald-500/15 bg-[#0a0b0e]/95 backdrop-blur">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 py-1 flex flex-col">
         @for (link of links; track link.fragment) {
-          <a [href]="'#' + link.fragment" (click)="close()"
+          <a [href]="'#' + link.fragment" (click)="navigate(link.fragment, $event)"
              class="py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-zinc-300 active:text-emerald-400 transition-colors border-b border-emerald-500/10 last:border-0">
             {{ i18n.t().nav[link.key] }}
           </a>
