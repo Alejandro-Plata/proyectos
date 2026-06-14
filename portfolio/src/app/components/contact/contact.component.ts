@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { I18nService } from '../../i18n/i18n.service';
 
 type EstadoEnvio = 'idle' | 'enviando' | 'ok' | 'error';
 
@@ -10,6 +11,7 @@ type EstadoEnvio = 'idle' | 'enviando' | 'ok' | 'error';
   templateUrl: './contact.component.html',
 })
 export class ContactComponent {
+  protected readonly i18n = inject(I18nService);
 
   private readonly accessKey = '7c152fa9-b9bb-4998-86a5-80dee46b0830'; // No hay problema en que sea pública
 

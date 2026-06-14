@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { I18nService } from '../../i18n/i18n.service';
 
 interface NavLink {
-  label: string;
+  key: 'about' | 'projects' | 'experience' | 'contact';
   fragment: string;
 }
 
@@ -11,6 +12,7 @@ interface NavLink {
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
+  protected readonly i18n = inject(I18nService);
   open = signal(false);
 
   toggle(): void {
@@ -22,9 +24,9 @@ export class NavbarComponent {
   }
 
   links: NavLink[] = [
-    { label: 'Sobre mí', fragment: 'sobre-mi' },
-    { label: 'Proyectos', fragment: 'proyectos' },
-    { label: 'Experiencia', fragment: 'experiencia' },
-    { label: 'Contacto', fragment: 'contacto' },
+    { key: 'about', fragment: 'sobre-mi' },
+    { key: 'projects', fragment: 'proyectos' },
+    { key: 'experience', fragment: 'experiencia' },
+    { key: 'contact', fragment: 'contacto' },
   ];
 }

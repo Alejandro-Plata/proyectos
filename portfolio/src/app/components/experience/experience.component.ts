@@ -1,16 +1,5 @@
-import { Component } from '@angular/core';
-
-interface TimelineItem {
-  period: string;
-  title: string;
-  place: string;
-  summary?: string;
-  /** Lista de experiencias y logros */
-  bullets?: string[];
-  current?: boolean;
-  /** MH destacado */
-  badge?: string;
-}
+import { Component, inject } from '@angular/core';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-experience',
@@ -18,41 +7,5 @@ interface TimelineItem {
   templateUrl: './experience.component.html',
 })
 export class ExperienceComponent {
-  timeline: TimelineItem[] = [
-    {
-      period: 'Feb 2026 - May 2026',
-      title: 'Desarrollador Junior (Prácticas) - NTT Data',
-      place: 'Cáceres',
-      bullets: [
-        'Desarrollo de aplicaciones siguiendo arquitectura MVC utilizando Java 8 y Spring Framework.',
-        'Implementación de vistas con JSP y controladores/servicios mediante interfaces.',
-        'Aseguramiento de la calidad del código mediante testing (JUnit, Mockito) y análisis de cobertura con SonarQube.',
-        'Control de versiones en equipo utilizando Git y SourceTree.',
-      ],
-    },
-    {
-      period: 'Abr 2025 - Jun 2025',
-      title: 'Cursos avanzados en formación dual con NTT Data',
-      place: 'Cáceres',
-      bullets: [
-        'Desarrollo front-end: Angular.',
-        'Gestión de bases de datos: nivel intermedio-avanzado.',
-        'Conocimiento avanzado de modelos de lenguaje (LLMs).',
-        'Automatización con IA y prompt engineering.',
-      ],
-    },
-    {
-      period: '2024 - 2026',
-      title: 'Técnico Superior en DAM',
-      place: 'IES Ágora | Cáceres',
-      badge: 'Matrícula de Honor',
-      summary: 'Desarrollo de Aplicaciones Multiplataforma.',
-    },
-    {
-      period: '2020 - 2025',
-      title: 'Grado en Biología',
-      place: 'Universidad de Extremadura | Badajoz',
-      summary: 'Desarrollo de mentalidad analítica y orden metódico.',
-    },
-  ];
+  protected readonly i18n = inject(I18nService);
 }

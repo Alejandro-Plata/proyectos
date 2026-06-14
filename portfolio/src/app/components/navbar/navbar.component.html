@@ -4,22 +4,41 @@
       <img src="assets/logo.png" alt="Alejandro Plata" class="h-8 sm:h-10 w-auto" />
     </a>
 
-    <!-- Navegacion escritorio -->
-    <div class="hidden md:flex gap-6 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-400">
-      @for (link of links; track link.fragment) {
-        <a [href]="'#' + link.fragment" class="hover:text-emerald-400 transition-colors">{{ link.label }}</a>
-      }
-    </div>
+    <div class="flex items-center gap-4 sm:gap-6">
+      <!-- Navegacion escritorio -->
+      <div class="hidden md:flex gap-6 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-400">
+        @for (link of links; track link.fragment) {
+          <a [href]="'#' + link.fragment" class="hover:text-emerald-400 transition-colors">{{ i18n.t().nav[link.key] }}</a>
+        }
+      </div>
 
-    <!-- Navegación móvil -->
-    <button type="button" class="md:hidden text-zinc-300 hover:text-emerald-400 p-1 -mr-1"
-            (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Abrir menu de navegacion">
-      @if (open()) {
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      } @else {
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      }
-    </button>
+      <!-- Selector de idioma -->
+      <div class="flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-[0.1em]" [attr.aria-label]="i18n.t().a11y.switchLang">
+        <svg class="w-3.5 h-3.5 text-emerald-500/50 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke-width="1.6"/>
+          <path stroke-width="1.6" d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18"/>
+        </svg>
+        <button type="button" (click)="i18n.setLang('es')"
+                class="transition-colors"
+                [class.text-emerald-400]="i18n.lang() === 'es'"
+                [class.text-zinc-600]="i18n.lang() !== 'es'">ES</button>
+        <span class="text-zinc-700">/</span>
+        <button type="button" (click)="i18n.setLang('en')"
+                class="transition-colors"
+                [class.text-emerald-400]="i18n.lang() === 'en'"
+                [class.text-zinc-600]="i18n.lang() !== 'en'">EN</button>
+      </div>
+
+      <!-- Navegación móvil -->
+      <button type="button" class="md:hidden text-zinc-300 hover:text-emerald-400 p-1 -mr-1"
+              (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Abrir menu de navegacion">
+        @if (open()) {
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        } @else {
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        }
+      </button>
+    </div>
   </div>
 
   <!-- Menú desplegado (móvil) -->
@@ -29,7 +48,7 @@
         @for (link of links; track link.fragment) {
           <a [href]="'#' + link.fragment" (click)="close()"
              class="py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-zinc-300 active:text-emerald-400 transition-colors border-b border-emerald-500/10 last:border-0">
-            {{ link.label }}
+            {{ i18n.t().nav[link.key] }}
           </a>
         }
       </div>

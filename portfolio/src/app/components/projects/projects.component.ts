@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, computed, ElementRef, OnDestroy, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { PROJECTS, Project } from '../../models/project.model';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-projects',
@@ -8,7 +9,13 @@ import { PROJECTS, Project } from '../../models/project.model';
   styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent implements AfterViewInit, OnDestroy {
+  protected readonly i18n = inject(I18nService);
   projects: Project[] = PROJECTS;
+
+  /** Descripcion del proyecto en el idioma activo */
+  description(project: Project): string {
+    return this.i18n.lang() === 'en' ? project.descriptionEn : project.description;
+  }
   // Lista duplicada para el bucle infinito (la 2a mitad permite el salto invisible)
   carouselProjects: Project[] = [...PROJECTS, ...PROJECTS];
 

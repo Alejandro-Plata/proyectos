@@ -2,7 +2,7 @@
   <!-- Encabezado -->
   <div class="mb-8 sm:mb-14">
     <h3 class="text-2xl sm:text-4xl font-orbitron font-bold uppercase tracking-[0.06em] text-gradient">
-      Sobre mi
+      {{ i18n.t().about.heading }}
     </h3>
     <div class="flex items-center gap-2 mt-3">
       <span class="h-px w-12 bg-emerald-500"></span>
@@ -25,8 +25,8 @@
 
     <div>
       <h1 class="text-[1.65rem] sm:text-5xl md:text-7xl font-bold mb-4 tracking-[0.03em] text-white font-orbitron text-neon uppercase leading-tight">
-        Desarrollador<br>
-        <span class="text-gradient">Web y Multiplataforma</span>
+        {{ i18n.t().about.titleLine1 }}<br>
+        <span class="text-gradient">{{ i18n.t().about.titleLine2 }}</span>
       </h1>
       <h2 class="font-mono text-[11px] sm:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] text-emerald-400/60">
         // Alejandro Plata Cortes
@@ -43,29 +43,12 @@
     </div>
     <!-- Descripción biografía -->
     <div class="space-y-2.5 sm:space-y-3 text-[13px] sm:text-base text-zinc-400 leading-relaxed font-mono">
-      <p>
-        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
-        Desarrollador especializado en <span class="text-emerald-400 font-semibold">backend</span>:
-        diseno y construyo <span class="text-zinc-200">APIs REST</span> con
-        <span class="text-emerald-400 font-semibold">Java / Spring Boot</span> y
-        <span class="text-emerald-400 font-semibold">Node.js / Express</span>,
-        sobre bases de datos <span class="text-emerald-400 font-semibold">PostgreSQL</span>.
-      </p>
-      <p>
-        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
-        He completado mis practicas en
-        <span class="text-zinc-200 font-semibold">NTT Data</span>,
-        trabajando con arquitecturas <span class="text-zinc-300">MVC</span>,
-        desarrollo de servicios y <span class="text-emerald-400 font-semibold">testing</span>
-        en entornos locales, desarrollando soluciones a problemas en varias aplicaciones de  <span class="text-emerald-400 font-semibold">Spring</span>.
-      </p>
-      <p>
-        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
-        He trabajado con <span class="text-emerald-400 font-semibold">TypeScript</span>
-        (acompañando tanto a <span class="text-zinc-300">Angular</span> como a <span class="text-zinc-300">React</span>), autenticacion con
-        <span class="text-emerald-400 font-semibold">JWT</span>, 
-        <span class="text-emerald-400 font-semibold">sockets</span>, entre otras tecnologías.
-      </p>
+      @for (parrafo of i18n.t().about.bio; track $index) {
+        <p>
+          <span class="text-emerald-500/70 mr-1.5 select-none">></span>
+          <span [innerHTML]="parrafo"></span>
+        </p>
+      }
     </div>
   </div>
 </section>
