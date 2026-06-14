@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -23,6 +24,9 @@ export function getSupabase(): SupabaseClient {
         );
     }
 
-    cliente = createClient(url, key, { auth: { persistSession: false } });
+    cliente = createClient(url, key, {
+        auth: { persistSession: false },
+        realtime: { transport: ws },
+    });
     return cliente;
 }
