@@ -130,7 +130,7 @@ const TRANSLATIONS: Record<Lang, Dictionary> = {
       error: '> Error al enviar. Intentalo de nuevo',
       errorLinkedin: ' o escribeme por LinkedIn',
     },
-    footer: { location: 'Caceres, Extremadura, Espana' },
+    footer: { location: 'Cáceres, Extremadura, España' },
     a11y: { switchLang: 'Cambiar idioma' },
   },
 
