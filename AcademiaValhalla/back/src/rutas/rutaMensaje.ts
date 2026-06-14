@@ -1,7 +1,22 @@
-import { Router } from 'express';
+import { Router, type Request, type Response, type NextFunction } from 'express';
+import multer from 'multer';
 import { autenticar } from '../middleware/middlewareAuth.js';
 import { ControladorMensaje } from '../controladores/ControladorMensaje.js';
 import { subirAdjuntoMensaje, subirAvatar } from '../config/subidaArchivos.js';
+
+function multerHandler(upload: multer.Multer, field: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        upload.single(field)(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ msg: `Error de subida: ${err.message}` });
+            }
+            if (err) {
+                return res.status(400).json({ msg: err.message ?? 'Tipo de archivo no permitido' });
+            }
+            next();
+        });
+    };
+}
 
 const router = Router();
 
@@ -16,12 +31,12 @@ router.delete('/conversations/:conversationId', autenticar, ControladorMensaje.c
 
 // ── Adjuntos ───────────────────────────────────────────────────
 
-router.post('/adjuntos', autenticar, subirAdjuntoMensaje.single('file'), ControladorMensaje.subirAdjunto);
+router.post('/adjuntos', autenticar, multerHandler(subirAdjuntoMensaje, 'file'), ControladorMensaje.subirAdjunto);
 
 // ── Grupos ─────────────────────────────────────────────────────
 
 router.post('/grupos', autenticar, ControladorMensaje.crearGrupo);
-router.patch('/grupos/:groupId', autenticar, subirAvatar.single('avatar'), ControladorMensaje.actualizarGrupo);
+router.patch('/grupos/:groupId', autenticar, multerHandler(subirAvatar, 'avatar'), ControladorMensaje.actualizarGrupo);
 router.post('/grupos/:groupId/participantes', autenticar, ControladorMensaje.agregarParticipantes);
 router.delete('/grupos/:groupId/participantes/:userId', autenticar, ControladorMensaje.eliminarParticipante);
 router.patch('/grupos/:groupId/participantes/:userId', autenticar, ControladorMensaje.actualizarRolParticipante);

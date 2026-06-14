@@ -18,11 +18,14 @@ export async function subirArchivo(
     const ext = path.extname(file.originalname) || '.png';
     const ruta = `${carpeta}/${prefijo}-${uuidv4()}${ext}`;
 
+    // Supabase no acepta parámetros de codec en el Content-Type (ej: "audio/webm;codecs=opus")
+    const contentType = file.mimetype.split(';')[0].trim();
+
     const { error } = await getSupabase()
         .storage
         .from(BUCKET)
         .upload(ruta, file.buffer, {
-            contentType: file.mimetype,
+            contentType,
             upsert: false,
         });
 

@@ -384,8 +384,9 @@ export class ControladorMensaje {
             const url = await subirArchivo(file, `chat/${conversation_id}`, 'msg');
             res.json({ url, meta: { size: file.size, mime: file.mimetype } });
         } catch (error: any) {
-            console.error('[subirAdjunto]', error?.message ?? error);
-            res.status(500).json({ msg: 'Error al subir el archivo' });
+            const msg = error?.message ?? 'Error al subir el archivo';
+            console.error('[subirAdjunto]', msg);
+            res.status(500).json({ msg });
         }
     };
 
