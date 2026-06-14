@@ -1,7 +1,10 @@
-<div class="min-h-screen bg-zinc-950 text-zinc-200 font-sans selection:bg-zinc-700 selection:text-white scroll-smooth">
+<div class="min-h-screen bg-[#0a0b0e] text-zinc-200 font-sans selection:bg-emerald-500/20 selection:text-white scroll-smooth">
+  <!-- Grid pattern overlay -->
+  <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+
   <app-navbar />
 
-  <main class="max-w-5xl mx-auto px-5 sm:px-6 pt-24 sm:pt-32 pb-20">
+  <main class="relative z-10 max-w-5xl mx-auto px-5 sm:px-6 pt-24 sm:pt-32 pb-20">
     <app-about />
     <app-projects />
     <app-experience />

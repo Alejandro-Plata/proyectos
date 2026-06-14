@@ -1,19 +1,19 @@
-<nav class="fixed top-0 w-full bg-zinc-950/80 backdrop-blur border-b border-zinc-800 z-40">
+<nav class="fixed top-0 w-full bg-[#0a0b0e]/80 backdrop-blur border-b border-emerald-500/15 z-40">
   <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
     <a href="#sobre-mi" aria-label="Inicio" class="shrink-0">
       <img src="assets/logo.png" alt="Alejandro Plata" class="h-9 sm:h-10 w-auto" />
     </a>
 
-    <!-- Navegación de escritorio -->
-    <div class="hidden md:flex gap-6 text-sm font-medium text-zinc-400">
+    <!-- Navegacion de escritorio -->
+    <div class="hidden md:flex gap-6 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-400">
       @for (link of links; track link.fragment) {
-        <a [href]="'#' + link.fragment" class="hover:text-white transition-colors">{{ link.label }}</a>
+        <a [href]="'#' + link.fragment" class="hover:text-emerald-400 transition-colors">{{ link.label }}</a>
       }
     </div>
 
-    <!-- Botón hamburguesa (móvil) -->
-    <button type="button" class="md:hidden text-zinc-300 hover:text-white p-1 -mr-1"
-            (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Abrir menú de navegación">
+    <!-- Boton hamburguesa (movil) -->
+    <button type="button" class="md:hidden text-zinc-300 hover:text-emerald-400 p-1 -mr-1"
+            (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Abrir menu de navegacion">
       @if (open()) {
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       } @else {
@@ -22,13 +22,13 @@
     </button>
   </div>
 
-  <!-- Menú desplegable (móvil) -->
+  <!-- Menu desplegable (movil) -->
   @if (open()) {
-    <div class="md:hidden border-t border-zinc-800 bg-zinc-950/95 backdrop-blur">
+    <div class="md:hidden border-t border-emerald-500/15 bg-[#0a0b0e]/95 backdrop-blur">
       <div class="max-w-5xl mx-auto px-6 py-2 flex flex-col">
         @for (link of links; track link.fragment) {
           <a [href]="'#' + link.fragment" (click)="close()"
-             class="py-3 text-sm font-medium text-zinc-300 hover:text-white transition-colors border-b border-zinc-800/60 last:border-0">
+             class="py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-300 hover:text-emerald-400 transition-colors border-b border-emerald-500/10 last:border-0">
             {{ link.label }}
           </a>
         }

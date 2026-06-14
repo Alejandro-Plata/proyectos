@@ -1,17 +1,22 @@
-<section id="contacto" class="relative overflow-hidden rounded-sm border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 sm:p-12">
-  <!-- Línea de acento superior -->
-  <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-sky-400/70 to-transparent"></div>
+<section id="contacto" class="relative overflow-hidden bg-[#050505] p-6 sm:p-12 corner-frame">
+  <!-- Linea de acento superior -->
+  <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
   <!-- Resplandor decorativo -->
-  <div class="pointer-events-none absolute -top-28 left-1/2 -translate-x-1/2 w-[30rem] h-52 bg-sky-500/[0.07] blur-3xl rounded-full"></div>
+  <div class="pointer-events-none absolute -top-28 left-1/2 -translate-x-1/2 w-[30rem] h-52 bg-emerald-500/[0.04] blur-3xl rounded-full"></div>
 
   <div class="relative grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-14">
 
     <!-- Columna de texto -->
     <div class="md:col-span-2">
-      <span class="inline-block w-10 h-0.5 bg-gradient-to-r from-sky-400 to-pink-500 mb-5"></span>
-      <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 font-orbitron text-neon tracking-wide">Contacta conmigo</h3>
-      <p class="text-zinc-400 leading-relaxed">
-        Actualmente estoy abierto a nuevas oportunidades. Déjame un mensaje y te responderé lo antes posible.
+      <div class="flex items-center gap-2 mb-5">
+        <span class="h-px w-8 bg-emerald-500"></span>
+        <span class="w-1.5 h-1.5 bg-emerald-500 rotate-45"></span>
+      </div>
+      <h3 class="text-2xl sm:text-3xl font-orbitron font-bold uppercase tracking-[0.06em] text-gradient mb-4">
+        Contacto
+      </h3>
+      <p class="text-zinc-400 leading-relaxed text-sm">
+        Actualmente estoy abierto a nuevas oportunidades. Dejame un mensaje y te respondere lo antes posible.
       </p>
 
       @if (linkedinUrl) {
@@ -23,39 +28,38 @@
 
     <!-- Formulario -->
     <form class="md:col-span-3 space-y-4" (ngSubmit)="enviar()">
-      <!-- Honeypot anti-bots: invisible para humanos, descarta envíos automáticos. -->
       <input type="checkbox" name="botcheck" [(ngModel)]="botcheck"
              class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input name="nombre" [(ngModel)]="nombre" required placeholder="Tu nombre" aria-label="Tu nombre"
-               class="w-full rounded-sm bg-zinc-950/70 border border-zinc-800 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-500
-                      focus:outline-none focus:border-sky-400/70 focus:shadow-[0_0_14px_rgba(56,189,248,0.15)]
-                      hover:border-zinc-700 transition-all duration-200">
+               class="w-full bg-[#0a0b0e] border border-emerald-500/15 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600
+                      font-mono focus:outline-none focus:border-emerald-500/40 focus:shadow-[0_0_14px_rgba(16,185,129,0.08)]
+                      hover:border-emerald-500/25 transition-all duration-200">
         <input name="email" type="email" [(ngModel)]="email" required placeholder="Tu email" aria-label="Tu email"
-               class="w-full rounded-sm bg-zinc-950/70 border border-zinc-800 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-500
-                      focus:outline-none focus:border-sky-400/70 focus:shadow-[0_0_14px_rgba(56,189,248,0.15)]
-                      hover:border-zinc-700 transition-all duration-200">
+               class="w-full bg-[#0a0b0e] border border-emerald-500/15 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600
+                      font-mono focus:outline-none focus:border-emerald-500/40 focus:shadow-[0_0_14px_rgba(16,185,129,0.08)]
+                      hover:border-emerald-500/25 transition-all duration-200">
       </div>
       <textarea name="mensaje" [(ngModel)]="mensaje" required rows="5" placeholder="Tu mensaje" aria-label="Tu mensaje"
-                class="w-full rounded-sm bg-zinc-950/70 border border-zinc-800 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-500
-                       focus:outline-none focus:border-sky-400/70 focus:shadow-[0_0_14px_rgba(56,189,248,0.15)]
-                       hover:border-zinc-700 transition-all duration-200 resize-y"></textarea>
+                class="w-full bg-[#0a0b0e] border border-emerald-500/15 px-4 py-3 text-sm text-zinc-200 placeholder-zinc-600
+                       font-mono focus:outline-none focus:border-emerald-500/40 focus:shadow-[0_0_14px_rgba(16,185,129,0.08)]
+                       hover:border-emerald-500/25 transition-all duration-200 resize-y"></textarea>
 
       <div class="flex justify-end pt-2">
         <button type="submit" class="btn-submit w-full sm:w-auto" [disabled]="estado() === 'enviando'">
-          {{ estado() === 'enviando' ? 'Enviando…' : 'Enviar mensaje' }}
+          {{ estado() === 'enviando' ? 'Enviando...' : 'Enviar mensaje' }}
         </button>
       </div>
 
       @if (estado() === 'ok') {
-        <p class="text-sm text-emerald-400" role="status">
-          ¡Mensaje enviado! Gracias, te responderé lo antes posible.
+        <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-emerald-400" role="status">
+          > Mensaje enviado. Gracias, te respondere lo antes posible.
         </p>
       }
       @if (estado() === 'error') {
-        <p class="text-sm text-red-400" role="alert">
-          Hubo un problema al enviar. Inténtalo de nuevo {{ linkedinUrl ? 'o escríbeme por LinkedIn' : '' }}.
+        <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-red-400" role="alert">
+          > Error al enviar. Intentalo de nuevo {{ linkedinUrl ? 'o escribeme por LinkedIn' : '' }}.
         </p>
       }
     </form>

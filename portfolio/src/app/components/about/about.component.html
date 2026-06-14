@@ -1,43 +1,69 @@
-<section id="sobre-mi" class="mb-12 sm:mb-16">
-  <h3 class="text-xl sm:text-2xl font-bold text-white mb-8 sm:mb-10 font-orbitron text-neon tracking-wide">Sobre mí</h3>
+<section id="sobre-mi" class="mb-16 sm:mb-24">
+  <!-- Section header -->
+  <div class="mb-10 sm:mb-14">
+    <h3 class="text-3xl sm:text-4xl font-orbitron font-bold uppercase tracking-[0.06em] text-gradient">
+      Sobre mi
+    </h3>
+    <div class="flex items-center gap-2 mt-3">
+      <span class="h-px w-12 bg-emerald-500"></span>
+      <span class="w-1.5 h-1.5 bg-emerald-500 rotate-45 animate-pulse-dot"></span>
+      <span class="h-px flex-1 bg-emerald-500/10"></span>
+    </div>
+  </div>
 
-  <div class="flex flex-col sm:flex-row sm:items-center items-start text-left gap-8 sm:gap-10 mb-8">
+  <div class="flex flex-col sm:flex-row sm:items-center items-start text-left gap-8 sm:gap-10 mb-10">
     <div class="relative flex-shrink-0 group">
-      <!-- Marco desplazado decorativo -->
-      <div class="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-sm border border-sky-500/25
-                  transition-transform duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5"></div>
-
-      <!-- Borde degradado neón -->
-      <div class="relative rounded-sm p-px bg-gradient-to-br from-sky-400/80 via-zinc-700/40 to-pink-500/60
-                  shadow-[0_0_22px_rgba(56,189,248,0.18)] transition-shadow duration-300
-                  group-hover:shadow-[0_0_30px_rgba(56,189,248,0.32)]">
+      <!-- Corner-frame photo -->
+      <div class="relative p-4 corner-frame">
         <img
           [src]="photoUrl"
-          alt="Alejandro Plata Cortés"
-          class="block w-32 h-32 sm:w-40 sm:h-40 rounded-sm object-cover
+          alt="Alejandro Plata Cortes"
+          class="block w-36 h-36 sm:w-44 sm:h-44 object-cover hex-shield
                  saturate-[0.85] transition-[filter] duration-300 group-hover:saturate-100" />
       </div>
     </div>
 
     <div>
-      <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight text-white font-orbitron text-neon">
-        Desarrollador Web y Multiplataforma
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 tracking-[0.03em] text-white font-orbitron text-neon uppercase leading-tight">
+        Desarrollador<br>
+        <span class="text-gradient">Web y Multiplataforma</span>
       </h1>
-      <h2 class="text-lg sm:text-xl md:text-2xl text-zinc-400 font-light">
-        Alejandro Plata Cortés
+      <h2 class="font-mono text-sm sm:text-base uppercase tracking-[0.2em] text-emerald-400/60">
+        // Alejandro Plata Cortes
       </h2>
     </div>
   </div>
 
-  <div class="max-w-2xl text-justify text-zinc-300 text-base sm:text-lg leading-relaxed">
-    <p>
-      Desarrollador Full Stack (Java/Spring &amp; React/Angular) con formación en Biología, lo que
-      me aporta una sólida capacidad de análisis y atención al detalle. Recientemente he
-      finalizado mis prácticas en NTT Data trabajando con arquitecturas MVC y testing.
-    </p>
-    <p>
-      Apasionado por la creación de soluciones eficientes y con un portfolio de proyectos propios
-      listos para producción.
-    </p>
+  <!-- Terminal-style bio -->
+  <div class="bg-[#050505] p-5 sm:p-6 corner-frame max-w-3xl">
+    <!-- Terminal header bar -->
+    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-emerald-500/10">
+      <span class="w-2 h-2 rounded-full bg-red-500/50"></span>
+      <span class="w-2 h-2 rounded-full bg-amber-500/50"></span>
+      <span class="w-2 h-2 rounded-full bg-emerald-500/50"></span>
+      <span class="font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-600 ml-2">perfil.ts</span>
+    </div>
+    <!-- Bio content -->
+    <div class="space-y-3 text-sm sm:text-base text-zinc-400 leading-relaxed font-mono">
+      <p>
+        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
+        Desarrollador <span class="text-emerald-400 font-semibold">Full Stack</span>
+        (<span class="text-zinc-300">Java/Spring</span> &amp; <span class="text-zinc-300">React/Angular</span>)
+        con formacion en Biologia, lo que me aporta una solida capacidad de
+        <span class="text-emerald-400 font-semibold">analisis</span> y atencion al detalle.
+      </p>
+      <p>
+        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
+        Recientemente he finalizado mis practicas en
+        <span class="text-zinc-200 font-semibold">NTT Data</span>
+        trabajando con arquitecturas <span class="text-zinc-300">MVC</span> y testing.
+      </p>
+      <p>
+        <span class="text-emerald-500/70 mr-1.5 select-none">></span>
+        Apasionado por la creacion de soluciones eficientes y con un portfolio de
+        <span class="text-emerald-400 font-semibold">proyectos propios</span>
+        listos para produccion.
+      </p>
+    </div>
   </div>
 </section>
