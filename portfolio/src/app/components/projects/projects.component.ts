@@ -138,7 +138,7 @@ export class ProjectsComponent {
     this.currentVideo.set(project.videoUrl ?? null);
   }
 
-  /** Swipe support for mobile modal */
+  /** Swipe: changes project on mobile */
   private touchStartX = 0;
 
   onTouchStart(event: TouchEvent): void {
@@ -147,9 +147,9 @@ export class ProjectsComponent {
 
   onTouchEnd(event: TouchEvent): void {
     const diff = event.changedTouches[0].clientX - this.touchStartX;
-    if (Math.abs(diff) > 50) {
-      if (diff < 0) this.nextImage();
-      else this.prevImage();
+    if (Math.abs(diff) > 80) {
+      if (diff < 0) this.nextProject();
+      else this.prevProject();
     }
   }
 }
