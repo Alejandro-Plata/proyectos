@@ -16,7 +16,7 @@
        (mouseenter)="pauseAuto()" (mouseleave)="resumeAuto()"
        (touchstart)="pauseAuto()" (touchend)="resumeAuto()" (scroll)="onManualScroll()">
     <div class="carousel-track">
-      @for (project of projects; track project.title) {
+      @for (project of carouselProjects; track $index) {
         <article class="carousel-card bg-[#050505] p-3.5 sm:p-5 flex flex-col transition-all duration-300
                         shadow-sm shadow-emerald-500/5 corner-frame">
 

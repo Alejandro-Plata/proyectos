@@ -9,12 +9,13 @@ import { PROJECTS, Project } from '../../models/project.model';
 })
 export class ProjectsComponent implements AfterViewInit, OnDestroy {
   projects: Project[] = PROJECTS;
+  // Lista duplicada para el bucle infinito (la 2a mitad permite el salto invisible)
+  carouselProjects: Project[] = [...PROJECTS, ...PROJECTS];
 
   /** Auto-scroll del carrusel (con scroll manual nativo) */
   @ViewChild('carouselContainer') carouselContainer!: ElementRef<HTMLElement>;
   private rafId = 0;
   private autoPaused = false;
-  private scrollDir = 1;
   private scrollPos = 0;
 
   ngAfterViewInit(): void {
@@ -28,23 +29,27 @@ export class ProjectsComponent implements AfterViewInit, OnDestroy {
   private autoScrollStep = (): void => {
     const el = this.carouselContainer?.nativeElement;
     if (el && !this.autoPaused) {
-      const max = el.scrollWidth - el.clientWidth;
-      if (max > 1) {
-        // Acumulamos en float (scrollLeft se redondea y se quedaria atascado)
-        this.scrollPos += 0.5 * this.scrollDir;
-        // Ida y vuelta suave entre inicio y final (sin repetir proyectos)
-        if (this.scrollPos >= max) {
-          this.scrollPos = max;
-          this.scrollDir = -1;
-        } else if (this.scrollPos <= 0) {
-          this.scrollPos = 0;
-          this.scrollDir = 1;
-        }
-        el.scrollLeft = this.scrollPos;
+      // Acumulamos en float (scrollLeft se redondea y se quedaria atascado)
+      this.scrollPos += 0.5;
+      const wrap = this.getWrapWidth(el);
+      // Bucle infinito siempre a la derecha: al llegar a la 2a copia, salto invisible
+      if (wrap > 0 && this.scrollPos >= wrap) {
+        this.scrollPos -= wrap;
       }
+      el.scrollLeft = this.scrollPos;
     }
     this.rafId = requestAnimationFrame(this.autoScrollStep);
   };
+
+  /** Distancia exacta de una vuelta = offset del primer item de la 2a copia */
+  private getWrapWidth(el: HTMLElement): number {
+    const track = el.firstElementChild as HTMLElement | null;
+    if (!track) return 0;
+    const cards = track.children;
+    const half = Math.floor(cards.length / 2);
+    const secondStart = cards[half] as HTMLElement | undefined;
+    return secondStart ? secondStart.offsetLeft : 0;
+  }
 
   pauseAuto(): void {
     this.autoPaused = true;

@@ -45,6 +45,20 @@
     }
   }
 
+  .btn-linkedin {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.15em]
+           bg-transparent font-mono transition-all duration-300;
+    color: #0a66c2;
+    border: 1px solid rgba(10, 102, 194, 0.4);
+
+    &:hover {
+      color: #ffffff;
+      background-color: #0a66c2;
+      border-color: #0a66c2;
+      box-shadow: 0 0 16px rgba(10, 102, 194, 0.4);
+    }
+  }
+
   .btn-submit {
     @apply inline-flex items-center justify-center gap-2 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.15em]
            bg-transparent font-mono transition-all duration-300;
