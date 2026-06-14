@@ -102,6 +102,8 @@ export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): 
                 ? (replyMessageType !== 'text' ? placeholderUltimoMensaje(replyMessageType, replyContent) : replyContent)
                 : null;
 
+            socket.join(conversation_id);
+
             io.to(conversation_id).emit('new_message', {
                 id: message.message_id,
                 conversation_id,
@@ -110,7 +112,7 @@ export function registrarManejadoresSocket(io: SocketIOServer, socket: Socket): 
                 message_type: messageType,
                 attachment_url: payload.attachment_url ?? null,
                 attachment_meta: attachment_meta ?? null,
-                timestamp: message.createdAt,
+                timestamp: (message as any).created_at,
                 read: false,
                 reply_to_id: reply_to_id ?? null,
                 reply_to_content: replyContentFinal,

@@ -40,6 +40,7 @@ const pad2 = (n: number) => String(n).padStart(2, '0');
 
 function getSeparatorLabel(timestamp: string): string {
     const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return '';
     const now = new Date();
     if (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate()) return 'HOY';
     const ayer = new Date(now); ayer.setDate(now.getDate() - 1);

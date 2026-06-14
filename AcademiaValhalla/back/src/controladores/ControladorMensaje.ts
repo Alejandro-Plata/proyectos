@@ -73,7 +73,7 @@ async function buildConversacionesResponse(misParticipaciones: any[], idUsuario:
             const base = {
                 id: conv.conversation_id,
                 last_message: conv.last_message ?? '',
-                last_message_time: conv.last_message_time ?? conv.createdAt,
+                last_message_time: conv.last_message_time ?? (conv as any).created_at,
                 last_message_sender_id: conv.last_message_sender_id ?? null,
                 unread_count: p.unread_count ?? 0,
                 is_archived: p.is_archived ?? false,
@@ -243,7 +243,7 @@ export class ControladorMensaje {
                             is_online: false,
                         },
                         last_message: conv!.last_message ?? '',
-                        last_message_time: conv!.last_message_time ?? (conv as any).createdAt,
+                        last_message_time: conv!.last_message_time ?? (conv as any).created_at,
                         last_message_sender_id: conv!.last_message_sender_id ?? null,
                         unread_count: (miParticipacion as any)?.unread_count ?? 0,
                     });
@@ -260,6 +260,9 @@ export class ControladorMensaje {
 
             const io = req.app.get('io');
             if (io) {
+                io.in(idUsuario).socketsJoin(conv.conversation_id);
+                io.in(participant_id).socketsJoin(conv.conversation_id);
+
                 io.to(participant_id).emit('new_conversation', {
                     id: conv.conversation_id,
                     is_group: false,
@@ -270,7 +273,7 @@ export class ControladorMensaje {
                         is_online: false,
                     },
                     last_message: '',
-                    last_message_time: (conv as any).createdAt,
+                    last_message_time: (conv as any).created_at,
                     last_message_sender_id: null,
                     unread_count: 0,
                 });
@@ -286,7 +289,7 @@ export class ControladorMensaje {
                     is_online: false,
                 },
                 last_message: '',
-                last_message_time: (conv as any).createdAt,
+                last_message_time: (conv as any).created_at,
                 last_message_sender_id: null,
                 unread_count: 0,
             });
@@ -435,13 +438,14 @@ export class ControladorMensaje {
                 participants,
                 participant_count: participants.length,
                 last_message: '',
-                last_message_time: (conv as any).createdAt,
+                last_message_time: (conv as any).created_at,
                 last_message_sender_id: null,
                 unread_count: 0,
             };
 
             const io = req.app.get('io');
             if (io) {
+                io.in(idUsuario).socketsJoin(conv.conversation_id);
                 for (const uid of participant_ids) {
                     io.to(uid).emit('new_conversation', groupResponse);
                     io.in(uid).socketsJoin(conv.conversation_id);
@@ -533,7 +537,7 @@ export class ControladorMensaje {
                         participants: participantsData,
                         participant_count: participantsData.length,
                         last_message: (conv as any)?.last_message ?? '',
-                        last_message_time: (conv as any)?.last_message_time ?? (conv as any)?.createdAt,
+                        last_message_time: (conv as any)?.last_message_time ?? (conv as any)?.created_at,
                         last_message_sender_id: (conv as any)?.last_message_sender_id ?? null,
                         unread_count: 0,
                     };

@@ -133,7 +133,7 @@ export const UserSearchModal = ({ isOpen, onClose, onStarted }: UserSearchModalP
                                 : 'border-slate-200 dark:border-white/10 text-slate-400 hover:border-emerald-500/30'
                         }`}
                     >
-                        [Directo]
+                        [Privado]
                     </button>
                     <button
                         onClick={() => setMode('group')}
@@ -256,7 +256,7 @@ export const UserSearchModal = ({ isOpen, onClose, onStarted }: UserSearchModalP
                                                 className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-emerald-500 border border-emerald-500/40 px-2 py-1 opacity-0 group-hover/row:opacity-100 transition-opacity"
                                                 style={{ clipPath: CLIP_TL }}
                                             >
-                                                [ABRIR CÓDICE]
+                                                [ABRIR CONVERSACIÓN]
                                             </span>
                                         )}
                                         {mode === 'group' && isSelected && (
