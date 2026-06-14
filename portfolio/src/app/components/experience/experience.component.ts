@@ -4,13 +4,11 @@ interface TimelineItem {
   period: string;
   title: string;
   place: string;
-  /** Línea de texto descriptiva (alternativa a bullets). */
   summary?: string;
-  /** Lista de logros/tareas. */
+  /** Lista de experiencias y logros */
   bullets?: string[];
-  /** Marcar el hito actual/destacado. */
   current?: boolean;
-  /** Distinción a destacar junto al título (p. ej. "Matrícula de Honor"). */
+  /** MH destacado */
   badge?: string;
 }
 
@@ -47,7 +45,6 @@ export class ExperienceComponent {
       period: '2024 - 2026',
       title: 'Técnico Superior en DAM',
       place: 'IES Ágora | Cáceres',
-      current: true,
       badge: 'Matrícula de Honor',
       summary: 'Desarrollo de Aplicaciones Multiplataforma.',
     },

@@ -9,6 +9,29 @@ import { PROJECTS, Project } from '../../models/project.model';
 })
 export class ProjectsComponent {
   projects: Project[] = PROJECTS;
+  carouselProjects: Project[] = [...PROJECTS, ...PROJECTS];
+
+
+  /** Per-card image preview index */
+  private previewIndexes = signal<Record<number, number>>({});
+
+  getPreviewIndex(cardIdx: number): number {
+    return this.previewIndexes()[cardIdx] ?? 0;
+  }
+
+  prevPreview(cardIdx: number, totalImages: number, event: Event) {
+    event.stopPropagation();
+    const current = this.getPreviewIndex(cardIdx);
+    const prev = (current - 1 + totalImages) % totalImages;
+    this.previewIndexes.update(map => ({ ...map, [cardIdx]: prev }));
+  }
+
+  nextPreview(cardIdx: number, totalImages: number, event: Event) {
+    event.stopPropagation();
+    const current = this.getPreviewIndex(cardIdx);
+    const next = (current + 1) % totalImages;
+    this.previewIndexes.update(map => ({ ...map, [cardIdx]: next }));
+  }
 
   /** Tecnologías expandidas (descripción "ver más") por título de proyecto. */
   private expandedTitles = signal<Set<string>>(new Set<string>());
@@ -58,15 +81,18 @@ export class ProjectsComponent {
     return this.labelMap[tech] ?? tech;
   }
 
-  // Estado del modal con signals (Angular 19)
+  // Estado del modal
   isModalOpen = signal<boolean>(false);
   currentImages = signal<string[]>([]);
   currentIndex = signal<number>(0);
   currentImage = computed(() => this.currentImages()[this.currentIndex()]);
-  /** Si el proyecto abierto tiene vídeo, el modal lo reproduce en vez del carrusel. */
   currentVideo = signal<string | null>(null);
+  currentProjectIndex = signal<number>(0);
+  currentProjectTitle = computed(() => this.projects[this.currentProjectIndex()]?.title ?? '');
 
   openModal(project: Project): void {
+    const idx = this.projects.findIndex(p => p.title === project.title);
+    this.currentProjectIndex.set(idx >= 0 ? idx : 0);
     this.currentImages.set(project.images);
     this.currentIndex.set(0);
     this.currentVideo.set(project.videoUrl ?? null);
@@ -92,5 +118,38 @@ export class ProjectsComponent {
 
   setIndex(index: number): void {
     this.currentIndex.set(index);
+  }
+
+  nextProject(): void {
+    const next = (this.currentProjectIndex() + 1) % this.projects.length;
+    this.switchToProject(next);
+  }
+
+  prevProject(): void {
+    const prev = (this.currentProjectIndex() - 1 + this.projects.length) % this.projects.length;
+    this.switchToProject(prev);
+  }
+
+  private switchToProject(idx: number): void {
+    const project = this.projects[idx];
+    this.currentProjectIndex.set(idx);
+    this.currentImages.set(project.images);
+    this.currentIndex.set(0);
+    this.currentVideo.set(project.videoUrl ?? null);
+  }
+
+  /** Swipe support for mobile modal */
+  private touchStartX = 0;
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].clientX;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const diff = event.changedTouches[0].clientX - this.touchStartX;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) this.nextImage();
+      else this.prevImage();
+    }
   }
 }

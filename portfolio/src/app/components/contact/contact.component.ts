@@ -10,10 +10,8 @@ type EstadoEnvio = 'idle' | 'enviando' | 'ok' | 'error';
   templateUrl: './contact.component.html',
 })
 export class ContactComponent {
-  // Web3Forms: crea una access key gratis en https://web3forms.com (te llega a tu correo,
-  // pero tu email queda en su panel y NUNCA aparece en el HTML, así no lo capturan los grabbers).
-  // TODO: pega aquí tu access key.
-  private readonly accessKey = '7c152fa9-b9bb-4998-86a5-80dee46b0830';
+
+  private readonly accessKey = '7c152fa9-b9bb-4998-86a5-80dee46b0830'; // No hay problema en que sea pública
 
   nombre = '';
   email = '';
@@ -21,8 +19,7 @@ export class ContactComponent {
   botcheck = false;
   estado = signal<EstadoEnvio>('idle');
 
-  // TODO: pega aquí la URL de tu perfil de LinkedIn. Vacío = no se muestra el botón.
-  linkedinUrl = '';
+  linkedinUrl = 'https://www.linkedin.com/in/alejandro-plata-cort%C3%A9s-730526349/';
 
   async enviar(): Promise<void> {
     if (!this.nombre || !this.email || !this.mensaje || this.estado() === 'enviando') return;

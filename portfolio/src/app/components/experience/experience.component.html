@@ -1,7 +1,7 @@
-<section id="experiencia" class="mb-20 sm:mb-32">
-  <!-- Section header -->
+<section id="experiencia" class="mb-14 sm:mb-32 scroll-mt-20 sm:scroll-mt-24">
+  <!-- Encabezado -->
   <div class="mb-10 sm:mb-14">
-    <h3 class="text-3xl sm:text-4xl font-orbitron font-bold uppercase tracking-[0.06em] text-gradient">
+    <h3 class="text-2xl sm:text-4xl font-orbitron font-bold uppercase tracking-[0.06em] text-gradient">
       Experiencia
     </h3>
     <div class="flex items-center gap-2 mt-3">
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="relative border-l border-emerald-500/20 pl-6 ml-3 space-y-12">
+  <div class="relative border-l border-emerald-500/20 pl-4 sm:pl-6 ml-2 sm:ml-3 space-y-8 sm:space-y-12">
     @for (item of timeline; track item.title) {
       <div class="relative">
         @if (item.current) {
@@ -23,7 +23,7 @@
         }
         <span class="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500">{{ item.period }}</span>
         <div class="flex flex-wrap items-center gap-2 mt-1">
-          <h4 class="text-xl font-bold text-white font-orbitron tracking-wide">{{ item.title }}</h4>
+          <h4 class="text-base sm:text-xl font-bold text-white font-orbitron tracking-wide">{{ item.title }}</h4>
           @if (item.badge) {
             <span class="inline-flex items-center gap-1 font-mono text-[10px] font-bold uppercase tracking-[0.1em] px-2.5 py-0.5
                          text-amber-300 border border-amber-400/50 bg-amber-400/10
@@ -43,8 +43,8 @@
         @if (item.bullets) {
           <ul class="text-sm text-zinc-400 space-y-2 list-none">
             @for (bullet of item.bullets; track bullet) {
-              <li class="flex items-start gap-2">
-                <span class="text-emerald-500/50 mt-1.5 text-[8px]">&#x25C6;</span>
+              <li class="flex items-baseline gap-2">
+                <span class="text-emerald-500/50 text-[8px] shrink-0 relative top-[-1px]">&#x25C6;</span>
                 <span>{{ bullet }}</span>
               </li>
             }

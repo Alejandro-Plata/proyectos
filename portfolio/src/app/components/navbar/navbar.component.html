@@ -1,17 +1,17 @@
 <nav class="fixed top-0 w-full bg-[#0a0b0e]/80 backdrop-blur border-b border-emerald-500/15 z-40">
-  <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-2.5 sm:py-4 flex justify-between items-center">
     <a href="#sobre-mi" aria-label="Inicio" class="shrink-0">
-      <img src="assets/logo.png" alt="Alejandro Plata" class="h-9 sm:h-10 w-auto" />
+      <img src="assets/logo.png" alt="Alejandro Plata" class="h-8 sm:h-10 w-auto" />
     </a>
 
-    <!-- Navegacion de escritorio -->
+    <!-- Navegacion escritorio -->
     <div class="hidden md:flex gap-6 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-400">
       @for (link of links; track link.fragment) {
         <a [href]="'#' + link.fragment" class="hover:text-emerald-400 transition-colors">{{ link.label }}</a>
       }
     </div>
 
-    <!-- Boton hamburguesa (movil) -->
+    <!-- Navegación móvil -->
     <button type="button" class="md:hidden text-zinc-300 hover:text-emerald-400 p-1 -mr-1"
             (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Abrir menu de navegacion">
       @if (open()) {
@@ -22,13 +22,13 @@
     </button>
   </div>
 
-  <!-- Menu desplegable (movil) -->
+  <!-- Menú desplegado (móvil) -->
   @if (open()) {
     <div class="md:hidden border-t border-emerald-500/15 bg-[#0a0b0e]/95 backdrop-blur">
-      <div class="max-w-5xl mx-auto px-6 py-2 flex flex-col">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 py-1 flex flex-col">
         @for (link of links; track link.fragment) {
           <a [href]="'#' + link.fragment" (click)="close()"
-             class="py-3 font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-300 hover:text-emerald-400 transition-colors border-b border-emerald-500/10 last:border-0">
+             class="py-3.5 font-mono text-xs uppercase tracking-[0.15em] text-zinc-300 active:text-emerald-400 transition-colors border-b border-emerald-500/10 last:border-0">
             {{ link.label }}
           </a>
         }
