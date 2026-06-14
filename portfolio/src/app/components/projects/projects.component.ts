@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, ElementRef, OnDestroy, signal, ViewChild } from '@angular/core';
 import { PROJECTS, Project } from '../../models/project.model';
 
 @Component({
@@ -7,9 +7,63 @@ import { PROJECTS, Project } from '../../models/project.model';
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
 })
-export class ProjectsComponent {
+export class ProjectsComponent implements AfterViewInit, OnDestroy {
   projects: Project[] = PROJECTS;
-  carouselProjects: Project[] = [...PROJECTS, ...PROJECTS];
+
+  /** Auto-scroll del carrusel (con scroll manual nativo) */
+  @ViewChild('carouselContainer') carouselContainer!: ElementRef<HTMLElement>;
+  private rafId = 0;
+  private autoPaused = false;
+  private scrollDir = 1;
+  private scrollPos = 0;
+
+  ngAfterViewInit(): void {
+    this.rafId = requestAnimationFrame(this.autoScrollStep);
+  }
+
+  ngOnDestroy(): void {
+    cancelAnimationFrame(this.rafId);
+  }
+
+  private autoScrollStep = (): void => {
+    const el = this.carouselContainer?.nativeElement;
+    if (el && !this.autoPaused) {
+      const max = el.scrollWidth - el.clientWidth;
+      if (max > 1) {
+        // Acumulamos en float (scrollLeft se redondea y se quedaria atascado)
+        this.scrollPos += 0.5 * this.scrollDir;
+        // Ida y vuelta suave entre inicio y final (sin repetir proyectos)
+        if (this.scrollPos >= max) {
+          this.scrollPos = max;
+          this.scrollDir = -1;
+        } else if (this.scrollPos <= 0) {
+          this.scrollPos = 0;
+          this.scrollDir = 1;
+        }
+        el.scrollLeft = this.scrollPos;
+      }
+    }
+    this.rafId = requestAnimationFrame(this.autoScrollStep);
+  };
+
+  pauseAuto(): void {
+    this.autoPaused = true;
+  }
+
+  resumeAuto(): void {
+    // Resincroniza con la posicion tras un scroll manual
+    const el = this.carouselContainer?.nativeElement;
+    if (el) this.scrollPos = el.scrollLeft;
+    this.autoPaused = false;
+  }
+
+  onManualScroll(): void {
+    // Mantiene el float sincronizado mientras el usuario hace scroll en pausa
+    if (this.autoPaused) {
+      const el = this.carouselContainer?.nativeElement;
+      if (el) this.scrollPos = el.scrollLeft;
+    }
+  }
 
 
   /** Per-card image preview index */

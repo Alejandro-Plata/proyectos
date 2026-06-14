@@ -12,9 +12,11 @@
   </div>
 
   <!-- Carrusel -->
-  <div class="carousel-container">
+  <div #carouselContainer class="carousel-container"
+       (mouseenter)="pauseAuto()" (mouseleave)="resumeAuto()"
+       (touchstart)="pauseAuto()" (touchend)="resumeAuto()" (scroll)="onManualScroll()">
     <div class="carousel-track">
-      @for (project of carouselProjects; track $index) {
+      @for (project of projects; track project.title) {
         <article class="carousel-card bg-[#050505] p-3.5 sm:p-5 flex flex-col transition-all duration-300
                         shadow-sm shadow-emerald-500/5 corner-frame">
 
@@ -109,84 +111,95 @@
     </div>
   </div>
 
-  <!-- Indicador de progreso -->
-  <div class="progress-track mt-6">
-    <div class="progress-fill"></div>
-  </div>
-
   @if (isModalOpen()) {
-    <div class="fixed inset-0 bg-[#0a0b0e] sm:bg-[#0a0b0e]/95 z-50 flex flex-col backdrop-blur-sm" (click)="closeModal()">
+    <div class="fixed inset-0 z-50 flex flex-col bg-black/95" style="backdrop-filter:blur(4px)">
 
-      <!-- Top bar: title + project nav + close -->
-      <div class="relative z-20 flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4 shrink-0
-                  bg-[#0a0b0e]/80 sm:bg-[#0a0b0e]/60 backdrop-blur-md border-b border-emerald-500/10"
-           (click)="$event.stopPropagation()">
-        <div class="flex items-center gap-1 sm:gap-2">
-          <button class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-zinc-400 active:text-emerald-400 sm:hover:text-emerald-400 sm:border sm:border-emerald-500/20 sm:hover:border-emerald-500/40 transition-colors" (click)="prevProject()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <!-- Header: titulo + nav proyectos + cerrar -->
+      <div class="flex items-center justify-between px-3 py-2 sm:px-6 sm:py-3 shrink-0 bg-black/60 border-b border-emerald-500/10"
+           style="backdrop-filter:blur(12px)">
+        <div class="flex items-center gap-1.5 sm:gap-3">
+          <button type="button"
+                  class="w-9 h-9 flex items-center justify-center rounded text-zinc-300 active:text-emerald-400"
+                  (click)="prevProject()">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <span class="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.15em] text-white truncate max-w-[40vw] sm:max-w-none">{{ currentProjectTitle() }}</span>
-          <button class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-zinc-400 active:text-emerald-400 sm:hover:text-emerald-400 sm:border sm:border-emerald-500/20 sm:hover:border-emerald-500/40 transition-colors" (click)="nextProject()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span class="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-white truncate max-w-[40vw] sm:max-w-none select-none">
+            {{ currentProjectTitle() }}
+          </span>
+          <button type="button"
+                  class="w-9 h-9 flex items-center justify-center rounded text-zinc-300 active:text-emerald-400"
+                  (click)="nextProject()">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
-        <button class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-zinc-400 active:text-emerald-400 sm:hover:text-emerald-400 transition-colors" (click)="closeModal()">
-          <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button type="button"
+                class="w-10 h-10 flex items-center justify-center rounded text-zinc-300 active:text-emerald-400"
+                (click)="closeModal()">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      @if (currentVideo()) {
-        <!-- Video fullscreen -->
-        <div class="flex-1 flex items-center justify-center p-2 sm:p-8" (click)="$event.stopPropagation()">
-          <div class="w-full h-full sm:max-w-6xl sm:max-h-[80vh] flex flex-col">
-            <video [src]="currentVideo()!" controls autoplay loop muted playsinline
-                   poster="assets/projects/android.png"
-                   class="w-full h-full object-contain bg-black sm:border sm:border-emerald-500/15 sm:shadow-2xl sm:shadow-emerald-500/10"></video>
-          </div>
-        </div>
-      } @else {
-        <!-- Image viewer -->
-        <div class="flex-1 relative flex items-center justify-center overflow-hidden"
-             (click)="$event.stopPropagation()"
-             (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+      <!-- Contenido principal -->
+      <div class="flex-1 relative flex items-center justify-center min-h-0 overflow-hidden"
+           (click)="closeModal()"
+           (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
 
-          <!-- Image arrows (mobile + desktop) -->
-          <button class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center
-                         bg-black/50 sm:bg-[#0a0b0e]/80 border border-white/10 sm:border-emerald-500/20 text-white/80 sm:text-white
-                         active:text-emerald-400 sm:hover:text-emerald-400 sm:hover:border-emerald-500/40 transition-colors rounded-full sm:rounded-none"
-                  (click)="prevImage()">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          </button>
-
+        @if (currentVideo()) {
+          <video [src]="currentVideo()!" controls autoplay loop muted playsinline
+                 poster="assets/projects/android.png"
+                 (click)="$event.stopPropagation()"
+                 class="block w-auto h-auto max-w-full max-h-full object-contain sm:max-w-[90vw] sm:max-h-[75vh] sm:border sm:border-emerald-500/15"></video>
+        } @else {
           <img [src]="currentImage()" alt="Imagen del proyecto"
-               class="max-h-full max-w-full w-full sm:w-auto h-auto object-contain sm:border sm:border-emerald-500/20 sm:shadow-2xl sm:shadow-emerald-500/10">
+               (click)="$event.stopPropagation()"
+               class="max-w-full max-h-full object-contain sm:max-w-[90vw] sm:max-h-[75vh] sm:border sm:border-emerald-500/15 sm:shadow-lg sm:shadow-emerald-500/5">
 
-          <button class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center
-                         bg-black/50 sm:bg-[#0a0b0e]/80 border border-white/10 sm:border-emerald-500/20 text-white/80 sm:text-white
-                         active:text-emerald-400 sm:hover:text-emerald-400 sm:hover:border-emerald-500/40 transition-colors rounded-full sm:rounded-none"
-                  (click)="nextImage()">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-          </button>
-        </div>
+          @if (currentImages().length > 1) {
+            <button type="button"
+                    class="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 z-10
+                           w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center
+                           bg-black/60 border border-white/20 sm:border-emerald-500/25
+                           text-white rounded-full sm:rounded
+                           active:text-emerald-400 sm:hover:text-emerald-400 sm:hover:border-emerald-500/50"
+                    (click)="prevImage(); $event.stopPropagation()">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button"
+                    class="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-10
+                           w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center
+                           bg-black/60 border border-white/20 sm:border-emerald-500/25
+                           text-white rounded-full sm:rounded
+                           active:text-emerald-400 sm:hover:text-emerald-400 sm:hover:border-emerald-500/50"
+                    (click)="nextImage(); $event.stopPropagation()">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          }
+        }
+      </div>
 
-        <!-- Bottom: dots (mobile) / thumbnails (desktop) -->
-        <div class="shrink-0 sm:hidden flex items-center justify-center gap-2 py-4 bg-[#0a0b0e]" (click)="$event.stopPropagation()">
-          @for (img of currentImages(); track img; let i = $index) {
-            <button class="w-2 h-2 rounded-full transition-all"
-                    [style.background]="i === currentIndex() ? '#34d399' : 'rgba(255,255,255,0.2)'"
-                    [class.scale-125]="i === currentIndex()"
-                    (click)="setIndex(i)"></button>
-          }
-        </div>
-        <div class="hidden sm:flex shrink-0 gap-2 justify-center py-4 overflow-x-auto max-w-[90vw] mx-auto px-4" (click)="$event.stopPropagation()">
-          @for (img of currentImages(); track img; let i = $index) {
-            <img [src]="img"
-                 class="h-14 w-20 object-cover cursor-pointer border-2 transition-all flex-shrink-0"
-                 [class.border-emerald-500]="currentIndex() === i"
-                 [class.border-transparent]="currentIndex() !== i"
-                 [class.opacity-50]="currentIndex() !== i"
-                 (click)="setIndex(i)">
-          }
+      <!-- Footer: dots / thumbnails -->
+      @if (!currentVideo() && currentImages().length > 1) {
+        <div class="shrink-0 py-3 sm:py-4 bg-black/60 border-t border-emerald-500/10">
+          <div class="flex sm:hidden items-center justify-center gap-2.5">
+            @for (img of currentImages(); track img; let i = $index) {
+              <button type="button" class="w-2.5 h-2.5 rounded-full border border-white/25 transition-all"
+                      [style.background]="i === currentIndex() ? '#34d399' : 'transparent'"
+                      (click)="setIndex(i)"></button>
+            }
+          </div>
+          <div class="hidden sm:flex items-center justify-center gap-2 overflow-x-auto max-w-[85vw] mx-auto px-4">
+            @for (img of currentImages(); track img; let i = $index) {
+              <img [src]="img"
+                   class="h-14 w-20 object-cover cursor-pointer border-2 transition-all flex-shrink-0"
+                   [class.border-emerald-500]="currentIndex() === i"
+                   [class.border-transparent]="currentIndex() !== i"
+                   [class.opacity-50]="currentIndex() !== i"
+                   (click)="setIndex(i)">
+            }
+          </div>
+          <p class="sm:hidden text-center text-[9px] text-zinc-600 font-mono mt-2 uppercase tracking-widest select-none">
+            swipe horizontal → cambiar proyecto
+          </p>
         </div>
       }
     </div>
