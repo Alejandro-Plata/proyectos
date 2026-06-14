@@ -113,7 +113,7 @@ export const NotePrintPage = () => {
                             to={`/dashboard/notes/${noteId}`}
                             className="px-4 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                         >
-                            Volver al apunte
+                            Volver a las notas
                         </Link>
                         <button
                             onClick={downloadPdf}
@@ -136,7 +136,7 @@ export const NotePrintPage = () => {
                             to={`/dashboard/notes/${noteId}`}
                             className="px-4 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                         >
-                            Volver al apunte
+                            Volver a las notas
                         </Link>
                     </>
                 )}

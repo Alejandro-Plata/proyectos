@@ -231,6 +231,18 @@ export class Reto extends Model {
     @Column(DataType.UUID)
     created_by?: string;
 
+    @Default(false)
+    @Column(DataType.BOOLEAN)
+    generated_by_ai?: boolean;
+
+    @AllowNull(true)
+    @Column(DataType.UUID)
+    generated_for?: string | null;
+
+    @Default([])
+    @Column(DataType.JSONB)
+    test_cases!: { stdin: string; expected_stdout: string; hidden?: boolean }[];
+
     @BelongsTo(() => Usuario)
     autor!: Usuario;
 
@@ -815,5 +827,337 @@ export class LogroUsuario extends Model {
 
     @BelongsTo(() => Logro)
     logro!: Logro;
+}
+
+// ==========================================
+// IA — Perfil de aprendizaje y caza del bug
+// ==========================================
+
+@Table({ tableName: 'learning_profiles', timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at' })
+export class PerfilAprendizaje extends Model {
+    @PrimaryKey
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Default({})
+    @Column(DataType.JSONB)
+    languages!: Record<string, number>;
+
+    @Default([])
+    @Column(DataType.JSONB)
+    concepts_seen!: string[];
+
+    @Default([])
+    @Column(DataType.JSONB)
+    recurring_errors!: { tag: string; count: number }[];
+
+    @Default([])
+    @Column(DataType.JSONB)
+    session_summaries!: { at: string; text: string }[];
+
+    @BelongsTo(() => Usuario)
+    usuario!: Usuario;
+}
+
+@Table({ tableName: 'troll_hunts', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class CazaTroll extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    hunt_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Column(DataType.STRING(50))
+    language!: string;
+
+    @Column(DataType.TEXT)
+    original_code!: string;
+
+    @Column(DataType.TEXT)
+    buggy_code!: string;
+
+    @Column(DataType.INTEGER)
+    bug_line!: number;
+
+    @Column(DataType.TEXT)
+    bug_explanation!: string;
+
+    @Default(false)
+    @Column(DataType.BOOLEAN)
+    solved!: boolean;
+
+    @AllowNull(true)
+    @Column(DataType.INTEGER)
+    duration_ms!: number | null;
+}
+
+// ==========================================
+// IA — RoadMaps
+// ==========================================
+
+@Table({ tableName: 'sagas', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class Saga extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    saga_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Column(DataType.TEXT)
+    goal!: string;
+
+    @Column(DataType.STRING(255))
+    title!: string;
+
+    @HasMany(() => HitoSaga, 'saga_id')
+    hitos!: HitoSaga[];
+}
+
+@Table({ tableName: 'saga_milestones', timestamps: false })
+export class HitoSaga extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    milestone_id!: string;
+
+    @ForeignKey(() => Saga)
+    @Column(DataType.UUID)
+    saga_id!: string;
+
+    @Column(DataType.INTEGER)
+    position!: number;
+
+    @Column(DataType.STRING(20))
+    type!: string; // 'note' | 'challenge' | 'project' | 'checkpoint'
+
+    @AllowNull(true)
+    @Column(DataType.UUID)
+    ref_id!: string | null;
+
+    @Column(DataType.STRING(255))
+    title!: string;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    description!: string | null;
+
+    @Default('pending')
+    @Column(DataType.STRING(20))
+    status!: string; // 'pending' | 'done' | 'skipped'
+
+    @BelongsTo(() => Saga, 'saga_id')
+    saga!: Saga;
+}
+
+@Table({ tableName: 'user_emblems', timestamps: true, createdAt: 'awarded_at', updatedAt: false })
+export class Emblema extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    emblem_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Column(DataType.STRING(30))
+    kind!: string; // 'season' | 'mentor' | 'showcase' | 'tournament'
+
+    @Column(DataType.STRING(80))
+    label!: string;
+
+    @Default({})
+    @Column(DataType.JSONB)
+    meta!: Record<string, any>;
+}
+
+@Table({ tableName: 'tournaments', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class Torneo extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    tournament_id!: string;
+
+    @Column(DataType.STRING(160))
+    title!: string;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    description!: string | null;
+
+    @Default('challenges')
+    @Column(DataType.STRING(20))
+    mode!: string; // 'challenges' | 'troll'
+
+    @AllowNull(true)
+    @Column(DataType.STRING(20))
+    season!: string | null;
+
+    @Default('upcoming')
+    @Column(DataType.STRING(20))
+    status!: string; // 'upcoming' | 'active' | 'finished'
+
+    @Column(DataType.DATE)
+    starts_at!: Date;
+
+    @Column(DataType.DATE)
+    ends_at!: Date;
+
+    @Default(100)
+    @Column(DataType.INTEGER)
+    reward_xp!: number;
+
+    @AllowNull(true)
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    created_by!: string | null;
+
+    @BelongsToMany(() => Reto, () => RetoTorneo)
+    retos!: Reto[];
+
+    @HasMany(() => ParticipanteTorneo, 'tournament_id')
+    participantes!: ParticipanteTorneo[];
+}
+
+@Table({ tableName: 'tournament_challenges', timestamps: false })
+export class RetoTorneo extends Model {
+    @PrimaryKey
+    @ForeignKey(() => Torneo)
+    @Column(DataType.UUID)
+    tournament_id!: string;
+
+    @PrimaryKey
+    @ForeignKey(() => Reto)
+    @Column(DataType.UUID)
+    challenge_id!: string;
+
+    @Default(100)
+    @Column(DataType.INTEGER)
+    points!: number;
+}
+
+@Table({ tableName: 'tournament_participants', timestamps: false })
+export class ParticipanteTorneo extends Model {
+    @PrimaryKey
+    @ForeignKey(() => Torneo)
+    @Column(DataType.UUID)
+    tournament_id!: string;
+
+    @PrimaryKey
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Default(0)
+    @Column(DataType.INTEGER)
+    score!: number;
+
+    @Default(0)
+    @Column(DataType.INTEGER)
+    solved_count!: number;
+
+    @AllowNull(true)
+    @Column(DataType.DATE)
+    last_solved_at!: Date | null;
+
+    @Default(DataType.NOW)
+    @Column(DataType.DATE)
+    joined_at!: Date;
+
+    @BelongsTo(() => Usuario)
+    usuario!: Usuario;
+}
+
+@Table({ tableName: 'tournament_solves', timestamps: false })
+export class ResolucionTorneo extends Model {
+    @PrimaryKey
+    @ForeignKey(() => Torneo)
+    @Column(DataType.UUID)
+    tournament_id!: string;
+
+    @PrimaryKey
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @PrimaryKey
+    @Column(DataType.UUID)
+    challenge_id!: string;
+
+    @Default(DataType.NOW)
+    @Column(DataType.DATE)
+    solved_at!: Date;
+}
+
+@Table({ tableName: 'mentor_profiles', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class PerfilMentor extends Model {
+    @PrimaryKey
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+
+    @Default(true)
+    @Column(DataType.BOOLEAN)
+    is_available!: boolean;
+
+    @Default([])
+    @Column(DataType.ARRAY(DataType.STRING))
+    languages!: string[];
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    bio_mentor!: string | null;
+
+    @Default(3)
+    @Column(DataType.INTEGER)
+    capacity!: number;
+
+    @BelongsTo(() => Usuario)
+    usuario!: Usuario;
+}
+
+@Table({ tableName: 'mentorships', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class Mentoria extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    mentorship_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    mentor_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    apprentice_id!: string;
+
+    @Default('pending')
+    @Column(DataType.STRING(20))
+    status!: string; // 'pending' | 'active' | 'ended' | 'rejected'
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    goal!: string | null;
+
+    @AllowNull(true)
+    @Column(DataType.UUID)
+    conversation_id!: string | null;
+
+    @AllowNull(true)
+    @Column(DataType.DATE)
+    ended_at!: Date | null;
+
+    @BelongsTo(() => Usuario, 'mentor_id')
+    mentor!: Usuario;
+
+    @BelongsTo(() => Usuario, 'apprentice_id')
+    aprendiz!: Usuario;
 }
 

@@ -35,6 +35,10 @@ const PostDetailPage = lazy(() => import('./app/features/community').then(m => (
 const UserProfilePage = lazy(() => import('./app/features/community').then(m => ({ default: m.UserProfilePage })));
 const MessagingPage  = lazy(() => import('./app/features/messaging').then(m => ({ default: m.MessagingPage })));
 const PaginaAsistente = lazy(() => import('./app/features/asistente').then(m => ({ default: m.PaginaAsistente })));
+const PaginaCazaTroll = lazy(() => import('./app/features/cazaTroll').then(m => ({ default: m.PaginaCazaTroll })));
+const PaginaSagas    = lazy(() => import('./app/features/sagas').then(m => ({ default: m.PaginaSagas })));
+const PaginaTorneos  = lazy(() => import('./app/features/torneos').then(m => ({ default: m.PaginaTorneos })));
+const PaginaPadrinazgo = lazy(() => import('./app/features/padrinazgo').then(m => ({ default: m.PaginaPadrinazgo })));
 const PaginaAdmin    = lazy(() => import('./app/features/admin').then(m => ({ default: m.PaginaAdmin })));
 
 const PageFallback = () => (
@@ -80,6 +84,10 @@ export default function App() {
                       <Route path="community/:id" element={<PostDetailPage />} />
                       <Route path="messages" element={<MessagingPage />} />
                       <Route path="assistant" element={<PaginaAsistente />} />
+                      <Route path="caza-bichillo" element={<PaginaCazaTroll />} />
+                      <Route path="roadmap" element={<PaginaSagas />} />
+                      <Route path="torneos" element={<PaginaTorneos />} />
+                      <Route path="padrinazgo" element={<PaginaPadrinazgo />} />
 
                       <Route element={<RoleGuard allowedRoles={['ADMIN']} />}>
                         <Route path="admin" element={<PaginaAdmin />} />

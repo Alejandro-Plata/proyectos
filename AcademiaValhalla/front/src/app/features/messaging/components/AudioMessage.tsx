@@ -99,7 +99,7 @@ export const AudioMessage = ({
     const displayTime = (playing || current > 0) ? current : duration;
 
     return (
-        <div className="flex items-center gap-2.5 min-w-[200px]">
+        <div className="flex items-center gap-2.5 w-full min-w-0">
             <audio ref={audioRef} src={src} preload="metadata" className="hidden" />
 
             {/* Play / pause — cuadrado, mismo patrón que botón enviar */}
@@ -130,14 +130,14 @@ export const AudioMessage = ({
                 aria-valuenow={Math.round(progress * 100)}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                className="flex-1 flex items-center gap-[2px] h-7 cursor-pointer"
+                className="flex-1 min-w-0 flex items-center gap-[2px] h-7 cursor-pointer overflow-hidden"
             >
                 {bars.map((amp, i) => {
                     const played = i / bars.length <= progress;
                     return (
                         <span
                             key={i}
-                            className={`w-[2px] shrink-0 transition-colors ${played ? 'bg-emerald-500' : pendingColor}`}
+                            className={`flex-1 min-w-0 max-w-[3px] transition-colors ${played ? 'bg-emerald-500' : pendingColor}`}
                             style={{ height: `${Math.round(amp * 100)}%` }}
                         />
                     );

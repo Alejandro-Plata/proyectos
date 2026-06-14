@@ -1,8 +1,19 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { autenticar } from '../middleware/middlewareAuth.js';
 import { ControladorReto } from '../controladores/ControladorReto.js';
 
 const router = Router();
+
+// A2 · La forja de retos consume IA + Judge0: límite estricto por usuario.
+const limiteForja = rateLimit({
+    windowMs: 60 * 60_000, // 1 hora
+    max: 8,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req) => (req as any).user?.user_id ?? req.ip,
+    message: { msg: 'Has forjado demasiados retos. Inténtalo más tarde.' },
+});
 
 /**
  * @openapi
@@ -91,6 +102,9 @@ router.post('/', autenticar, ControladorReto.crear);
  *       '504': { description: Timeout de ejecución }
  */
 router.post('/execute', autenticar, ControladorReto.ejecutarCodigo);
+
+// A2 · Forjar un reto a medida con IA
+router.post('/forge', autenticar, limiteForja, ControladorReto.forjar);
 
 /**
  * @openapi
@@ -182,5 +196,8 @@ router.post('/:challengeId/progress', autenticar, ControladorReto.actualizarProg
  *       '401': { $ref: '#/components/responses/Unauthorized' }
  */
 router.get('/:challengeId/progress', autenticar, ControladorReto.obtenerProgreso);
+
+// A2 · Verificar la solución contra los casos de prueba (otorga XP si pasa)
+router.post('/:challengeId/verify', autenticar, ControladorReto.verificar);
 
 export default router;

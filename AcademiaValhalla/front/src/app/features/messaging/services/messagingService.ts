@@ -115,6 +115,21 @@ export const messagingService = {
         return res.json();
     },
 
+    updateGroup: async (groupId: string, data: { name?: string; avatar?: File }): Promise<void> => {
+        const formData = new FormData();
+        if (data.name !== undefined) formData.append('name', data.name);
+        if (data.avatar) formData.append('avatar', data.avatar);
+        const res = await fetch(`${API_BASE}/messages/grupos/${groupId}`, {
+            method: 'PATCH',
+            headers: getHeaders(), // sin Content-Type: el navegador pone el boundary del multipart
+            body: formData,
+        });
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body.msg ?? 'Error al actualizar el grupo');
+        }
+    },
+
     addGroupParticipants: async (groupId: string, userIds: string[]): Promise<void> => {
         const res = await fetch(`${API_BASE}/messages/grupos/${groupId}/participantes`, {
             method: 'POST',

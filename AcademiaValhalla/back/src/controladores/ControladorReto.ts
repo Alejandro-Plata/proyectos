@@ -13,6 +13,9 @@ import { ServicioLogros } from '../servicios/ServicioLogros.js';
 import { RECOMPENSAS_XP_RETO } from '../utils/constXP.js';
 import { executeCode as codeArenaExecute } from '../servicios/ServicioCodeArena.js';
 import { CODE_ARENA_LANGUAGES as LENGUAJES_CODE_ARENA } from '../utils/codeArenaLanguages.js';
+import { ServicioForjaRetos } from '../servicios/ServicioForjaRetos.js';
+import { ServicioMemoria } from '../servicios/ServicioMemoria.js';
+import { ServicioTorneos } from '../servicios/ServicioTorneos.js';
 
 function mapearRetoAFrontend(reto: any) {
     const r = typeof reto.toJSON === 'function' ? reto.toJSON() : reto;
@@ -256,6 +259,68 @@ export class ControladorReto {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error al obtener progreso' });
+        }
+    };
+
+    // ── A2 · Forja de retos a medida ───────────────────────────
+
+    static forjar = async (req: Request, res: Response) => {
+        try {
+            const idUsuario = req.user!.user_id;
+            const tema: string = (req.body?.tema?.trim())
+                || (await ServicioMemoria.temaDebil(idUsuario))
+                || 'estructuras de datos básicas';
+
+            const reto = await ServicioForjaRetos.forjar(idUsuario, tema);
+            res.status(201).json({ msg: 'Reto forjado', challenge: mapearRetoAFrontend(reto), challenge_id: reto.challenge_id, tema });
+        } catch (error: any) {
+            console.error('[forjar]', error?.message ?? error);
+            res.status(502).json({ msg: error?.message ?? 'No se pudo forjar el reto' });
+        }
+    };
+
+    /** Verifica el código del usuario contra los test_cases (retos con casos). Otorga XP si pasa. */
+    static verificar = async (req: Request, res: Response) => {
+        try {
+            const idUsuario = req.user!.user_id;
+            const { challengeId } = req.params;
+            const { language, code } = req.body;
+
+            if (!language || typeof code !== 'string') {
+                return res.status(400).json({ msg: 'Se requieren "language" y "code".' });
+            }
+
+            const reto = await Reto.findByPk(challengeId);
+            if (!reto) return res.status(404).json({ msg: 'Reto no encontrado' });
+            if (!Array.isArray(reto.test_cases) || reto.test_cases.length === 0) {
+                return res.status(400).json({ msg: 'Este reto no tiene casos de prueba verificables.' });
+            }
+
+            const { passed, results } = await ServicioForjaRetos.verificarSolucion(reto, language.toLowerCase(), code);
+
+            let recompensaXP = null;
+            let logrosDesbloqueados: any[] = [];
+            if (passed) {
+                const yaCompletado = await ProgresoRetoUsuario.findOne({
+                    where: { user_id: idUsuario, challenge_id: challengeId, status: 'COMPLETADO' },
+                });
+                await ProgresoRetoUsuario.upsert({
+                    user_id: idUsuario, challenge_id: challengeId,
+                    status: 'COMPLETADO', user_solution: code, completed_at: new Date(),
+                });
+                if (!yaCompletado) {
+                    recompensaXP = await ServicioXP.otorgarXP(idUsuario, reto.experience_reward || 25);
+                    const completados = await ProgresoRetoUsuario.count({ where: { user_id: idUsuario, status: 'COMPLETADO' } });
+                    logrosDesbloqueados = await ServicioLogros.verificarYDesbloquear(idUsuario, 'challenge_count', completados);
+                }
+                // B7 · puntuar en torneos activos que contengan este reto
+                await ServicioTorneos.registrarResolucion(idUsuario, challengeId);
+            }
+
+            res.json({ passed, results, xpReward: recompensaXP, unlockedAchievements: logrosDesbloqueados });
+        } catch (error: any) {
+            console.error('[verificar]', error?.message ?? error);
+            res.status(502).json({ msg: 'Error al verificar la solución' });
         }
     };
 

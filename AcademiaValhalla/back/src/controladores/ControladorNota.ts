@@ -135,27 +135,39 @@ export class ControladorNotaUsuario {
             const idUsuario = req.user!.user_id;
 
             const nota = await NotaUsuario.findOne({
-                where: { note_id: idNota, user_id: idUsuario }
+                where: { note_id: idNota },
+                include: [{ model: Usuario, as: 'autorNota', attributes: ['username', 'avatar_url'] }],
             });
 
             if (!nota) {
                 return res.status(404).json({ msg: "Nota no encontrada" });
             }
 
-            // Incluir revisión pendiente si existe
-            const revisionPendiente = await RevisionNota.findOne({
-                where: { note_id: (nota as any).note_id, status: 'pending' },
-                attributes: ['revision_id', 'created_at'],
-            });
+            const esPropietario = (nota as any).user_id === idUsuario;
 
-            const revisionRechazada = await RevisionNota.findOne({
-                where: { note_id: (nota as any).note_id, status: 'rejected' },
-                order: [['created_at', 'DESC']],
-                attributes: ['revision_id', 'review_comment', 'created_at'],
-            });
+            // El propietario puede ver su nota; el resto solo si está aprobada en la comunidad
+            if (!esPropietario && (nota as any).community_status !== 'approved') {
+                return res.status(404).json({ msg: "Nota no encontrada" });
+            }
+
+            // Las revisiones solo conciernen al propietario
+            let revisionPendiente = null;
+            let revisionRechazada = null;
+            if (esPropietario) {
+                revisionPendiente = await RevisionNota.findOne({
+                    where: { note_id: (nota as any).note_id, status: 'pending' },
+                    attributes: ['revision_id', 'created_at'],
+                });
+                revisionRechazada = await RevisionNota.findOne({
+                    where: { note_id: (nota as any).note_id, status: 'rejected' },
+                    order: [['created_at', 'DESC']],
+                    attributes: ['revision_id', 'review_comment', 'created_at'],
+                });
+            }
 
             return res.json({
                 ...( nota as any).toJSON(),
+                is_owner: esPropietario,
                 pendingRevision: revisionPendiente ?? null,
                 rejectedRevision: revisionRechazada ?? null,
             });

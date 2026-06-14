@@ -57,10 +57,17 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                     if (msg.conversation_id === idActivo) {
                         setMensajes((prev) => {
                             if (msg.sender_id === idUsuarioActual) {
+                                // Reemplaza el mensaje optimista (texto por contenido, media por tipo)
                                 const idxTemp = prev.findIndex(
-                                    (m) => m.id.startsWith('temp-') && m.content === msg.content
+                                    (m) => m.id.startsWith('temp-')
+                                        && m.message_type === msg.message_type
+                                        && (msg.message_type === 'text' ? m.content === msg.content : true)
                                 );
                                 if (idxTemp !== -1) {
+                                    const previo = prev[idxTemp];
+                                    if (previo.attachment_url?.startsWith('blob:')) {
+                                        URL.revokeObjectURL(previo.attachment_url);
+                                    }
                                     const actualizado = [...prev];
                                     actualizado[idxTemp] = msg;
                                     return actualizado;
@@ -180,6 +187,13 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
                             return { ...c, participants: c.participants.filter(p => p.user_id !== user_id) };
                         })
                     );
+                    if (refConvActiva.current?.id === conversation_id && refConvActiva.current.is_group) {
+                        setConversacionActiva((prev) =>
+                            prev?.is_group
+                                ? { ...prev, participants: (prev as ConversationGroup).participants.filter(p => p.user_id !== user_id), participant_count: (prev as ConversationGroup).participants.filter(p => p.user_id !== user_id).length }
+                                : prev
+                        );
+                    }
                     break;
                 }
             }
@@ -273,20 +287,82 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
             onProgress?: (pct: number) => void
         ) => {
             if (!conversacionActiva) return;
-            const { url, meta } = await messagingService.subirAdjunto(conversacionActiva.id, file, onProgress);
-            ws.send({
-                type: 'send_message',
-                payload: {
-                    conversation_id: conversacionActiva.id,
-                    content: caption?.trim() || undefined,
-                    reply_to_id: replyToId,
-                    message_type: messageType,
-                    attachment_url: url,
-                    attachment_meta: meta,
-                },
+
+            const convId = conversacionActiva.id;
+            const idEmisor = user?.user_id ?? '';
+            const captionText = caption?.trim() || undefined;
+            const localUrl = URL.createObjectURL(file);
+            const tempId = `temp-${Date.now()}`;
+            const msgRespuesta = replyToId ? refMensajes.current.find(m => m.id === replyToId) : null;
+
+            // 1) Mensaje optimista: visible al instante con la URL local (blob)
+            const mensajeOptimista: Message = {
+                id: tempId,
+                conversation_id: convId,
+                sender_id: idEmisor,
+                content: captionText,
+                message_type: messageType,
+                attachment_url: localUrl,
+                attachment_meta: { size: file.size, mime: file.type },
+                timestamp: new Date().toISOString(),
+                read: false,
+                reply_to_id: replyToId,
+                reply_to_content: msgRespuesta?.content,
+                reply_to_sender: msgRespuesta
+                    ? (msgRespuesta.sender_id === idEmisor
+                        ? refUsuario.current?.username
+                        : !conversacionActiva.is_group
+                            ? conversacionActiva.participant.username
+                            : (conversacionActiva as ConversationGroup).participants.find(p => p.user_id === msgRespuesta.sender_id)?.username)
+                    : undefined,
+            };
+
+            setMensajes((prev) => [...prev, mensajeOptimista]);
+
+            const preview = messageType === 'image' ? '📷 Foto'
+                : messageType === 'video' ? '🎥 Vídeo'
+                : messageType === 'audio' ? '🎤 Audio'
+                : (captionText ?? '');
+            setConversaciones((prev) => {
+                const actualizado = prev.map((c) =>
+                    c.id === convId
+                        ? { ...c, last_message: preview, last_message_time: mensajeOptimista.timestamp, last_message_sender_id: idEmisor }
+                        : c
+                );
+                const idx = actualizado.findIndex((c) => c.id === convId);
+                if (idx > 0) {
+                    const [conv] = actualizado.splice(idx, 1);
+                    actualizado.unshift(conv);
+                }
+                return actualizado;
             });
+
+            // 2) Subida en segundo plano; el eco del WS reconcilia el mensaje temporal
+            try {
+                const { url, meta } = await messagingService.subirAdjunto(convId, file, onProgress);
+                ws.send({
+                    type: 'send_message',
+                    payload: {
+                        conversation_id: convId,
+                        content: captionText,
+                        reply_to_id: replyToId,
+                        message_type: messageType,
+                        attachment_url: url,
+                        attachment_meta: meta,
+                    },
+                });
+                // Conserva la vista local pero adopta los metadatos del servidor (p. ej. durationSec)
+                setMensajes((prev) => prev.map(m =>
+                    m.id === tempId ? { ...m, attachment_meta: { ...m.attachment_meta, ...meta } } : m
+                ));
+            } catch (err) {
+                // Revierte el mensaje optimista si falla la subida
+                URL.revokeObjectURL(localUrl);
+                setMensajes((prev) => prev.filter(m => m.id !== tempId));
+                throw err;
+            }
         },
-        [conversacionActiva, ws]
+        [conversacionActiva, user?.user_id, ws]
     );
 
     const marcarComoLeida = useCallback(() => {
@@ -321,6 +397,32 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
         []
     );
 
+    const actualizarGrupo = useCallback(async (groupId: string, data: { name?: string; avatar?: File }) => {
+        // El backend emite group_updated por WS, que actualiza el estado
+        await messagingService.updateGroup(groupId, data);
+    }, []);
+
+    const agregarParticipantesGrupo = useCallback(async (groupId: string, userIds: string[]) => {
+        await messagingService.addGroupParticipants(groupId, userIds);
+    }, []);
+
+    const eliminarParticipanteGrupo = useCallback(async (groupId: string, userId: string) => {
+        await messagingService.removeGroupParticipant(groupId, userId);
+    }, []);
+
+    const actualizarRolGrupo = useCallback(async (groupId: string, userId: string, role: 'admin' | 'member') => {
+        await messagingService.updateGroupRole(groupId, userId, role);
+    }, []);
+
+    const salirDelGrupo = useCallback(async (groupId: string) => {
+        const uid = refUsuario.current?.user_id;
+        if (!uid) return;
+        await messagingService.removeGroupParticipant(groupId, uid);
+        // Respaldo local por si el WS removed_from_group no llega
+        setConversaciones((prev) => prev.filter((c) => c.id !== groupId));
+        if (refConvActiva.current?.id === groupId) setConversacionActiva(null);
+    }, []);
+
     const archivarConversacion = useCallback(async (conversacionId: string) => {
         await messagingService.archiveConversation(conversacionId);
         setConversaciones((prev) => prev.filter((c) => c.id !== conversacionId));
@@ -352,6 +454,11 @@ export const MessagingProvider = ({ children }: { children: ReactNode }) => {
         sendCommand: enviarComando,
         startConversation: iniciarConversacion,
         createGroup: crearGrupo,
+        updateGroup: actualizarGrupo,
+        addGroupParticipants: agregarParticipantesGrupo,
+        removeGroupParticipant: eliminarParticipanteGrupo,
+        updateGroupRole: actualizarRolGrupo,
+        leaveGroup: salirDelGrupo,
         archiveConversation: archivarConversacion,
         unarchiveConversation: desarchivarConversacion,
         closeConversation: cerrarConversacion,

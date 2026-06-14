@@ -40,6 +40,7 @@ export const TarjetaMensaje = ({
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const timeLabel = formatMessageTime(message.timestamp);
     const { message_type = 'text', attachment_url, content } = message;
+    const isMedia = message_type === 'image' || message_type === 'video' || message_type === 'audio';
 
     // System messages: centered, no bubble
     if (message_type === 'system') {
@@ -65,7 +66,7 @@ export const TarjetaMensaje = ({
                 className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group`}
                 aria-label={`${isOwn ? 'Tú' : (senderUsername ?? 'Usuario')} ${timeLabel}`}
             >
-                <div className="flex items-end gap-1.5 max-w-[68%] sm:max-w-[62%]">
+                <div className={`flex items-end gap-1.5 ${isMedia ? 'max-w-[80%] sm:max-w-[70%]' : 'max-w-[68%] sm:max-w-[62%]'}`}>
 
                     {/* Reply button — left for own messages */}
                     {isOwn && onReply && (
@@ -147,7 +148,7 @@ export const TarjetaMensaje = ({
                                 )}
 
                                 {message_type === 'audio' && attachment_url && (
-                                    <div className="mb-1.5">
+                                    <div className="mb-1.5 w-[240px] max-w-full">
                                         <AudioMessage
                                             src={attachment_url}
                                             seed={message.id}

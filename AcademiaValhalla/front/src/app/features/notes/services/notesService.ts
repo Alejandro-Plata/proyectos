@@ -41,7 +41,9 @@ export const notesService = {
             headers: authHeaders(),
         });
         if (!res.ok) return undefined;
-        return mapNote(await res.json(), 'personal');
+        const data = await res.json();
+        // is_owner === false → apunte de comunidad de otro autor (solo lectura)
+        return mapNote(data, data.is_owner === false ? 'community' : 'personal');
     },
 
     requestCommunity: async (noteId: string): Promise<void> => {

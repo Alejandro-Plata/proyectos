@@ -159,3 +159,42 @@ export const challengesService = {
         if (!res.ok) throw new Error('Error al enviar la propuesta');
     },
 };
+
+// ── A2 · Forja de retos ────────────────────────────────────────
+
+export interface ResultadoVerificacion {
+    passed: boolean;
+    results: { hidden: boolean; passed: boolean; stdin?: string; expected?: string; got?: string }[];
+    xpReward?: any;
+    unlockedAchievements?: any[];
+}
+
+export const forjaService = {
+    /** Pide a la IA forjar un reto a medida (devuelve el id del reto creado). */
+    forge: async (tema?: string): Promise<{ challenge_id: string; tema: string }> => {
+        const res = await fetch(`${API_BASE}/challenges/forge`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ tema }),
+        });
+        if (!res.ok) {
+            const b = await res.json().catch(() => ({}));
+            throw new Error(b.msg ?? 'No se pudo forjar el reto');
+        }
+        return res.json();
+    },
+
+    /** Verifica el código del usuario contra los casos de prueba del reto. */
+    verify: async (challengeId: string, language: string, code: string): Promise<ResultadoVerificacion> => {
+        const res = await fetch(`${API_BASE}/challenges/${challengeId}/verify`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ language, code }),
+        });
+        if (!res.ok) {
+            const b = await res.json().catch(() => ({}));
+            throw new Error(b.msg ?? 'Error al verificar la solución');
+        }
+        return res.json();
+    },
+};

@@ -1,7 +1,9 @@
 ﻿import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icons } from '../../../components/Icons';
 import { ProposeMissionModal } from './ProposeMissionModal';
 import { ProposeMissionMobile } from './ProposeMissionMobile';
+import { forjaService } from '../services/challengesService';
 import type { Reto as Challenge } from '../types/types';
 
 interface ChallengeBrowseViewProps {
@@ -72,9 +74,12 @@ export const VistaExplorarRetos = ({
         <div className="flex flex-col h-[100dvh] bg-slate-50 dark:bg-[#050505] text-slate-900 dark:text-white overflow-hidden">
             {/* BB-4 Page title */}
             <div className="shrink-0 px-4 pt-6 pb-2">
-                <div className="mb-4">
-                    <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Misiones</h1>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Pon a prueba tus habilidades</p>
+                <div className="mb-4 flex items-start justify-between gap-3">
+                    <div>
+                        <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Misiones</h1>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Pon a prueba tus habilidades</p>
+                    </div>
+                    <ForjarRetoBoton />
                 </div>
             </div>
 
@@ -255,3 +260,35 @@ export const VistaExplorarRetos = ({
         </div>
     );
 };
+
+/** A2 · Botón para forjar un reto a medida con IA. */
+function ForjarRetoBoton() {
+    const navigate = useNavigate();
+    const [forjando, setForjando] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const forjar = async () => {
+        setForjando(true); setError(null);
+        try {
+            await forjaService.forge();
+            navigate(0); // refresca la lista para mostrar el reto forjado
+        } catch (e: any) {
+            setError(e?.message ?? 'No se pudo forjar el reto');
+            setForjando(false);
+        }
+    };
+
+    return (
+        <div className="flex flex-col items-end shrink-0">
+            <button
+                onClick={forjar}
+                disabled={forjando}
+                title="Genera un reto a medida de tus puntos débiles"
+                className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest px-3 py-2 border border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/[0.08] transition-colors disabled:opacity-60"
+            >
+                <span>⚒</span>{forjando ? 'Forjando...' : 'Fórjame un reto'}
+            </button>
+            {error && <span className="text-[10px] text-red-500 mt-1 max-w-[160px] text-right">{error}</span>}
+        </div>
+    );
+}

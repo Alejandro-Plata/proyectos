@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useChat } from '../hooks/useChat';
 import { TarjetaMensaje } from './TarjetaMensaje';
 import { EntradaMensaje } from './EntradaMensaje';
+import { GroupInfoModal } from './GroupInfoModal';
 import type { Message, ConversationGroup } from '../types/types';
 import { getAvatarUrl } from '../../../utils/getAvatarUrl';
 import { useMessaging } from '../../../hooks/useMessaging';
@@ -78,6 +79,7 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
         showScrollBtn, handleScroll, scrollToBottom,
     } = useChat();
     const { sendMediaMessage } = useMessaging();
+    const [showGroupInfo, setShowGroupInfo] = useState(false);
 
     const getUsername = (userId: string): string => {
         if (userId === currentUserId) return 'Tú';
@@ -127,7 +129,7 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
     const headerOnline = !activeConversation.is_group && activeConversation.participant.is_online;
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="relative flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-[#0a0b0e] shrink-0 z-10">
                 {onBack && (
@@ -138,6 +140,11 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
                     </button>
                 )}
 
+                <div
+                    onClick={isGroup ? () => setShowGroupInfo(true) : undefined}
+                    className={`flex items-center gap-3 min-w-0 flex-1 ${isGroup ? 'cursor-pointer' : ''}`}
+                    title={isGroup ? 'Ver info del grupo' : undefined}
+                >
                 <div className="relative shrink-0 w-9 h-9">
                     {isGroup ? (
                         <div className="w-9 h-9 hex-shield flex items-center justify-center bg-emerald-500/10 border border-emerald-500/20 overflow-hidden">
@@ -170,6 +177,13 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
                     <p className="font-mono text-[10px] uppercase tracking-widest truncate text-slate-400 dark:text-slate-500">
                         {!isGroup && (headerOnline ? '◆' : '◇')} {headerStatus}
                     </p>
+                </div>
+
+                {isGroup && (
+                    <svg className="w-4 h-4 shrink-0 text-slate-300 dark:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                )}
                 </div>
             </div>
 
@@ -241,6 +255,15 @@ export const VentanaCodice = ({ isDark, onBack }: PropsVentanaCodice) => {
                     isDark={isDark}
                 />
             </div>
+
+            {isGroup && showGroupInfo && (
+                <GroupInfoModal
+                    isOpen={showGroupInfo}
+                    onClose={() => setShowGroupInfo(false)}
+                    group={activeConversation as ConversationGroup}
+                    isDark={isDark}
+                />
+            )}
         </div>
     );
 };

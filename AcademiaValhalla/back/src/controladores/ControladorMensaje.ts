@@ -12,6 +12,35 @@ import { subirArchivo } from '../servicios/ServicioStorage.js';
 
 const SUPABASE_URL_PREFIX = process.env.SUPABASE_URL ?? '';
 
+/** Construye la representación completa de un grupo (con participantes y roles). */
+async function construirRespuestaGrupo(groupId: string) {
+    const conv = await Conversacion.findByPk(groupId);
+    if (!conv) return null;
+    const participantes = await ParticipanteConversacion.findAll({
+        where: { conversation_id: groupId },
+        include: [{ model: Usuario, as: 'usuario', attributes: ['user_id', 'username', 'avatar_url'] }],
+    });
+    const participants = (participantes as any[]).map((p: any) => ({
+        user_id: p.usuario?.user_id ?? '',
+        username: p.usuario?.username ?? '',
+        avatar_url: p.usuario?.avatar_url ?? null,
+        is_online: false,
+        role: p.role,
+    }));
+    return {
+        id: groupId,
+        is_group: true,
+        name: (conv as any).name,
+        avatar_url: (conv as any).avatar_url ?? null,
+        participants,
+        participant_count: participants.length,
+        last_message: (conv as any).last_message ?? '',
+        last_message_time: (conv as any).last_message_time ?? (conv as any).created_at,
+        last_message_sender_id: (conv as any).last_message_sender_id ?? null,
+        unread_count: 0,
+    };
+}
+
 function validarMagicBytes(buffer: Buffer, mime: string): boolean {
     if (mime.startsWith('image/jpeg'))  return buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF;
     if (mime.startsWith('image/png'))   return buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47;
@@ -475,8 +504,17 @@ export class ControladorMensaje {
             if (name?.trim()) updates.name = name.trim();
             if (file) updates.avatar_url = await subirArchivo(file, `chat/${groupId}`, 'group-avatar');
 
+            if (Object.keys(updates).length === 0) {
+                return res.status(400).json({ msg: 'Nada que actualizar' });
+            }
+
             await Conversacion.update(updates, { where: { conversation_id: groupId, is_group: true } });
-            res.json({ msg: 'Grupo actualizado' });
+
+            const groupResponse = await construirRespuestaGrupo(groupId);
+            const io = req.app.get('io');
+            if (io && groupResponse) io.to(groupId).emit('group_updated', groupResponse);
+
+            res.json(groupResponse ?? { msg: 'Grupo actualizado' });
         } catch (error: any) {
             console.error('[actualizarGrupo]', error?.message ?? error);
             res.status(500).json({ msg: 'Error al actualizar el grupo' });
@@ -563,10 +601,20 @@ export class ControladorMensaje {
             const isSelf = userId === idUsuario;
 
             if (!isSelf) {
-                const rol = await ParticipanteConversacion.findOne({
-                    where: { conversation_id: groupId, user_id: idUsuario, role: { [Op.in]: ['owner', 'admin'] } },
+                const actor = await ParticipanteConversacion.findOne({
+                    where: { conversation_id: groupId, user_id: idUsuario },
                 });
-                if (!rol) return res.status(403).json({ msg: 'Sin permisos para expulsar participantes' });
+                if (!actor || !['owner', 'admin'].includes((actor as any).role)) {
+                    return res.status(403).json({ msg: 'Sin permisos para expulsar participantes' });
+                }
+                const objetivo = await ParticipanteConversacion.findOne({
+                    where: { conversation_id: groupId, user_id: userId },
+                });
+                if (!objetivo) return res.status(404).json({ msg: 'El participante no existe' });
+                // El owner puede expulsar a cualquiera; un admin solo a miembros normales
+                if ((actor as any).role === 'admin' && (objetivo as any).role !== 'member') {
+                    return res.status(403).json({ msg: 'Un administrador solo puede expulsar a miembros' });
+                }
             }
 
             if (isSelf) {
@@ -626,7 +674,12 @@ export class ControladorMensaje {
             if (!esOwner) return res.status(403).json({ msg: 'Solo el owner puede cambiar roles' });
 
             await ParticipanteConversacion.update({ role }, { where: { conversation_id: groupId, user_id: userId } });
-            res.json({ msg: 'Rol actualizado' });
+
+            const groupResponse = await construirRespuestaGrupo(groupId);
+            const io = req.app.get('io');
+            if (io && groupResponse) io.to(groupId).emit('group_updated', groupResponse);
+
+            res.json(groupResponse ?? { msg: 'Rol actualizado' });
         } catch (error: any) {
             console.error('[actualizarRolParticipante]', error?.message ?? error);
             res.status(500).json({ msg: 'Error al actualizar rol' });

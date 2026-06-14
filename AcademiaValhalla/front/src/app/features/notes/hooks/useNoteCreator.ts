@@ -1,9 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Block, BlockType } from '../types/types';
 import { generateId } from '../utils';
 import { API_BASE, authHeaders } from '../../../services/apiClient';
 import type { XPRewardResponse } from '../../../services/xpService';
+
+// A5 · clave de sessionStorage donde el asistente deja un borrador destilado
+const CLAVE_BORRADOR_IA = 'borrador-apunte-ia';
 
 export const useCreadorNota = () => {
     const navigate = useNavigate();
@@ -15,6 +18,29 @@ export const useCreadorNota = () => {
     const [blocks, setBlocks] = useState<Block[]>([
         { id: generateId(), type: 'text', value: '' }
     ]);
+
+    // A5 · Si venimos del asistente con un borrador destilado, hidratamos el formulario.
+    useEffect(() => {
+        const raw = sessionStorage.getItem(CLAVE_BORRADOR_IA);
+        if (!raw) return;
+        sessionStorage.removeItem(CLAVE_BORRADOR_IA);
+        try {
+            const d = JSON.parse(raw);
+            if (d.title) setTitle(d.title);
+            if (d.language) setSelectedLanguage(String(d.language).toLowerCase());
+            if (d.difficulty) setSelectedDifficulty(d.difficulty);
+            if (Array.isArray(d.tags)) setSelectedTags(d.tags);
+            if (Array.isArray(d.content) && d.content.length) {
+                setBlocks(d.content.map((b: any) => ({
+                    id: generateId(),
+                    type: (['text', 'code', 'image', 'definition'].includes(b.type) ? b.type : 'text') as BlockType,
+                    value: b.value ?? '',
+                    title: b.title,
+                    language: b.language ?? 'javascript',
+                })));
+            }
+        } catch { /* borrador corrupto: se ignora */ }
+    }, []);
 
     const [isSaving, setIsSaving] = useState(false);
     const [shareToForum, setShareToForum] = useState(false);
