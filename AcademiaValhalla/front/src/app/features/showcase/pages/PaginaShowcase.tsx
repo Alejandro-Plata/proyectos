@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { getAvatarUrl, resolveAssetUrl } from '../../../utils/getAvatarUrl';
+import { resolveAssetUrl } from '../../../utils/getAvatarUrl';
 import { showcaseService, type ProyectoResumen, type ProyectoDetalle } from '../services/showcaseService';
 
 const DIMENSIONES: { key: string; label: string }[] = [
