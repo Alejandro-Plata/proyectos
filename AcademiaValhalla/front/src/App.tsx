@@ -29,10 +29,12 @@ const CreateNotePage = lazy(() => import('./app/features/notes').then(m => ({ de
 const EditNotePage   = lazy(() => import('./app/features/notes').then(m => ({ default: m.EditNotePage })));
 const NotePrintPage  = lazy(() => import('./app/features/notes').then(m => ({ default: m.NotePrintPage })));
 const PaginaRetos    = lazy(() => import('./app/features/retos').then(m => ({ default: m.PaginaRetos })));
+const CommunityLayout = lazy(() => import('./app/features/community').then(m => ({ default: m.CommunityLayout })));
 const ForumPage      = lazy(() => import('./app/features/community').then(m => ({ default: m.ForumPage })));
 const CreatePostPage = lazy(() => import('./app/features/community').then(m => ({ default: m.CreatePostPage })));
 const PostDetailPage = lazy(() => import('./app/features/community').then(m => ({ default: m.PostDetailPage })));
 const UserProfilePage = lazy(() => import('./app/features/community').then(m => ({ default: m.UserProfilePage })));
+const PaginaShowcase = lazy(() => import('./app/features/showcase').then(m => ({ default: m.PaginaShowcase })));
 const MessagingPage  = lazy(() => import('./app/features/messaging').then(m => ({ default: m.MessagingPage })));
 const PaginaAsistente = lazy(() => import('./app/features/asistente').then(m => ({ default: m.PaginaAsistente })));
 const PaginaCazaTroll = lazy(() => import('./app/features/cazaTroll').then(m => ({ default: m.PaginaCazaTroll })));
@@ -78,16 +80,19 @@ export default function App() {
                       <Route path="notes/:noteId/edit" element={<EditNotePage />} />
                       <Route path="notes/:noteId" element={<NewNotePage />} />
                       <Route path="challenges" element={<PaginaRetos />} />
-                      <Route path="community" element={<ForumPage />} />
-                      <Route path="community/createpost" element={<CreatePostPage />} />
-                      <Route path="community/profile/:userId" element={<UserProfilePage />} />
-                      <Route path="community/:id" element={<PostDetailPage />} />
+                      <Route path="community" element={<CommunityLayout />}>
+                        <Route index element={<ForumPage />} />
+                        <Route path="showcase" element={<PaginaShowcase />} />
+                        <Route path="torneos" element={<PaginaTorneos />} />
+                        <Route path="mecenazgo" element={<PaginaPadrinazgo />} />
+                        <Route path="createpost" element={<CreatePostPage />} />
+                        <Route path="profile/:userId" element={<UserProfilePage />} />
+                        <Route path=":id" element={<PostDetailPage />} />
+                      </Route>
                       <Route path="messages" element={<MessagingPage />} />
                       <Route path="assistant" element={<PaginaAsistente />} />
                       <Route path="caza-bichillo" element={<PaginaCazaTroll />} />
                       <Route path="roadmap" element={<PaginaSagas />} />
-                      <Route path="torneos" element={<PaginaTorneos />} />
-                      <Route path="padrinazgo" element={<PaginaPadrinazgo />} />
 
                       <Route element={<RoleGuard allowedRoles={['ADMIN']} />}>
                         <Route path="admin" element={<PaginaAdmin />} />

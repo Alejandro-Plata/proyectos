@@ -27,31 +27,97 @@ interface BugGenerado {
 
 const XP_CAZA = 35;
 
+/**
+ * Banco de respaldo de bichillos curados manualmente. Se usa cuando la IA (Groq)
+ * o Judge0 no están disponibles, de modo que la caza nunca falle con un 502.
+ * Cada bug está verificado a mano: el `bug_line` apunta al fallo real.
+ */
+export const BANCO_BICHILLOS: BugGenerado[] = [
+    {
+        language: 'javascript',
+        original_code: `function suma(numeros) {\n  let total = 0;\n  for (let i = 0; i < numeros.length; i++) {\n    total += numeros[i];\n  }\n  return total;\n}\nconsole.log(suma([1, 2, 3, 4]));`,
+        buggy_code: `function suma(numeros) {\n  let total = 0;\n  for (let i = 0; i <= numeros.length; i++) {\n    total += numeros[i];\n  }\n  return total;\n}\nconsole.log(suma([1, 2, 3, 4]));`,
+        bug_line: 3,
+        bug_explanation: 'Error off-by-one: la condición usa "<=" en lugar de "<", lo que accede a numeros[length] (undefined) y produce NaN.',
+    },
+    {
+        language: 'python',
+        original_code: `def es_par(n):\n    return n % 2 == 0\n\nnumeros = [1, 2, 3, 4, 5, 6]\npares = [x for x in numeros if es_par(x)]\nprint(pares)`,
+        buggy_code: `def es_par(n):\n    return n % 2 == 1\n\nnumeros = [1, 2, 3, 4, 5, 6]\npares = [x for x in numeros if es_par(x)]\nprint(pares)`,
+        bug_line: 2,
+        bug_explanation: 'Condición invertida: "n % 2 == 1" detecta impares, no pares. Debería comparar con 0.',
+    },
+    {
+        language: 'javascript',
+        original_code: `function maximo(arr) {\n  let max = arr[0];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] > max) max = arr[i];\n  }\n  return max;\n}\nconsole.log(maximo([3, 7, 2, 9, 4]));`,
+        buggy_code: `function maximo(arr) {\n  let max = arr[0];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] < max) max = arr[i];\n  }\n  return max;\n}\nconsole.log(maximo([3, 7, 2, 9, 4]));`,
+        bug_line: 4,
+        bug_explanation: 'Operador equivocado: usa "<" en vez de ">", por lo que calcula el mínimo en lugar del máximo.',
+    },
+    {
+        language: 'python',
+        original_code: `def factorial(n):\n    resultado = 1\n    for i in range(1, n + 1):\n        resultado *= i\n    return resultado\n\nprint(factorial(5))`,
+        buggy_code: `def factorial(n):\n    resultado = 1\n    for i in range(1, n):\n        resultado *= i\n    return resultado\n\nprint(factorial(5))`,
+        bug_line: 3,
+        bug_explanation: 'Rango incorrecto: range(1, n) excluye n, así que factorial(5) calcula 4! = 24 en lugar de 120.',
+    },
+    {
+        language: 'javascript',
+        original_code: `function invertir(texto) {\n  let resultado = '';\n  for (let i = texto.length - 1; i >= 0; i--) {\n    resultado += texto[i];\n  }\n  return resultado;\n}\nconsole.log(invertir('hola'));`,
+        buggy_code: `function invertir(texto) {\n  let resultado = '';\n  for (let i = texto.length - 1; i > 0; i--) {\n    resultado += texto[i];\n  }\n  return resultado;\n}\nconsole.log(invertir('hola'));`,
+        bug_line: 3,
+        bug_explanation: 'Off-by-one: la condición "i > 0" omite el índice 0, perdiendo la primera letra del texto.',
+    },
+    {
+        language: 'python',
+        original_code: `def contar_vocales(texto):\n    vocales = 'aeiou'\n    contador = 0\n    for c in texto.lower():\n        if c in vocales:\n            contador += 1\n    return contador\n\nprint(contar_vocales('Murcielago'))`,
+        buggy_code: `def contar_vocales(texto):\n    vocales = 'aeiou'\n    contador = 0\n    for c in texto:\n        if c in vocales:\n            contador += 1\n    return contador\n\nprint(contar_vocales('Murcielago'))`,
+        bug_line: 4,
+        bug_explanation: 'Falta normalizar a minúsculas: al iterar sobre "texto" sin .lower(), no cuenta vocales mayúsculas.',
+    },
+];
+
 export class ServicioCazaTroll {
+
+    static elegirFallback(tema?: string): BugGenerado {
+        // Si el tema sugiere un lenguaje, prioriza ese subconjunto del banco
+        const t = (tema ?? '').toLowerCase();
+        const lang = ['python', 'javascript', 'typescript', 'java'].find(l => t.includes(l));
+        const candidatos = lang ? BANCO_BICHILLOS.filter(b => b.language === lang) : BANCO_BICHILLOS;
+        const pool = candidatos.length ? candidatos : BANCO_BICHILLOS;
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
 
     static async iniciar(userId: string, tema = 'lógica de arrays'): Promise<{ hunt_id: string; language: string; buggy_code: string }> {
         let bug: BugGenerado | null = null;
 
-        for (let intento = 0; intento < 2 && !bug; intento++) {
-            const candidato = await ServicioIA.json<BugGenerado>({
-                modelo: MODELO.potente,
-                system: PROMPT_BUG,
-                messages: [{ role: 'user', content: `Tema: ${tema}` }],
-                validar: (x): x is BugGenerado =>
-                    x && typeof x.buggy_code === 'string' && typeof x.original_code === 'string' && Number.isFinite(x.bug_line),
-                temperature: 0.7,
-                maxTokens: 1800,
-            });
+        // Intenta generar un bug con IA (Groq) + verificación con Judge0.
+        // Si algo falla (sin API key, rate limit, Judge0 caído...), recurre al banco local.
+        try {
+            for (let intento = 0; intento < 2 && !bug; intento++) {
+                const candidato = await ServicioIA.json<BugGenerado>({
+                    modelo: MODELO.potente,
+                    system: PROMPT_BUG,
+                    messages: [{ role: 'user', content: `Tema: ${tema}` }],
+                    validar: (x): x is BugGenerado =>
+                        x && typeof x.buggy_code === 'string' && typeof x.original_code === 'string' && Number.isFinite(x.bug_line),
+                    temperature: 0.7,
+                    maxTokens: 1800,
+                });
 
-            const slug = (candidato.language ?? '').toLowerCase();
-            if (!CODE_ARENA_LANGUAGES[slug]) continue;
+                const slug = (candidato.language ?? '').toLowerCase();
+                if (!CODE_ARENA_LANGUAGES[slug]) continue;
 
-            if (await this.bugEsRealista(slug, candidato.original_code, candidato.buggy_code)) {
-                bug = candidato;
+                if (await this.bugEsRealista(slug, candidato.original_code, candidato.buggy_code)) {
+                    bug = candidato;
+                }
             }
+        } catch (e) {
+            console.error('[caza.iniciar] IA/Judge0 no disponible, usando banco local:', (e as any)?.message ?? e);
         }
 
-        if (!bug) throw new Error('No se pudo preparar la caza. Inténtalo de nuevo.');
+        // Respaldo garantizado: nunca devolvemos 502 por culpa de servicios externos.
+        if (!bug) bug = this.elegirFallback(tema);
 
         const hunt = await CazaTroll.create({
             user_id: userId,

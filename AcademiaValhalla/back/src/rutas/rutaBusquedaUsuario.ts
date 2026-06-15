@@ -2,8 +2,15 @@
 import { Router } from 'express';
 import { autenticar } from '../middleware/middlewareAuth.js';
 import { ControladorBusquedaUsuario as ControladorBusqueda } from '../controladores/ControladorBusqueda.js';
+import { ControladorMaestrias } from '../controladores/ControladorMaestrias.js';
 
 const router = Router();
+
+router.get('/:userId/mastery', autenticar, ControladorMaestrias.maestria);
+router.get('/:userId/emblems', autenticar, ControladorMaestrias.emblemas);
+router.get('/:userId/endorsements', autenticar, ControladorMaestrias.endosos);
+router.post('/:userId/endorsements', autenticar, ControladorMaestrias.endosar);
+router.delete('/:userId/endorsements/:skill', autenticar, ControladorMaestrias.quitarEndoso);
 
 /**
  * @openapi

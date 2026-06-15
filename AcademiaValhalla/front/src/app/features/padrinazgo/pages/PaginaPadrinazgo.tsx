@@ -82,8 +82,8 @@ export const PaginaPadrinazgo = () => {
     return (
         <div className="max-w-3xl mx-auto px-5 py-8">
             <header className="mb-5">
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white font-mono uppercase tracking-wide">🛡️ Padrinazgo</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Encuentra un mentor humano o apadrina a quien empieza.</p>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white font-mono uppercase tracking-wide">Mecenazgo</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Encuentra un mentor humano o ejerce de mecenas de quien empieza.</p>
             </header>
 
             <div className="flex gap-1 mb-5 border-b border-emerald-500/10">

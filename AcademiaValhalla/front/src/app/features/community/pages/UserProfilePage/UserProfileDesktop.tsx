@@ -8,6 +8,7 @@ import { CATEGORY_CONFIG } from '../../config/categories';
 import { getRankInfo, getLevelProgress, getRankColors } from '../../utils/rankHelper';
 import { formatTimeAgo } from '../../utils/timeUtils';
 import { useUserProfile } from '../../hooks/useUserProfile';
+import { SeccionMaestrias } from '../../components/SeccionMaestrias';
 
 interface UserProfileDesktopProps {
     userId: string | undefined;
@@ -261,6 +262,11 @@ export const UserProfileDesktop = ({ userId }: UserProfileDesktopProps) => {
                                     </p>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Maestrías y endosos */}
+                        <div className="mt-5 bg-white dark:bg-[#0a0b0e] border border-emerald-500/15 dark:border-emerald-500/10 p-5 shadow-sm shadow-emerald-500/5">
+                            <SeccionMaestrias userId={profile.user_id} />
                         </div>
                     </div>
 

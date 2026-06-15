@@ -1,3 +1,6 @@
+// Layout
+export { CommunityLayout } from './components/CommunityLayout';
+
 // Pages
 export { ForumPage } from './pages/ForumPage/ForumPage';
 export { CreatePostPage } from './pages/CreatePostPage/CreatePostPage';

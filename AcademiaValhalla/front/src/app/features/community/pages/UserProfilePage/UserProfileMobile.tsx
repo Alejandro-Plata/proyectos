@@ -9,6 +9,7 @@ import { getRankInfo, getLevelProgress, getRankColors } from '../../utils/rankHe
 import { formatTimeAgo } from '../../utils/timeUtils';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { EncabezadoMobile } from '../../../../components/Header/HeaderMobile';
+import { SeccionMaestrias } from '../../components/SeccionMaestrias';
 
 interface UserProfileMobileProps {
     userId: string | undefined;
@@ -239,6 +240,11 @@ export const UserProfileMobile = ({ userId }: UserProfileMobileProps) => {
                             </p>
                         </div>
                     )}
+                </div>
+
+                {/* Maestrías y endosos */}
+                <div className="bg-white dark:bg-[#0a0b0e] border border-emerald-500/15 dark:border-emerald-500/10 p-4 shadow-sm">
+                    <SeccionMaestrias userId={profile.user_id} />
                 </div>
             </div>
         </div>

@@ -1161,3 +1161,120 @@ export class Mentoria extends Model {
     aprendiz!: Usuario;
 }
 
+// ==========================================
+// Salón de los Héroes y endosos de habilidades
+// ==========================================
+
+@Table({ tableName: 'showcase_projects', timestamps: true, createdAt: 'created_at', updatedAt: 'updated_at' })
+export class ProyectoShowcase extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    project_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    author_id!: string;
+
+    @Column(DataType.STRING(160))
+    title!: string;
+
+    @Column(DataType.STRING(280))
+    summary!: string;
+
+    @Default([])
+    @Column(DataType.JSONB)
+    description!: object[];
+
+    @AllowNull(true)
+    @Column(DataType.STRING(300))
+    repo_url!: string | null;
+
+    @AllowNull(true)
+    @Column(DataType.STRING(300))
+    demo_url!: string | null;
+
+    @Default([])
+    @Column(DataType.ARRAY(DataType.STRING))
+    tech_stack!: string[];
+
+    @AllowNull(true)
+    @Column(DataType.STRING(400))
+    cover_image_url!: string | null;
+
+    @Default(false)
+    @Column(DataType.BOOLEAN)
+    featured!: boolean;
+
+    @Default(0)
+    @Column(DataType.INTEGER)
+    upvote_count!: number;
+
+    @BelongsTo(() => Usuario, 'author_id')
+    autor!: Usuario;
+
+    @HasMany(() => FeedbackProyecto, 'project_id')
+    feedback!: FeedbackProyecto[];
+}
+
+@Table({ tableName: 'project_feedback', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class FeedbackProyecto extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    feedback_id!: string;
+
+    @ForeignKey(() => ProyectoShowcase)
+    @Column(DataType.UUID)
+    project_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    author_id!: string;
+
+    @Column(DataType.STRING(20))
+    dimension!: string; // 'codigo' | 'diseno' | 'idea' | 'documentacion'
+
+    @Column(DataType.SMALLINT)
+    rating!: number;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    comment!: string | null;
+
+    @BelongsTo(() => Usuario, 'author_id')
+    autor!: Usuario;
+}
+
+@Table({ tableName: 'project_upvotes', timestamps: false })
+export class VotoProyecto extends Model {
+    @PrimaryKey
+    @ForeignKey(() => ProyectoShowcase)
+    @Column(DataType.UUID)
+    project_id!: string;
+
+    @PrimaryKey
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    user_id!: string;
+}
+
+@Table({ tableName: 'skill_endorsements', timestamps: true, createdAt: 'created_at', updatedAt: false })
+export class Endoso extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    endorsement_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    endorser_id!: string;
+
+    @ForeignKey(() => Usuario)
+    @Column(DataType.UUID)
+    endorsed_id!: string;
+
+    @Column(DataType.STRING(50))
+    skill!: string;
+}
+

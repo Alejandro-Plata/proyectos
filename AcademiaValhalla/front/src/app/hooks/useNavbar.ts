@@ -46,24 +46,6 @@ const BASE_MENU_ITEMS: MenuItem[] = [
         label: 'RoadMap',
         to: '/dashboard/roadmap',
         icon: Icons.notes
-    },
-    {
-        id: 'caza-bichillo',
-        label: 'Caza al bichillo',
-        to: '/dashboard/caza-bichillo',
-        icon: Icons.challenges
-    },
-    {
-        id: 'torneos',
-        label: 'Torneos',
-        to: '/dashboard/torneos',
-        icon: Icons.challenges
-    },
-    {
-        id: 'padrinazgo',
-        label: 'Padrinazgo',
-        to: '/dashboard/padrinazgo',
-        icon: Icons.community
     }
 ];
 

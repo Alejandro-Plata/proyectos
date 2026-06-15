@@ -131,6 +131,7 @@
     "seed:misiones": "tsx src/scripts/seedMisiones.ts",
     "seed:notas-java": "tsx src/scripts/seedNotasJava.ts",
     "seed:publicaciones": "tsx src/scripts/seedPublicaciones.ts",
+    "seed:comunidad": "tsx src/scripts/seedComunidad.ts",
     "gen:api-client": "openapi-typescript http://localhost:3000/api/docs.json -o ../front/src/types/api-client.ts"
   },
   "author": "Alejandro Plata Cortés",

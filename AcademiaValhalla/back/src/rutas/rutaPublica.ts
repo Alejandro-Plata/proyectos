@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { ControladorReto } from '../controladores/ControladorReto.js';
+import { ControladorMaestrias } from '../controladores/ControladorMaestrias.js';
 
 const router = Router();
 
@@ -45,5 +46,7 @@ const executeLimiter = rateLimit({
  *       '504': { description: Timeout de ejecución }
  */
 router.post('/execute', executeLimiter, ControladorReto.execute);
+
+router.get('/card/:username', ControladorMaestrias.tarjetaPublica);
 
 export default router;

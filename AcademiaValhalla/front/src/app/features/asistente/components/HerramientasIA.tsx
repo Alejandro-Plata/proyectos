@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { aiService, type PerfilAprendizaje, type RevisionHallazgo } from '../services/aiService';
+import { CazaBichillo } from '../../cazaTroll';
 
 interface Props {
     onClose: () => void;
@@ -16,7 +17,7 @@ const SEV_COLOR: Record<string, string> = {
  * A1 (memoria) + A3 (revisión socrática) en un panel lateral del asistente.
  */
 export const HerramientasIA = ({ onClose }: Props) => {
-    const [tab, setTab] = useState<'memoria' | 'revision'>('memoria');
+    const [tab, setTab] = useState<'memoria' | 'revision' | 'caza'>('memoria');
 
     // A1
     const [perfil, setPerfil] = useState<PerfilAprendizaje | null>(null);
@@ -62,6 +63,7 @@ export const HerramientasIA = ({ onClose }: Props) => {
                 <div className="flex gap-1">
                     <button onClick={() => setTab('memoria')} className={`font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border ${tab === 'memoria' ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/[0.06]' : 'border-transparent text-slate-400'}`}>Lo que Freya sabe</button>
                     <button onClick={() => setTab('revision')} className={`font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border ${tab === 'revision' ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/[0.06]' : 'border-transparent text-slate-400'}`}>Revisar mi código</button>
+                    <button onClick={() => setTab('caza')} className={`font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border ${tab === 'caza' ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/[0.06]' : 'border-transparent text-slate-400'}`}>Caza al bichillo</button>
                 </div>
                 <button onClick={onClose} className="text-slate-400 hover:text-emerald-500 font-mono text-xs">[×]</button>
             </div>
@@ -157,6 +159,10 @@ export const HerramientasIA = ({ onClose }: Props) => {
                             </ul>
                         )}
                     </div>
+                )}
+
+                {tab === 'caza' && (
+                    <CazaBichillo />
                 )}
             </div>
         </div>
