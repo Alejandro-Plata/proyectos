@@ -31,6 +31,18 @@
       <h2 class="font-mono text-[11px] sm:text-base uppercase tracking-[0.15em] sm:tracking-[0.2em] text-emerald-400/60">
         // Alejandro Plata Cortes
       </h2>
+
+      <!-- Descarga de CV -->
+      <a [href]="cvUrl" [download]="cvFileName"
+         class="group inline-flex items-center gap-2 mt-5 px-4 py-2.5 corner-frame
+                font-mono text-[11px] sm:text-xs uppercase tracking-[0.15em]
+                text-emerald-400 bg-emerald-500/5 border border-emerald-500/30
+                transition-colors hover:bg-emerald-500/15 hover:text-emerald-300">
+        <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+        </svg>
+        {{ i18n.t().about.downloadCv }}
+      </a>
     </div>
   </div>
 

@@ -19,6 +19,7 @@ interface Dictionary {
     titleLine1: string;
     titleLine2: string;
     bio: string[];
+    downloadCv: string;
   };
   projects: {
     heading: string;
@@ -68,6 +69,7 @@ const TRANSLATIONS: Record<Lang, Dictionary> = {
           'autenticacion con <span class="text-emerald-400 font-semibold">JWT</span>, ' +
           '<span class="text-emerald-400 font-semibold">sockets</span>, entre otras tecnologías.',
       ],
+      downloadCv: 'Descargar CV',
     },
     projects: {
       heading: 'Proyectos',
@@ -155,6 +157,7 @@ const TRANSLATIONS: Record<Lang, Dictionary> = {
           '<span class="text-emerald-400 font-semibold">JWT</span> authentication, ' +
           '<span class="text-emerald-400 font-semibold">sockets</span>, among other technologies.',
       ],
+      downloadCv: 'Download CV',
     },
     projects: {
       heading: 'Projects',

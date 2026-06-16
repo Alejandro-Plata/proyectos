@@ -9,4 +9,6 @@ import { I18nService } from '../../i18n/i18n.service';
 export class AboutComponent {
   protected readonly i18n = inject(I18nService);
   photoUrl = '../../assets/foto_perfil.jpeg';
+  cvUrl = 'assets/CV_PlataCortesAlejandro.pdf';
+  cvFileName = 'CV_PlataCortesAlejandro.pdf';
 }
