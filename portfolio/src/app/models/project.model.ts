@@ -50,8 +50,7 @@ export const PROJECTS: Project[] = [
       'assets/projects/playfutbet/playfutbet_6.png',
       'assets/projects/playfutbet/playfutbet_7.png',
       'assets/projects/playfutbet/playfutbet_8.png',
-      'assets/projects/playfutbet/playfutbet_9.png',
-      'https://placehold.co/800x500/18181b/e4e4e7?text=PlayFutBet+2',
+      'assets/projects/playfutbet/playfutbet_9.png'
     ],
     demoUrl: 'https://playfutbet.vercel.app/',
     githubUrl: REPO,
