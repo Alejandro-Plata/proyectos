@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planes Docentes · GIITI — Centro Universitario de Mérida</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">
+        <h1>Planes Docentes · GIITI</h1>
+        <span>Grado en Ingeniería Informática en Tecnologías de la Información · Centro Universitario de Mérida · Curso 2025/2026</span>
+      </div>
+      <nav class="tabs">
+        <a href="#catalogo">Asignaturas</a>
+        <a href="#plan">Plan 4 años</a>
+      </nav>
+      <button class="theme-btn" id="themeBtn" title="Cambiar tema">◑ Tema</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== CATÁLOGO ===================== -->
+    <section id="catalogo">
+      <span class="eyebrow">Catálogo</span>
+      <h2 class="section-title">Asignaturas</h2>
+      <p class="section-sub">Haz clic en una asignatura para ver temario, criterios de evaluación, prácticas y la valoración continua vs. global (pensada para quien puede asistir a prácticas/laboratorio pero no a las clases de teoría).</p>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="controls">
+        <input type="search" id="search" placeholder="Buscar por nombre, código o profesor…" />
+        <select id="filterCurso">
+          <option value="">Todos los cursos</option>
+          <option value="1">1er curso</option>
+          <option value="2">2º curso</option>
+          <option value="3">3er curso</option>
+          <option value="4">4º curso</option>
+        </select>
+        <select id="filterCaracter">
+          <option value="">Todo carácter</option>
+          <option value="Básica">Básica</option>
+          <option value="Obligatoria">Obligatoria</option>
+          <option value="Optativa">Optativa</option>
+        </select>
+        <select id="filterVeredicto">
+          <option value="">Toda recomendación</option>
+          <option value="global">Conviene Global</option>
+          <option value="continua">Conviene Continua</option>
+          <option value="indiferente">Indiferente</option>
+        </select>
+        <span class="count" id="count"></span>
+      </div>
+
+      <div id="catalog"></div>
+
+      <div class="legend">
+        <span><i class="dot continua"></i> Conviene continua (aprovechando las prácticas)</span>
+        <span><i class="dot global"></i> Conviene global (la continua exige asistir a teoría)</span>
+        <span><i class="dot indiferente"></i> Indiferente</span>
+      </div>
+    </section>
+
+    <!-- ===================== PLAN 4 AÑOS ===================== -->
+    <section id="plan">
+      <span class="eyebrow">Estrategia</span>
+      <h2 class="section-title">Plan recomendado para aprobar todo en 4 años</h2>
+      <p class="section-sub">Distribución año a año de las 25 asignaturas, con cuántas cursar, en qué orden y por qué — teniendo en cuenta que no puedes asistir a clase.</p>
+      <div id="planContent"></div>
+    </section>
+  </main>
+
+  <footer>
+    Datos extraídos de los 25 planes docentes oficiales (UEx, plan 1514, curso 2025/2026). Base de datos: <code>planes.json</code>.
+    La valoración de evaluación continua vs. global es orientativa y prioriza tu situación: puedes asistir a prácticas/laboratorio pero no a las clases de teoría.
+  </footer>
+
+  <!-- Modal detalle -->
+  <div class="overlay" id="overlay">
+    <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
