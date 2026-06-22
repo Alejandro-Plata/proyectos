@@ -110,7 +110,7 @@ const TRANSLATIONS: Record<Lang, Dictionary> = {
           title: 'Técnico Superior en DAM',
           place: 'IES Ágora | Cáceres',
           badge: 'Matrícula de Honor',
-          summary: 'Desarrollo de Aplicaciones Multiplataforma.',
+          summary: 'Desarrollo de Aplicaciones Multiplataforma. Nota media: 9.8/10.',
         },
         {
           period: '2020 - 2025',
@@ -198,7 +198,7 @@ const TRANSLATIONS: Record<Lang, Dictionary> = {
           title: 'Higher Technician in Multiplatform App Development (DAM)',
           place: 'IES Ágora | Cáceres',
           badge: 'Top Honors',
-          summary: 'Cross-platform application development.',
+          summary: 'Cross-platform application development. GPA: 9.8/10.',
         },
         {
           period: '2020 - 2025',
